@@ -47,6 +47,10 @@ export class Player {
       .setOrigin(0.5, 1).setDepth(y);
   }
 
+  get direction(): Dir {
+    return this.facing;
+  }
+
   update(delta: number) {
     if (isOverlayOpen(useUI.getState())) {
       this.keyboard?.resetKeys();

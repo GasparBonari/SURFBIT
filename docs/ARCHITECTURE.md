@@ -78,11 +78,13 @@ src/
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         🔲 shop interiors
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
-│   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation
-│   │                         🔲 Npc, interaction
+│   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
+│   │                         🔲 Npc
 │   ├── audio.ts              🔲 WebAudio ambience + music
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
-└── components/                  🔲 React UI (HUD, ProductModal, CartDrawer, …)
+└── components/                  React UI
+    ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
+    └── …                      🔲 HUD, ProductModal, CartDrawer, DialogBox
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -218,8 +220,10 @@ corner tiles. Wet sand follows the same shoreline on its south and east edges.
   `depth = bottom pixel y`. `flat` props (rugs, towels, flowers) use
   `depth = 1`. `wall` props use `depth = 2`. Footprints `3`, wave foam `4`,
   gulls and in-world markers `100000`.
-- **Interaction point:** one tile in front (below) the footprint's
-  bottom-center, unless the object is a door (door tile itself).
+- **Interaction point:** center of the first tile row below the footprint,
+  aligned with its horizontal center. Building doors use their configured
+  door tile center. Enter and exit props use the center of the footprint's
+  bottom tile row.
 
 ## Player & collision
 
@@ -233,6 +237,19 @@ corner tiles. Wet sand follows the same shoreline on its south and east edges.
 - Facing = dominant axis of the input vector; animations are 4-directional.
 - Camera: `startFollow(player, true)`, bounded to the map, integer zoom
   `max(2, floor(viewportHeight / 240))`, `roundPixels: true`.
+
+## World interactions
+
+The interaction system looks for the closest interaction point within 14 px of
+a probe 10 px ahead of the player's feet. It publishes the prompt to
+`useUI` and shows a marker at the target. Reduced motion keeps the marker
+stationary.
+
+E, Space, Enter and the touch button share one activation path. Activation
+emits `WORLD_INTERACTION` on the Phaser scene with the selected map
+`Interaction` as its payload. Door transitions, dialogs and product overlays
+consume this event in their respective roadmap steps. Open overlays and a
+250 ms cooldown after closing an overlay block activation.
 
 ## Decisions
 

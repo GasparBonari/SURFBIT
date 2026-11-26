@@ -1,0 +1,44 @@
+.pill {
+  position: absolute;
+  z-index: var(--sb-z-hud);
+  bottom: max(var(--sb-space-5), env(safe-area-inset-bottom));
+  inset-inline: 0;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--sb-space-4));
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sb-space-3);
+  padding: var(--sb-space-2) var(--sb-space-3);
+  background: var(--sb-cream);
+  font-size: 10px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.key {
+  padding: var(--sb-space-1) var(--sb-space-2);
+  border: 2px solid var(--sb-outline);
+  border-radius: var(--sb-radius);
+  background: var(--sb-surface);
+  box-shadow: var(--sb-shadow-sm);
+  font: inherit;
+}
+
+.action {
+  display: none;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+@media (any-pointer: coarse) {
+  .key {
+    display: none;
+  }
+
+  .action {
+    display: inline-flex;
+  }
+}

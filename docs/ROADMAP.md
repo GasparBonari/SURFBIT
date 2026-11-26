@@ -108,9 +108,10 @@ Goal: walk a character around an animated beach town with collisions.
 
 ## Phase 2 — Interaction & interiors
 
-- [ ] **2.1 Interaction system + prompt pill**
-  - Files: `src/game/systems/interaction.ts`, `src/components/InteractPrompt.tsx`, `src/components/InteractPrompt.module.css`
+- [x] **2.1 Interaction system + prompt pill**
+  - Files: `src/game/systems/{interaction,Player}.ts`, `src/game/scenes/mapScene.ts`, `src/app/page.tsx`, `src/components/InteractPrompt.tsx`, `src/components/InteractPrompt.module.css`
   - Do: each frame find the nearest interactable whose interaction point is within 14 px of a probe 10 px in front of the player's feet. Call `useUI.getState().setPrompt({ verb, label })` (`Enter` + building label, `Inspect` + product handle, `Read` + title, `Talk` + name, `Exit`) or `null`. Show the bobbing `marker` sprite above the target. **E / Space / Enter** triggers, debounced by 250 ms after `lastClosedAt`. React pill resolves product handles to titles via `useCatalog`; on touch it shows an **A** button that emits `gameEvents.emit("interact")`.
+    Emit the selected action on the scene for the transition and overlay handlers added in later steps.
   - Accept: correct prompt for each object type; no double-trigger when closing a dialog with E.
 
 - [ ] **2.2 Doors and scene transitions**
@@ -223,3 +224,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.4 complete. Added walking and running, tile collision with wall sliding, and a bounded camera that follows the player at integer zoom.
 - 2026-11-26 — Step 1.5 complete. Added the town façades and prop layer, verified player depth sorting in the browser, and compared the town with the visual reference.
 - 2026-11-26 — Step 1.6 complete. Animated the shoreline, palms, flags, gulls, surfers, and sand footprints. Verified reduced motion in the browser.
+- 2026-11-26 — Step 2.1 complete. Added proximity prompts and a target marker, with shared keyboard and touch activation and a dialog-close cooldown.

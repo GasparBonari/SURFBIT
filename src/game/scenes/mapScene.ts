@@ -4,6 +4,7 @@ import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
 import type { MapKey } from "../maps/types";
 import { Ambient } from "../systems/ambient";
+import { Interactions } from "../systems/interaction";
 import { Player } from "../systems/Player";
 import { spawnObjects } from "../systems/objects";
 import { TILESET_KEY } from "../textures";
@@ -19,6 +20,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
   return class MapScene extends phaser.Scene {
     private player?: Player;
     private ambient?: Ambient;
+    private interactions?: Interactions;
 
     constructor() {
       super(MAP_SCENE_KEY);
@@ -35,6 +37,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         active = false;
         this.ambient?.destroy();
         this.ambient = undefined;
+        this.interactions?.destroy();
+        this.interactions = undefined;
         this.player = undefined;
         if (updateZoom) scale.off(RESIZE, updateZoom);
         events.off(SHUTDOWN, cleanup);
@@ -65,6 +69,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
         const animatedProps = spawnObjects(this, def);
         const player = new Player(this, start, buildBlocked(def));
+        this.interactions = new Interactions(this, def.objects);
         if (def.kind === "outdoor") {
           this.ambient = new Ambient(this, def.ground, ground, animatedProps, player.sprite);
         }
@@ -82,9 +87,10 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
       }
     }
 
-    update(_time: number, delta: number) {
+    update(time: number, delta: number) {
       if (!this.player) return;
       this.player.update(delta);
+      this.interactions?.update(time, this.player.sprite, this.player.direction);
       this.ambient?.update(delta, this.player.sprite);
     }
   };
