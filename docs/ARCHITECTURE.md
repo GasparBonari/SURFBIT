@@ -40,7 +40,7 @@ Status: ✅ exists · 🔲 to be built (see [ROADMAP.md](ROADMAP.md))
 ```
 src/
 ├── app/                         Next.js App Router
-│   ├── layout.tsx            ✅ fonts, metadata, global CSS
+│   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, cart drawer
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
 │   ├── page.tsx              ✅ world page, catalog hydration, and no-JavaScript fallback → 🔲 HUD
 │   ├── page.module.css       ✅ fullscreen canvas and fallback layout
@@ -91,7 +91,9 @@ src/
     ├── ProductModal.tsx       ✅ in-world product details and modal controls (with CSS module)
     ├── ProductArt.tsx         ✅ photos and fallback illustrations (with CSS module)
     ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
-    └── …                      🔲 HUD, CartDrawer
+    ├── StoreHydrator.tsx      ✅ restores cart and settings after the first client render
+    ├── CartDrawer.tsx         ✅ cart entry, line editing, subtotal, and checkout link (with CSS module)
+    └── …                      🔲 HUD
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.

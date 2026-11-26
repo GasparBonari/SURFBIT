@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Press_Start_2P } from "next/font/google";
+import { CartDrawer } from "@/components/CartDrawer";
+import { StoreHydrator } from "@/components/StoreHydrator";
 import "./globals.css";
 
 const pixel = Press_Start_2P({
@@ -31,7 +33,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${pixel.variable} ${body.variable}`}>
-      <body>{children}</body>
+      <body>
+        <StoreHydrator />
+        {children}
+        <CartDrawer />
+      </body>
     </html>
   );
 }

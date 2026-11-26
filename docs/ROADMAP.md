@@ -141,9 +141,10 @@ Goal: walk a character around an animated beach town with collisions.
     The full product page is implemented in step 3.4.
   - Accept: inspecting any display opens the right product; adding works from every shop into one cart.
 
-- [ ] **3.2 Cart drawer**
+- [x] **3.2 Cart drawer**
   - Files: `src/components/CartDrawer.tsx`, `src/components/StoreHydrator.tsx`, CSS, `src/app/layout.tsx`
   - Do: `StoreHydrator` calls `useCart.persist.rehydrate()` and `useSettings.persist.rehydrate()` on mount (stores use `skipHydration` to avoid SSR mismatches). Drawer lists lines, quantity steppers, remove, subtotal, "Checkout" → `/checkout`, "Keep exploring" closes.
+    A standalone Cart button opens the drawer until the HUD is built in step 4.1. The checkout page is implemented in step 3.3.
   - Accept: cart survives reload; no hydration warnings.
 
 - [ ] **3.3 Checkout**
@@ -232,3 +233,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 3.1 complete. Hydrated the catalog on the world page, added a stock-aware product modal, and verified all three shops add to one cart.
 - 2026-11-26 — Step 2.3 follow-up. Shop cameras fill the viewport at integer zoom and refit when it resizes.
 - 2026-11-26 — Step 2.2 follow-up. Walking through shop doors and onto exit mats now triggers travel automatically.
+- 2026-11-26 — Step 3.2 complete. Added a cart drawer with stock-aware quantity controls, removal, subtotal and a checkout link. Verified that cart and settings restore after reload without hydration warnings.
