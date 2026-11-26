@@ -221,7 +221,7 @@ The project should be structured as a web application containing an interactive 
 | TypeScript | Application logic and type safety |
 | Phaser | 2D world rendering, movement, collisions and scenes |
 | Tiled | Creating outdoor and indoor tilemaps |
-| Aseprite | Pixel-art assets and spritesheets |
+| Pixelorama / LibreSprite / Aseprite | Pixel-art assets and spritesheets (free editors; see ARCHITECTURE.md → D14) |
 | Zustand | Shared application and shopping cart state |
 | Shopify Storefront API | Products, inventory and commerce |
 | Supabase | Optional accounts and saved preferences |

@@ -82,7 +82,7 @@ One palette for the whole project. **UI tokens** live in
 `src/game/art/palette.ts` (`P.*`). Shared colors must have the same hex in both.
 
 World colors are sampled from the reference images. Display colors also use
-the mock catalog's product artwork. The Aseprite version of the
+the mock catalog's product artwork. The Aseprite/GIMP version of the
 palette is `assets/palette/surfbit.gpl`; regenerate it from `palette.ts` when
 colors change.
 
@@ -222,14 +222,21 @@ game. They can't reach the hand-made detail of the references. Reaching that
 needs production pixel art; see ROADMAP.md → Phase A. The full list of
 needed assets is in [SCENES.md → Asset checklist](SCENES.md#7-asset-checklist-production-art).
 
-Whoever makes the art (a pixel artist, an edited asset pack, or AI-assisted
-sprites cleaned up by hand) must follow the palette and pixel rules in this
-file. Never drop a reference image straight into the game: it isn't on a pixel
+The chosen source is an edited free asset pack (ARCHITECTURE.md → D14):
+one commercially licensed 16 px base pack, recolored to the palette, with
+shop buildings, signs and the plaza inlay drawn by hand on pack parts. Aim
+for a bolder pixel look than the references: fewer colors per sprite,
+cleaner shapes, less tiny detail. All art must follow the palette and pixel
+rules in this file, and every pack used must be listed in
+`assets/LICENSES.md`. Never drop a reference image straight into the game: it isn't on a pixel
 grid, it can't be split into layers, and it blurs when zoomed.
 
-### Replacing placeholder art with real assets (Aseprite)
+### Replacing placeholder art with real assets
 
-1. Draw in Aseprite at 1× using the palette above (import `assets/palette/surfbit.gpl`).
+1. Draw or edit at 1× in a pixel editor (Pixelorama, LibreSprite, or Aseprite
+   built from source) using the palette above (import
+   `assets/palette/surfbit.gpl`). Recolor pack sprites to this palette; don't
+   keep the pack's own colors.
 2. Export spritesheets as PNG + JSON (array) into
    `public/assets/{tiles,characters,props,buildings}/`.
 3. Keep **the same texture keys, frame sizes and frame order** used by the
