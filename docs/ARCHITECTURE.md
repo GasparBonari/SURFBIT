@@ -83,6 +83,9 @@ src/
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
 
+✅ `docs/art-references/` contains the town, Boards, and Wear concept images.
+[Visual references](ART_DIRECTION.md#visual-references)
+
 ## Key rules of the architecture
 
 1. **Phaser is client-only.** Load it with `await import("phaser")` inside a

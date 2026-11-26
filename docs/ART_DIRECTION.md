@@ -8,6 +8,37 @@ rule here, fix the asset, not the rule (or update the rule here first).
 Relaxed, sunny, nostalgic. Late-90s surf shop meets 16-bit handheld RPG.
 Warm sand, turquoise water, sun-bleached wood, coral and teal accents.
 
+## Visual references
+
+Use these concept images for layout, atmosphere, and visual detail. Build the
+scenes with the palette and pixel rules below, including the 16 × 16 px tile
+grid and 16 × 24 px character frames. Follow the roadmap for map layouts and
+which shops players can enter. [Roadmap](ROADMAP.md)
+
+### Beach Town
+
+![Pixel-art beach town with shopfronts around a stone plaza and a sandy shoreline below](art-references/beach-town.webp)
+
+Use the central plaza as a landmark with clear paths to the shops, boardwalk,
+and beach. Give each storefront a readable sign and a display that identifies
+what it sells. Group palms, flowers, and benches along the paths so the routes
+stay legible.
+
+### Boards interior
+
+![Surf shop with upright boards, timber flooring, woven rugs, and a counter at the back](art-references/boards-interior.webp)
+
+Make upright surfboards the focal point. Use warm timber and surf posters to
+give the room character, and keep a clear aisle from the entrance to the
+displays and counter.
+
+### Wear interior
+
+![Clothing shop with teal walls, racks on both sides of the main aisle, and fitting rooms at the back](art-references/wear-interior.webp)
+
+Pair teal walls with warm wood. Place clothing racks and mannequins along the
+main aisle, and make the fitting rooms easy to spot from the entrance.
+
 ## Palette
 
 One palette for the whole project. **UI tokens** live in
