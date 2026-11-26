@@ -1,0 +1,18 @@
+.frame {
+  position: relative;
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--sb-radius);
+  background: var(--sb-cream);
+}
+
+.photo {
+  object-fit: contain;
+}
+
+.illustration {
+  width: 84%;
+  height: 84%;
+}

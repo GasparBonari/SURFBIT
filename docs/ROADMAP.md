@@ -135,9 +135,10 @@ Goal: walk a character around an animated beach town with collisions.
 
 ## Phase 3 — Shopping
 
-- [ ] **3.1 Catalog hydration + product modal**
+- [x] **3.1 Catalog hydration + product modal**
   - Files: `src/components/CatalogHydrator.tsx`, `src/components/ProductModal.tsx`, `src/components/ProductPurchase.tsx`, `src/components/ProductArt.tsx`, CSS modules, `src/app/page.tsx`
   - Do: `page.tsx` awaits `commerce.listProducts()` and renders `<CatalogHydrator products>`. `ProductArt` renders `image.src` if present, else an inline SVG illustration from `ProductArt` (`kind`, `color`, `accent`). `ProductPurchase` (shared with the product page): option pickers (disable values with no stock), price, stock label ("Only 3 left" / "Sold out"), quantity stepper clamped to stock, Add to cart → toast/confirmation. Modal: focus trap, Esc closes, mobile full-screen sheet, link "View full page" → `/products/[handle]`.
+    The full product page is implemented in step 3.4.
   - Accept: inspecting any display opens the right product; adding works from every shop into one cart.
 
 - [ ] **3.2 Cart drawer**
@@ -228,3 +229,5 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 2.2 complete. Added door and bridge travel with lazy loading and reduced-motion-aware camera fades. Verified all three return spawns with browser fixtures.
 - 2026-11-26 — Step 2.3 complete. Added lazy-loaded Boards, Wear, and Gear interiors with reachable displays for all 15 products, and compared Boards and Wear screenshots with their references.
 - 2026-11-26 — Step 2.4 complete. Added four townsfolk, three shopkeepers, shared character collision, and keyboard and touch dialog for conversations and signs.
+- 2026-11-26 — Step 3.1 complete. Hydrated the catalog on the world page, added a stock-aware product modal, and verified all three shops add to one cart.
+- 2026-11-26 — Step 2.3 follow-up. Shop cameras fill the viewport at integer zoom and refit when it resizes.

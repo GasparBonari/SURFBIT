@@ -67,7 +67,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         this.ambient = undefined;
         this.interactions?.destroy();
         this.interactions = undefined;
-        if (useUI.getState().dialog) useUI.getState().closeAll();
+        const ui = useUI.getState();
+        if (ui.dialog || ui.product) ui.closeAll();
         this.player = undefined;
         this.npcs = [];
         this.blocked = [];
@@ -105,10 +106,18 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         this.interactions = new Interactions(this, def.objects, this.npcs);
         this.ambient = new Ambient(this, def, ground, animatedProps, player.sprite);
         const camera = this.cameras.main;
-        camera.setBackgroundColor(def.kind === "interior" ? P.outline : P.water);
-        updateZoom = () => camera.setZoom(Math.max(2, Math.floor(scale.height / 240)));
+        const interior = def.kind === "interior";
+        const { widthInPixels, heightInPixels } = tilemap;
+        camera.setBackgroundColor(interior ? P.outline : P.water);
+        updateZoom = () => {
+          const { width, height } = scale;
+          const zoom = interior
+            ? Math.ceil(Math.max(width / widthInPixels, height / heightInPixels))
+            : Math.floor(height / 240);
+          camera.setZoom(Math.max(2, zoom));
+        };
         updateZoom();
-        camera.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
+        camera.setBounds(0, 0, widthInPixels, heightInPixels);
         camera.startFollow(player.sprite, true);
         scale.on(RESIZE, updateZoom);
         this.player = player;
@@ -132,7 +141,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
           this.transitioning = true;
           this.interactions?.clearTarget();
-          if (useUI.getState().dialog) useUI.getState().closeAll();
+          const ui = useUI.getState();
+          if (ui.dialog || ui.product) ui.closeAll();
           const fade = !prefersReducedMotion();
 
           const loadDestination = async () => {
@@ -161,6 +171,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         const onInteraction = (action: Interaction, npc?: Npc) => {
           if (action.kind === "enter" || action.kind === "exit") {
             travel({ map: action.target, spawn: action.spawn });
+          } else if (action.kind === "product") {
+            useUI.getState().openProduct(action.productId);
           } else if (action.kind === "talk") {
             npc?.turnToward(player.sprite);
             useUI.getState().openDialog(action.name, action.lines);

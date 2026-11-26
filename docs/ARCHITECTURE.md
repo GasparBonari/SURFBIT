@@ -42,7 +42,7 @@ src/
 ├── app/                         Next.js App Router
 │   ├── layout.tsx            ✅ fonts, metadata, global CSS
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
-│   ├── page.tsx              ✅ world page and no-JavaScript fallback → 🔲 HUD
+│   ├── page.tsx              ✅ world page, catalog hydration, and no-JavaScript fallback → 🔲 HUD
 │   ├── page.module.css       ✅ fullscreen canvas and fallback layout
 │   ├── World.tsx             ✅ App Router client entry for the world
 │   ├── shop/page.tsx         🔲 direct shopping mode (all products)
@@ -87,7 +87,11 @@ src/
 └── components/                  React UI
     ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
     ├── DialogBox.tsx          ✅ NPC and sign dialog (with CSS module)
-    └── …                      🔲 HUD, ProductModal, CartDrawer
+    ├── CatalogHydrator.tsx    ✅ loads server products into the client catalog
+    ├── ProductModal.tsx       ✅ in-world product details and modal controls (with CSS module)
+    ├── ProductArt.tsx         ✅ photos and fallback illustrations (with CSS module)
+    ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
+    └── …                      🔲 HUD, CartDrawer
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -125,7 +129,7 @@ configuration passes the loaded Phaser runtime to the scene factories.
 2. Player walks into Boards → `MapScene` restarts with map `boards`.
 3. Player faces a `display` object with `productId: "pixel-fish"`; the
    interaction system calls `useUI.getState().setPrompt({ verb: "Inspect", label: "pixel-fish" })`.
-   The HUD resolves the handle to "Pixel Fish" via `useCatalog`.
+   `InteractPrompt` resolves the handle to "Pixel Fish" via `useCatalog`.
 4. Player presses **E** → `useUI.getState().openProduct("pixel-fish")`.
    Game input pauses while `isOverlayOpen` is true.
 5. `<ProductModal>` renders the product, user picks a variant →
@@ -249,8 +253,10 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
   characters from skipping solids or one another. No Arcade physics.
 - Speed 80 px/s walking, ×1.6 with Shift. Diagonal input is normalised.
 - Facing = dominant axis of the input vector; animations are 4-directional.
-- Camera: `startFollow(player, true)`, bounded to the map, integer zoom
-  `max(2, floor(viewportHeight / 240))`, `roundPixels: true`.
+- Camera: `startFollow(player, true)`, bounded to the map with `roundPixels: true`.
+  Town zoom is `max(2, floor(viewportHeight / 240))`. Interiors use the
+  smallest integer zoom of at least 2× that covers both viewport dimensions.
+  Both recalculate zoom when the viewport resizes.
 - NPCs start at their home tile centers. Wanderers take short walks within
   three tiles of home and pause between legs. Reduced motion or an open
   overlay pauses wandering. NPCs turn toward the player when spoken to.
@@ -265,9 +271,9 @@ stationary.
 E, Space, Enter and the touch button share one activation path. Activation
 emits `WORLD_INTERACTION` on the Phaser scene with the selected map
 `Interaction` as its payload and the live NPC when present. `MapScene` handles
-doors and opens dialog for Talk and Read actions. The dialog uses the shared
-UI store and returns focus to the canvas when closed. Open overlays and a
-250 ms cooldown after closing an overlay block world activation.
+doors, opens the product modal for Inspect, and opens dialog for Talk and Read.
+Both use the shared UI store and return focus to the canvas when closed. Open
+overlays and a 250 ms cooldown after closing an overlay block world activation.
 
 Door actions and `gameEvents` travel resolve through the same lazy map
 registry. The camera fades out, the target map loads, and `MapScene` restarts
