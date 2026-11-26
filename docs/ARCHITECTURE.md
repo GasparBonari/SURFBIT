@@ -249,7 +249,16 @@ Town streets (`:`) and plaza (`#`) use cobblestone variants. Raised planters
 (`P`) and retaining walls (`S`) are solid. Stairs (`s`) and the deck (`d`)
 are walkable. Stairs directly south of the deck use timber treads. Along the
 diagonal shore, north and west foam edges join through inside and outside
-corner tiles. Wet sand follows the same shoreline on its south and east edges.
+corner tiles; corners are drawn diagonally so one-tile steps read as a slope.
+Wet sand follows the same shoreline on its south and east edges, with a
+diagonal corner tile beside each step.
+
+Neighbour-aware tiles: a planter picks one of 16 rim tiles from which sides
+face non-planter ground (`planterTile(mask)`, 1 = north, 2 = east, 4 = south,
+8 = west). A retaining wall gets a squared end pillar where it meets anything
+other than wall or the map edge. Interior walls (`M`, `G`) get a skirting
+board where the floor (`_`, `D`) is directly below. A run of doormat tiles
+(`D`) draws one mat with a single wave mark across its two halves.
 
 Shop floorboards (`_`) use deterministic variants. Interior wood walls
 (`M`), sage walls (`G`) and railings (`R`) are solid. Each two-tile

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PLAYER_LOOK } from "../art/characters";
 import { P } from "../art/palette";
-import { T } from "../art/tiles";
+import { planterTile, T } from "../art/tiles";
 import { buildBlocked, buildGround, validateMap } from "./build";
 import { MAPS } from "./index";
 import type { MapDef, MapObject } from "./types";
@@ -31,12 +31,45 @@ describe("buildGround", () => {
     const tiles = buildGround(map);
 
     expect([T.grass0, T.grass1, T.grass2]).toContain(tiles[0][0]);
-    expect(tiles[0].slice(1)).toEqual([T.grassEdge, T.plaza0, T.plaza1, T.retainingWall]);
+    expect(tiles[0].slice(1)).toEqual([T.grassEdge, T.plaza0, T.plaza1, T.retainingWallEndW]);
     expect(tiles[1][0]).toBe(T.grassEdge);
     expect(tiles[1][2]).toBe(T.deck);
     expect(tiles[1][3]).toBe(T.plaza0);
-    expect(tiles[1][4]).toBe(T.retainingWallFace);
-    expect(tiles[2].slice(0, 4)).toEqual([T.planter, T.stairs, T.deckStairs, T.retainingWall]);
+    expect(tiles[1][4]).toBe(T.retainingWallFaceEndW);
+    expect(tiles[2].slice(0, 4)).toEqual([planterTile(15), T.stairs, T.deckStairs, T.retainingWallEndW]);
+  });
+
+  it("caps retaining walls only where they meet something other than wall", () => {
+    const tiles = buildGround(makeMap({ ground: ["SSSsS", "SSSsS"] }));
+
+    expect(tiles[0]).toEqual([T.retainingWall, T.retainingWall, T.retainingWallEndE, T.stairs, T.retainingWallEndW]);
+    expect(tiles[1]).toEqual([
+      T.retainingWallFace, T.retainingWallFace, T.retainingWallFaceEndE, T.stairs, T.retainingWallFaceEndW,
+    ]);
+  });
+
+  it("draws planter rims on the sides that face away from the bed", () => {
+    const tiles = buildGround(makeMap({ ground: [".....", ".PPP.", ".PPP.", "....."] }));
+
+    expect(tiles[1].slice(1, 4)).toEqual([planterTile(1 | 8), planterTile(1), planterTile(1 | 2)]);
+    expect(tiles[2].slice(1, 4)).toEqual([planterTile(4 | 8), planterTile(4), planterTile(2 | 4)]);
+  });
+
+  it("adds skirting where interior walls meet the floor and splits doormats into halves", () => {
+    const tiles = buildGround(makeMap({ ground: ["MGM", "M_M", "_DD", "D._"] }));
+
+    expect(tiles[0]).toEqual([T.wallWood, T.wallSageTrim, T.wallWood]);
+    expect(tiles[1][0]).toBe(T.wallWoodTrim);
+    expect(tiles[2].slice(1)).toEqual([T.matW, T.matE]);
+    expect(tiles[3][0]).toBe(T.matWE);
+  });
+
+  it("uses a diagonal wet-sand corner beside a one-tile shoreline step", () => {
+    const tiles = buildGround(makeMap({ ground: ["....", "...~", "..~~"] }));
+
+    expect(tiles[1][2]).toBe(T.sandWetCorner);
+    expect(tiles[1][3]).toBe(T.foamCorner0);
+    expect(tiles[2][3]).toBe(T.foamInner0);
   });
 
   it("joins north and west swash around both sides of a shoreline step", () => {

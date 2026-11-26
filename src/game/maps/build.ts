@@ -1,6 +1,6 @@
 import { rng } from "../art/canvas";
 import { PROPS, type PropSpec } from "../art/props";
-import { LEGEND, T, TILE } from "../art/tiles";
+import { LEGEND, planterTile, T, TILE } from "../art/tiles";
 import type { MapDef, MapObject } from "./types";
 
 interface Footprint {
@@ -25,20 +25,45 @@ function containsTile(footprint: Footprint, x: number, y: number): boolean {
     && y >= footprint.y && y < footprint.y + footprint.h;
 }
 
+const WALLS = new Set(["M", "G"]);
+const FLOORS = new Set(["_", "D"]);
+
 export function buildGround(def: MapDef): number[][] {
   return def.ground.map((row, y) => Array.from(row, (tile, x) => {
     const below = def.ground[y + 1]?.[x];
     const above = def.ground[y - 1]?.[x];
+    const west = row[x - 1];
+    const east = row[x + 1];
     if (tile === ".") {
-      const eastWater = row[x + 1] === "~";
-      if (below === "~") return eastWater ? T.sandWetSouthEast : T.sandWet;
+      const eastWater = east === "~";
+      // A diagonal foam corner sits east when that water tile also has land to its north.
+      const cornerEast = eastWater && def.ground[y - 1]?.[x + 1] !== undefined && def.ground[y - 1][x + 1] !== "~";
+      if (below === "~") return cornerEast ? T.sandWetCorner : eastWater ? T.sandWetSouthEast : T.sandWet;
       if (eastWater) return T.sandWetEast;
     }
     if (tile === '"' && below !== undefined && below !== '"') return T.grassEdge;
-    if (tile === "S" && above === "S") return T.retainingWallFace;
+    if (tile === "P") {
+      const rim = (neighbour: string | undefined) => neighbour !== "P";
+      return planterTile(
+        (rim(above) ? 1 : 0) | (rim(east) ? 2 : 0) | (rim(below) ? 4 : 0) | (rim(west) ? 8 : 0),
+      );
+    }
+    if (tile === "S") {
+      const face = above === "S";
+      if (west !== undefined && west !== "S") return face ? T.retainingWallFaceEndW : T.retainingWallEndW;
+      if (east !== undefined && east !== "S") return face ? T.retainingWallFaceEndE : T.retainingWallEndE;
+      return face ? T.retainingWallFace : T.retainingWall;
+    }
+    if (WALLS.has(tile) && below !== undefined && FLOORS.has(below)) {
+      return tile === "G" ? T.wallSageTrim : T.wallWoodTrim;
+    }
+    if (tile === "D") {
+      const edgeW = west !== "D";
+      const edgeE = east !== "D";
+      return edgeW && edgeE ? T.matWE : edgeW ? T.matW : edgeE ? T.matE : T.mat;
+    }
     if (tile === "s" && above === "d") return T.deckStairs;
     if (tile === "~") {
-      const west = row[x - 1];
       const northLand = above !== undefined && above !== "~";
       const westLand = west !== undefined && west !== "~";
       if (northLand && westLand) return T.foamCorner0;

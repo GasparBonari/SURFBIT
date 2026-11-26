@@ -188,7 +188,7 @@ group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 - [x] **A.1 Choose the art source** *(owner decision)* — edited free asset pack, recolored to the palette, with hand-drawn brand pieces. See ARCHITECTURE.md → Decisions D14.
 - [x] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
 - [x] **A.3 Style test slice** — *(made by upgrading the generators, see ARCHITECTURE.md → D14; approved by the owner)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
-- [ ] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
+- [x] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
 - [ ] **A.5 Characters** — player, 3 shopkeepers, townsfolk, surfer (16 × 32 sheets).
 - [ ] **A.6 Buildings** — all town buildings and cottages.
 - [ ] **A.7 Town props** — everything in the SCENES.md town props table.
@@ -252,3 +252,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step A.2 complete. Added a stacked pixel-style SVG logo to the HUD and storefront, a matching wave favicon, and 8 × 8 and 16 × 16 waves for shop signs, props and the plaza inlay.
 - 2026-11-26 — Step 5.1 complete. Added paginated Shopify catalog reads, product metafield and photo mapping, and hosted checkout. Verified the provider with mocked Storefront API responses.
 - 2026-11-26 — Step A.3 complete. Upgraded the generators for cobbles, sand, water and foam, the palm, the Boards thatch and open front, and character shading. Compared with the beach-town reference and approved by the owner. Revised D14: generators are the production art; Coastal Village Lite is kept as a reference only.
+- 2026-11-26 — Step A.4 complete. Brought the terrain to the A.3 standard: block-laid retaining wall with end pillars, 16 planter rim tiles with lush beds, diagonal shoreline corners and wet sand, stone and timber stairs, deck planks, tufted grass edges, interior floorboards, plank walls with skirting, a railing, and a two-tile wave doormat. Compared the town and Boards interior with their references.
