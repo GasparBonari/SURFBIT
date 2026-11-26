@@ -38,40 +38,103 @@ function speckle(ctx: Ctx, ox: number, seed: number, colors: string[], count: nu
   }
 }
 
+const wrap = (v: number) => ((v % TILE) + TILE) % TILE;
+
 function sand(ctx: Ctx, ox: number, seed: number) {
   rect(ctx, ox, 0, TILE, TILE, P.sand);
-  speckle(ctx, ox, seed, [P.sandDark, P.sandLight, P.sandDark], 14);
+  const r = rng(seed);
+  // Wind ripples: short dark dashes with a lit pixel row above, wrapping so tiles join.
+  for (let i = 0; i < 2; i++) {
+    const y = 4 + i * 8 + Math.floor(r() * 3);
+    const x = Math.floor(r() * TILE);
+    const len = 3 + Math.floor(r() * 3);
+    for (let j = 0; j < len; j++) {
+      px(ctx, ox + wrap(x + j), y, P.sandDark);
+      if (j > 0 && j < len - 1) px(ctx, ox + wrap(x + j), y - 1, P.sandLight);
+    }
+  }
+  speckle(ctx, ox, seed + 3, [P.sandDark, P.sandDark, P.sandLight, P.sandWet], 10);
   if (seed % 3 === 0) {
-    // tiny shell
-    px(ctx, ox + 11, 4, P.cream);
-    px(ctx, ox + 12, 4, P.pink);
+    px(ctx, ox + 11, 12, P.cream);
+    px(ctx, ox + 12, 12, P.pink);
+    px(ctx, ox + 12, 13, P.sandWet);
+  } else if (seed % 3 === 1) {
+    px(ctx, ox + 4, 11, P.wallStoneLight);
+    px(ctx, ox + 5, 11, P.wallStone);
+    px(ctx, ox + 5, 12, P.sandWetDark);
   }
 }
 
 function wetSand(ctx: Ctx, ox: number, south: boolean, east: boolean) {
   sand(ctx, ox, 91);
   for (let i = 0; i < TILE; i++) {
-    const depth = 4 + (i % 5 === 0 ? 1 : 0);
-    if (south) rect(ctx, ox + i, TILE - depth, 1, depth, P.sandWet);
-    if (east) rect(ctx, ox + TILE - depth, i, depth, 1, P.sandWet);
+    const depth = 4 + Math.round(Math.sin((i * Math.PI) / 8) * 1.4);
+    if (south) {
+      rect(ctx, ox + i, TILE - depth, 1, depth, P.sandWet);
+      px(ctx, ox + i, TILE - depth, P.sandDark);
+      if (i % 3 !== 1) px(ctx, ox + i, TILE - 2, P.sandLight);
+    }
+    if (east) {
+      rect(ctx, ox + TILE - depth, i, depth, 1, P.sandWet);
+      px(ctx, ox + TILE - depth, i, P.sandDark);
+      if (i % 3 !== 1) px(ctx, ox + TILE - 2, i, P.sandLight);
+    }
   }
 }
 
-function cobbles(ctx: Ctx, ox: number, seed: number, plaza = false) {
-  const random = rng(seed);
-  const width = plaza ? 8 : 6;
-  const height = plaza ? 8 : 5;
-  rect(ctx, ox, 0, TILE, TILE, P.stoneDark);
-  for (let y = 0; y < TILE; y += height) {
-    const offset = (y / height % 2) * Math.floor(width / 2);
-    for (let x = -offset; x < TILE; x += width) {
-      const left = Math.max(x, 0);
-      const right = Math.min(x + width - 1, TILE);
-      const light = random() > 0.45;
-      rect(ctx, ox + left, y, right - left, Math.min(height - 1, TILE - y), light ? P.stoneLight : P.stone);
-      if (x >= 0 && light) px(ctx, ox + left, y, P.stone);
-      if (x > 0 && !light && y > 0) px(ctx, ox + x - 1, y - 1, P.grout);
+type Seed = [x: number, y: number];
+
+// Toroidal seed layouts: cells wrap at the tile edge, so neighbouring tiles join seamlessly.
+const COBBLE_SEEDS: Seed[] = [[2, 2], [9, 1], [14, 6], [6, 8], [11, 12], [2, 13]];
+const PAVER_SEEDS: Seed[] = [[4, 4], [12, 3], [3, 12], [11, 11]];
+
+/** Rounded stones: grout where two cells meet, light top-left bevel, dark bottom-right bevel. */
+function stones(ctx: Ctx, ox: number, seeds: Seed[], fills: string[], squash: number) {
+  const nearest = (x: number, y: number) => {
+    let best = Infinity, second = Infinity, cell = 0;
+    seeds.forEach(([sx, sy], i) => {
+      const dx = Math.min(Math.abs(x - sx), TILE - Math.abs(x - sx)) * squash;
+      const dy = Math.min(Math.abs(y - sy), TILE - Math.abs(y - sy));
+      const d = Math.hypot(dx, dy);
+      if (d < best) { second = best; best = d; cell = i; } else if (d < second) second = d;
+    });
+    return { cell, edge: second - best < 1.05 };
+  };
+  const grid = Array.from({ length: TILE }, (_, y) => Array.from({ length: TILE }, (_, x) => nearest(x, y)));
+  const at = (x: number, y: number) => grid[wrap(y)][wrap(x)];
+  for (let y = 0; y < TILE; y++) {
+    for (let x = 0; x < TILE; x++) {
+      const here = at(x, y);
+      if (here.edge) {
+        // Grout is darkest where several stones meet, softer along a single seam.
+        const deep = at(x + 1, y).edge && at(x, y + 1).edge;
+        px(ctx, ox + x, y, deep ? P.grout : P.stoneDark);
+        continue;
+      }
+      const fill = fills[here.cell % fills.length];
+      const lit = at(x - 1, y).edge || at(x, y - 1).edge;
+      const shaded = at(x + 1, y).edge || at(x, y + 1).edge;
+      px(ctx, ox + x, y, shaded ? shade(fill, -0.1) : lit ? shade(fill, 0.35) : fill);
     }
+  }
+}
+
+/** Cells touching the tile edge keep the same fill in every variant so stones never change colour mid-stone. */
+function cobbleFills(seeds: Seed[], variant: number, plaza: boolean) {
+  const r = rng(40 + variant * 13);
+  const base = plaza ? [P.stone, P.stoneLight, P.sandDark] : [P.stone, P.stone, P.stoneLight, P.wallStoneLight, P.sandDark];
+  return seeds.map(([x, y], i) => {
+    const touchesEdge = x < 3 || y < 3 || x > 12 || y > 12;
+    return touchesEdge ? base[i % base.length] : base[Math.floor(r() * base.length)];
+  });
+}
+
+function cobbles(ctx: Ctx, ox: number, variant: number, plaza = false) {
+  const seeds = plaza ? PAVER_SEEDS : COBBLE_SEEDS;
+  stones(ctx, ox, seeds, cobbleFills(seeds, variant, plaza), plaza ? 0.8 : 0.75);
+  if (variant === 1) {
+    px(ctx, ox + 7, 5, P.grout); // hairline crack
+    px(ctx, ox + 8, 6, P.stoneDark);
   }
 }
 
@@ -91,27 +154,30 @@ function grass(ctx: Ctx, ox: number, seed: number) {
   }
 }
 
+// Ripple bands: [row, start x, length]. Frames shift them 4px east so the loop closes after 4 frames.
+const RIPPLES: [number, number, number][] = [[2, 3, 6], [7, 11, 4], [12, 1, 7]];
+
 function water(ctx: Ctx, ox: number, frame: number) {
   rect(ctx, ox, 0, TILE, TILE, P.water);
-  // gentle diagonal swell bands that shift with the frame
-  for (let y = 0; y < TILE; y++) {
-    for (let x = 0; x < TILE; x++) {
-      const v = (x + y * 4 + frame * 4) % 16;
-      if (v === 0) px(ctx, ox + x, y, P.waterDeep);
+  for (const [row, start, len] of RIPPLES) {
+    const shift = frame * 4 + (row % 2 ? 0 : 2);
+    for (let j = 0; j < len; j++) {
+      const x = wrap(start + j + shift);
+      const middle = j > 0 && j < len - 1;
+      px(ctx, ox + x, row, middle && j % 3 === 1 ? P.foamShade : P.waterLight);
+      // Trough sits a few pixels behind each crest.
+      px(ctx, ox + wrap(x - 7), row + 2, P.waterDeep);
     }
   }
-  const glints = [[3, 3], [11, 9], [7, 13]];
-  for (const [gx, gy] of glints) {
-    const x = (gx + frame * 2) % TILE;
-    px(ctx, ox + x, gy, P.waterLight);
-    px(ctx, ox + ((x + 1) % TILE), gy, P.waterLight);
-  }
+  px(ctx, ox + wrap(3 + frame * 4), 7, P.foam);
+  px(ctx, ox + wrap(11 + frame * 4), 4, P.waterDeeper);
 }
 
 function foam(ctx: Ctx, ox: number, frame: number, edge: "north" | "west" | "corner" | "inner") {
   water(ctx, ox, frame);
   const baseReach = [4, 5, 6, 5][frame];
   const reach = (along: number) => baseReach + Math.round(Math.sin(along * Math.PI / 4));
+  const lace = rng(500 + frame);
   for (let y = 0; y < TILE; y++) {
     for (let x = 0; x < TILE; x++) {
       const north = y - reach(x);
@@ -120,11 +186,14 @@ function foam(ctx: Ctx, ox: number, frame: number, edge: "north" | "west" | "cor
       if (edge === "west") depth = west;
       if (edge === "corner") depth = Math.min(north, west, Math.floor((north + west - 3) / 2));
       if (edge === "inner") depth = Math.round(Math.hypot(x, y)) - reach(0);
+      const hole = lace() < 0.22;
 
-      if (depth < -1) px(ctx, ox + x, y, P.sandWet);
-      else if (depth <= 0) px(ctx, ox + x, y, P.foam);
+      if (depth < -2) px(ctx, ox + x, y, P.sandWet);
+      else if (depth === -2) px(ctx, ox + x, y, hole ? P.sandWet : P.foamShade);
+      else if (depth <= 0) px(ctx, ox + x, y, hole && depth === 0 ? P.foamShade : P.foam);
       else if (depth === 1) px(ctx, ox + x, y, P.foamShade);
-      else if (depth === 3 && (x + y + frame) % 5 === 0) px(ctx, ox + x, y, P.foam);
+      else if (depth <= 4) px(ctx, ox + x, y, (x * 3 + y + frame * 2) % 7 === 0 ? P.foamShade : P.waterLight);
+      else if (depth === 6 && (x + y * 2 + frame * 3) % 5 < 2) px(ctx, ox + x, y, P.foam);
     }
   }
 }
@@ -215,7 +284,7 @@ export function buildTileset(): HTMLCanvasElement {
         grass(ctx, ox, i - T.grass0 + 1);
         break;
       case "grassEdge":
-        cobbles(ctx, ox, 5);
+        cobbles(ctx, ox, 0);
         rect(ctx, ox, 0, TILE, 11, P.grass);
         for (let x = 0; x < TILE; x++) {
           const d = (x * 7) % 3;
@@ -225,10 +294,10 @@ export function buildTileset(): HTMLCanvasElement {
         speckle(ctx, ox, 44, [P.grassDark], 5);
         break;
       case "street0": case "street1": case "street2":
-        cobbles(ctx, ox, 70 + i);
+        cobbles(ctx, ox, i - T.street0);
         break;
       case "plaza0": case "plaza1":
-        cobbles(ctx, ox, 17 + i, true);
+        cobbles(ctx, ox, i - T.plaza0, true);
         break;
       case "planter":
         stoneWall(ctx, ox, true);

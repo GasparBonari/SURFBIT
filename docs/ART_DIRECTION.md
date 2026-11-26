@@ -222,13 +222,15 @@ game. They can't reach the hand-made detail of the references. Reaching that
 needs production pixel art; see ROADMAP.md → Phase A. The full list of
 needed assets is in [SCENES.md → Asset checklist](SCENES.md#7-asset-checklist-production-art).
 
-The chosen source is an edited free asset pack (ARCHITECTURE.md → D14):
-one commercially licensed 16 px base pack, recolored to the palette, with
-shop buildings, signs and the plaza inlay drawn by hand on pack parts. Aim
-for a bolder pixel look than the references: fewer colors per sprite,
-cleaner shapes, less tiny detail. All art must follow the palette and pixel
-rules in this file, and every pack used must be listed in
-`assets/LICENSES.md`. Never drop a reference image straight into the game: it isn't on a pixel
+The production art is the generators themselves, upgraded step by step in
+Phase A (ARCHITECTURE.md → D14). Aim for a bolder pixel look than the
+references: fewer colors per sprite, cleaner shapes, less tiny detail. The
+A.3 slice set the standard: rounded cobbles with grout and a top-left bevel,
+water with ripple bands and lacy two-line foam, palms with layered fronds
+and a ringed trunk, thatch laid in staggered courses with a shaggy eave, open
+shop fronts with a lit interior, and characters with a shaded far edge. All
+art must follow the palette and pixel rules in this file, and any
+third-party art must be listed in `assets/LICENSES.md`. Never drop a reference image straight into the game: it isn't on a pixel
 grid, it can't be split into layers, and it blurs when zoomed.
 
 ### Replacing placeholder art with real assets

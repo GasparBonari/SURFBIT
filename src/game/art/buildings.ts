@@ -36,13 +36,7 @@ function drawRoof(ctx: Ctx, w: number, h: number, style: BuildingStyle) {
       rect(ctx, rightSlope, y, w - inset - 3 - rightSlope, 1, dark);
     }
     if (thatch) {
-      for (let x = inset + 6; x < w - inset - 4; x += 3) {
-        const sweep = x < ridge ? y : -y;
-        const straw = (x + Math.floor(sweep / 2) + 24) % 8;
-        const roll = random();
-        if (roll < 0.72) rect(ctx, x, y, straw < 3 ? 2 : 1, 1, straw < 5 ? light : dark);
-        if ((y + Math.floor(x / 7)) % course === 6 && straw < 5) px(ctx, x + 1, y, edge);
-      }
+      thatchRow(ctx, y, inset + 2, w - inset - 3, rightSlope, course, ROOFS.thatch);
     } else {
       const stagger = Math.floor(y / course) % 2 * Math.floor(tile / 2);
       for (let x = inset + 5; x < w - inset - 3; x++) {
@@ -53,6 +47,39 @@ function drawRoof(ctx: Ctx, w: number, h: number, style: BuildingStyle) {
   }
   if (hip) rect(ctx, ridge - 24, 1, 48, 2, light);
   else rect(ctx, ridge - 1, 2, 2, 7, light);
+  if (thatch) thatchFringe(ctx, 2, w - 2, h - 3, random);
+}
+
+const hash = (x: number, y: number) => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 97;
+
+/** Straw laid in courses: vertical strands, a ragged dark lip at the bottom of each course, shade on the right slope. */
+function thatchRow(
+  ctx: Ctx, y: number, from: number, to: number, rightSlope: number, course: number,
+  { base, light, dark, edge }: (typeof ROOFS)["thatch"],
+) {
+  for (let x = from; x < to; x++) {
+    // Bundles of straw are staggered so course lines don't read as stripes.
+    const lift = hash(Math.floor(x / 5), 3) % 4;
+    const tier = Math.floor((y + lift) / course);
+    const row = (y + lift) % course;
+    const strand = hash(x, tier) % 5;
+    const lip = row === course - 1 || (row === course - 2 && strand === 0);
+    let color: string = strand < 2 ? light : strand < 4 ? base : dark;
+    if (lip) color = strand % 2 ? dark : edge;
+    else if (row === 0 && strand > 2) color = dark;
+    if (x >= rightSlope && !lip) color = color === light ? base : dark;
+    px(ctx, x, y, color);
+  }
+}
+
+/** Shaggy straw hanging past the eave. */
+function thatchFringe(ctx: Ctx, from: number, to: number, y: number, random: () => number) {
+  const { base, dark, edge } = ROOFS.thatch;
+  for (let x = from; x < to; x++) {
+    const hang = 2 + Math.floor(random() * 3);
+    rect(ctx, x, y, 1, hang, x % 3 === 0 ? dark : base);
+    px(ctx, x, y + hang, edge);
+  }
 }
 
 function drawGable(ctx: Ctx, center: number, eave: number, halfWidth: number, rise: number) {
@@ -126,9 +153,15 @@ function drawDoor(ctx: Ctx, center: number, bottom: number, boarded: boolean, op
   rect(ctx, x + 1, y + 1, 2, 29, P.woodLight);
   rect(ctx, x - 2, bottom - 2, 24, 2, P.sandDark);
   if (open) {
-    rect(ctx, x + 4, y + 1, 14, 28, P.navyDark);
-    rect(ctx, x + 4, y + 24, 14, 5, P.wood);
-    rect(ctx, x + 4, y + 25, 14, 1, P.woodLight);
+    // Warm interior seen through the doorway instead of a dark void.
+    rect(ctx, x + 3, y + 1, 16, 29, P.woodDeep);
+    rect(ctx, x + 5, y + 4, 12, 16, P.woodDark);
+    rect(ctx, x + 10, y + 1, 1, 5, P.ironDark);
+    rect(ctx, x + 8, y + 6, 5, 2, P.glowWarm);
+    rect(ctx, x + 9, y + 8, 3, 1, P.glow);
+    rect(ctx, x + 3, y + 20, 16, 10, P.wood);
+    for (const row of [22, 25, 28]) rect(ctx, x + 3, y + row, 16, 1, P.woodDark);
+    rect(ctx, x + 3, y + 20, 16, 1, P.woodLight);
     return;
   }
   box(ctx, x + 4, y + 3, 12, 13, P.deepBlue, P.woodDeep);
@@ -158,6 +191,38 @@ function drawAwning(ctx: Ctx, x: number, y: number, w: number, color: string) {
     }
   }
   rect(ctx, x, y - 1, w, 1, P.woodDeep);
+}
+
+/** Open shop front: lit back wall, a pendant lamp, a shelf of wax and fins, boards and a counter. */
+function drawShopInterior(ctx: Ctx, x: number, y: number, w: number, counterLeft: boolean) {
+  box(ctx, x, y, w, 31, P.woodDark, P.woodDeep);
+  rect(ctx, x + 2, y + 2, w - 4, 25, P.woodDark);
+  for (let i = x + 4; i < x + w - 2; i += 5) rect(ctx, i, y + 4, 1, 22, P.woodDeep);
+  rect(ctx, x + 2, y + 2, w - 4, 2, P.woodDeep);
+  const lamp = x + Math.floor(w / 2);
+  rect(ctx, lamp, y + 4, 1, 3, P.ironDark);
+  rect(ctx, lamp - 2, y + 7, 5, 2, P.glowWarm);
+  rect(ctx, lamp - 1, y + 9, 3, 1, P.glow);
+  for (const [dx, dy] of [[-5, 10], [5, 10], [-3, 12], [3, 12]]) px(ctx, lamp + dx, y + dy, P.wood);
+
+  rect(ctx, x + 3, y + 12, w - 6, 1, P.woodLight);
+  for (let i = x + 4, n = 0; i + 3 < x + w - 3; i += 5, n++) {
+    rect(ctx, i, y + 9, 3, 3, [P.sun, P.sky, P.coral, P.cream][n % 4]);
+    px(ctx, i, y + 9, P.cream);
+  }
+
+  const counterX = counterLeft ? x + 2 : x + Math.floor(w / 2) - 2;
+  const boardsX = counterLeft ? x + Math.floor(w / 2) + 1 : x + 3;
+  for (const [i, color] of [P.cream, P.flagBlue, P.sun].entries()) {
+    drawBoard(ctx, boardsX + i * 6, y + 13 + i, 5, 15 - i, color, P.coral);
+  }
+  const counterW = Math.floor(w / 2);
+  rect(ctx, counterX, y + 19, counterW, 8, P.wood);
+  rect(ctx, counterX, y + 19, counterW, 1, P.woodLight);
+  rect(ctx, counterX, y + 22, counterW, 1, P.woodDark);
+  rect(ctx, counterX + 2, y + 16, 4, 3, P.ironDark);
+  px(ctx, counterX + 3, y + 17, P.sky);
+  rect(ctx, x - 1, y + 28, w + 2, 2, P.woodLight);
 }
 
 function drawDisplay(
@@ -292,8 +357,13 @@ export function buildBuilding(w: number, h: number, style: BuildingStyle, label:
     drawWorkshop(ctx, w, eave + 13, bottom);
   } else {
     if (front === "surfboards") box(ctx, 12, displayY - 4, w - 24, 35, P.woodDark, P.woodDeep);
-    drawDisplay(ctx, 16, displayY, leftWidth, front);
-    drawDisplay(ctx, doorX + 16, displayY, rightWidth, front === "gear" ? "bottles" : front);
+    if (front === "surfboards") {
+      if (leftWidth >= 18) drawShopInterior(ctx, 16, displayY, leftWidth, false);
+      if (rightWidth >= 18) drawShopInterior(ctx, doorX + 16, displayY, rightWidth, true);
+    } else {
+      drawDisplay(ctx, 16, displayY, leftWidth, front);
+      drawDisplay(ctx, doorX + 16, displayY, rightWidth, front === "gear" ? "bottles" : front);
+    }
   }
   const boarded = entrance?.boarded ?? false;
   drawDoor(ctx, doorX, bottom, boarded, front === "surfboards" && !boarded);

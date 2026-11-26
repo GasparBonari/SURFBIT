@@ -181,11 +181,13 @@ Goal: walk a character around an animated beach town with collisions.
 The game is built on procedural placeholder art (phases 1–4). Matching the
 detail of `docs/art-references/` needs real pixel art. This track can run in
 parallel with phases 2–5 and doesn't block them. Spec: ART_DIRECTION.md →
-Production art; asset list: SCENES.md §7.
+Production art; asset list: SCENES.md §7. Since A.3 the art is made by
+upgrading the generators in `src/game/art` (D14), so A.4–A.8 bring each
+group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 
 - [x] **A.1 Choose the art source** *(owner decision)* — edited free asset pack, recolored to the palette, with hand-drawn brand pieces. See ARCHITECTURE.md → Decisions D14.
 - [x] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
-- [ ] **A.3 Style test slice** — *(base pack: Coastal Village Lite, see `assets/LICENSES.md`; the owner places the downloaded files in `assets/packs/coastal-village-lite/` first)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
+- [x] **A.3 Style test slice** — *(made by upgrading the generators, see ARCHITECTURE.md → D14; approved by the owner)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
 - [ ] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
 - [ ] **A.5 Characters** — player, 3 shopkeepers, townsfolk, surfer (16 × 32 sheets).
 - [ ] **A.6 Buildings** — all town buildings and cottages.
@@ -249,3 +251,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step A.1 complete. Chose an edited free asset pack with hand-drawn brand pieces and a bolder pixel look (D14). Updated the art tooling docs to allow free editors.
 - 2026-11-26 — Step A.2 complete. Added a stacked pixel-style SVG logo to the HUD and storefront, a matching wave favicon, and 8 × 8 and 16 × 16 waves for shop signs, props and the plaza inlay.
 - 2026-11-26 — Step 5.1 complete. Added paginated Shopify catalog reads, product metafield and photo mapping, and hosted checkout. Verified the provider with mocked Storefront API responses.
+- 2026-11-26 — Step A.3 complete. Upgraded the generators for cobbles, sand, water and foam, the palm, the Boards thatch and open front, and character shading. Compared with the beach-town reference and approved by the owner. Revised D14: generators are the production art; Coastal Village Lite is kept as a reference only.

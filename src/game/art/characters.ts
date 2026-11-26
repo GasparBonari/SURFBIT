@@ -1,4 +1,4 @@
-import { type Ctx, ellipse, makeCanvas, px, rect } from "./canvas";
+import { type Ctx, ellipse, makeCanvas, px, rect, shade } from "./canvas";
 import { P } from "./palette";
 
 export const CHAR_W = 16;
@@ -78,7 +78,8 @@ function drawLegs(ctx: Ctx, look: Look, side: boolean, pose: Pose) {
     drawFoot(9, 30, true);
   }
   rect(ctx, 4, 21, 8, 4, look.shorts);
-  rect(ctx, 5, 24, 6, 1, look.shorts);
+  rect(ctx, 5, 24, 6, 1, shade(look.shorts, -0.25));
+  if (!side) px(ctx, 8, 23, shade(look.shorts, -0.25));
 }
 
 function drawBackpack(ctx: Ctx, color: string, dir: DrawDir, y: number) {
@@ -103,6 +104,11 @@ function drawTorso(ctx: Ctx, look: Look, dir: DrawDir, pose: Pose, bob: number) 
   rect(ctx, 5, y, 6, 2, look.shirt);
   rect(ctx, 4, y + 2, 8, 20 - y, look.shirt);
   rect(ctx, 5, 21, 6, 1, look.shirt);
+  // Top-left light: shade the far edge and hem, light the near shoulder.
+  const shirtShade = shade(look.shirt, -0.16);
+  rect(ctx, dir === "right" ? 4 : 11, y + 2, 1, 20 - y - 2, shirtShade);
+  rect(ctx, 5, 21, 6, 1, shirtShade);
+  px(ctx, 5, y, shade(look.shirt, 0.3));
 
   if (dir === "down" && look.shirtMark) drawWaveMark(ctx, 6, y + 3, look.shirtMark);
   if (look.backpack) drawBackpack(ctx, look.backpack, dir, y + 1);
@@ -150,6 +156,7 @@ function drawHair(ctx: Ctx, look: Look, dir: DrawDir, y: number) {
       px(ctx, 13, y + 9, hair);
     }
   }
+  if (!look.hat) rect(ctx, 5, y + 1, 3, 1, shade(hair, 0.28));
   if (hairStyle === "bun") rect(ctx, 6, y - 2, 4, 3, hair);
   if (accent) {
     rect(ctx, 5, y + 1, 3, 1, accent);
@@ -163,6 +170,8 @@ function drawCap(ctx: Ctx, hat: Hat, dir: DrawDir, y: number) {
   rect(ctx, 5, y, 6, 1, hat.color);
   rect(ctx, 4, y + 1, 8, 2, hat.color);
   rect(ctx, 3, y + 3, 10, 2, hat.color);
+  rect(ctx, 5, y + 1, 2, 1, shade(hat.color, 0.3));
+  rect(ctx, 11, y + 2, 1, 3, shade(hat.color, -0.2));
 
   if (dir === "right") {
     const panelX = backward ? 4 : 8;
@@ -210,6 +219,9 @@ function drawHead(ctx: Ctx, look: Look, dir: DrawDir, bob: number) {
 
   rect(ctx, 4, y, 8, 10, look.skin);
   rect(ctx, 5, y + 10, 6, 1, look.skin);
+  const skinShade = shade(look.skin, -0.14);
+  if (dir !== "right") rect(ctx, 11, y + 4, 1, 6, skinShade);
+  rect(ctx, 5, y + 10, 6, 1, skinShade);
   if (dir === "right") {
     rect(ctx, 10, y + 3, 3, 6, look.skin);
     px(ctx, 13, y + 6, look.skin);

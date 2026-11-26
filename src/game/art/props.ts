@@ -26,47 +26,79 @@ export interface PropSpec {
   draw(ctx: Ctx, ox: number, frame: number, tint: Tint): void;
 }
 
-const leafRow = (ctx: Ctx, x: number, y: number, len: number, dir: number, sway: number) => {
-  for (let i = 0; i < len; i++) {
-    const t = i / len;
-    const xx = x + dir * i;
-    const yy = y + Math.round(t * t * 6) + Math.round(sway * t);
-    px(ctx, xx, yy, P.leafDark);
-    rect(ctx, xx, yy - 2, 1, t < 0.7 ? 2 : 1, P.leaf);
-    if (i % 2 === 0 && t < 0.85) px(ctx, xx, yy - 2, t < 0.45 ? P.leafLight : P.leafGlint);
-    if (i % 3 === 1) px(ctx, xx, yy + 1, P.leafDark);
+interface Frond {
+  /** Direction in degrees (0 = east, 90 = south). */
+  angle: number;
+  length: number;
+  width: number;
+  droop: number;
+  back?: boolean;
+}
+
+// Back fronds first (shaded), then the sides, then the drooping front ones on top.
+const FRONDS: Frond[] = [
+  { angle: -150, length: 17, width: 3, droop: 0.55, back: true },
+  { angle: -30, length: 17, width: 3, droop: 0.55, back: true },
+  { angle: -100, length: 11, width: 3, droop: 0.35, back: true },
+  { angle: 180, length: 22, width: 5, droop: 0.6 },
+  { angle: 0, length: 20, width: 5, droop: 0.6 },
+  { angle: -125, length: 15, width: 3, droop: 0.5 },
+  { angle: -60, length: 15, width: 3, droop: 0.5 },
+  { angle: 150, length: 17, width: 3, droop: 0.45 },
+  { angle: 30, length: 17, width: 3, droop: 0.45 },
+  { angle: 100, length: 9, width: 3, droop: 0.2 },
+];
+
+/** A feathery frond: lit upper half, shaded lower half, serrated leaflet tips along the bottom edge. */
+function frond(ctx: Ctx, cx: number, cy: number, f: Frond, sway: number) {
+  const a = (f.angle * Math.PI) / 180;
+  const steps = f.length * 3;
+  const [top, mid, low, tip] = f.back
+    ? [P.leaf, P.leafDark, P.leafDeep, P.leafDeep]
+    : [P.leafLight, P.leaf, P.leafDark, P.leafDeep];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = cx + Math.cos(a) * f.length * t + sway * t * t;
+    const y = cy + Math.sin(a) * f.length * t + f.droop * f.length * t * t;
+    const half = Math.max(0.5, f.width * Math.sin(Math.PI * Math.min(1, t * 1.15 + 0.08)));
+    for (let k = -Math.ceil(half); k <= Math.ceil(half); k++) {
+      const color = k < -half / 2 ? top : k <= 0 ? mid : low;
+      px(ctx, x, y + k, color);
+    }
+    // leaflet tips hang below the frond every few pixels
+    if (i % 6 === 0 && t > 0.15 && t < 0.92) {
+      px(ctx, x, y + Math.ceil(half) + 1, tip);
+      px(ctx, x + Math.sign(Math.cos(a)), y + Math.ceil(half) + 2, tip);
+    }
+    if (!f.back && i % 9 === 4 && t < 0.7) px(ctx, x, y - Math.ceil(half), P.leafGlint);
   }
-};
+}
 
 function palm(ctx: Ctx, ox: number, frame: number, height = 64) {
   const sway = [-1, 0, 1][frame];
-  // trunk: gentle curve from base (center bottom) to crown
-  const baseX = ox + 24, baseY = height - 1, topX = ox + 28, topY = height === 64 ? 20 : 14;
+  const baseX = ox + 23, baseY = height - 1, topX = ox + 27, topY = height === 64 ? 19 : 14;
+  // ringed trunk, lit on the left, curving slightly toward the crown
   for (let y = baseY; y >= topY; y--) {
     const t = (baseY - y) / (baseY - topY);
     const x = Math.round(baseX + (topX - baseX) * t * t);
-    rect(ctx, x - 2, y, 5, 1, P.trunk);
-    px(ctx, x - 2, y, P.trunkDark);
-    if ((baseY - y) % 4 === 0) rect(ctx, x - 2, y, 5, 1, P.trunkDark);
+    const half = t < 0.12 ? 3 : 2;
+    rect(ctx, x - half, y, half * 2 + 1, 1, P.trunk);
+    px(ctx, x - half, y, P.thatchDark);
+    px(ctx, x + half, y, P.trunkDark);
+    if ((baseY - y) % 3 === 0) {
+      rect(ctx, x - half + 1, y, half * 2, 1, P.trunkDark);
+      px(ctx, x - half, y, P.trunk);
+    }
   }
-  // coconuts
-  ellipse(ctx, topX - 2, topY + 3, 2, 2, P.trunkDark);
-  ellipse(ctx, topX + 2, topY + 4, 2, 2, P.woodDeep);
-  // fronds
-  const cx = topX, cy = topY;
-  for (let row = -1; row <= 1; row++) {
-    leafRow(ctx, cx, cy + row - 3, height === 64 ? 22 : 17, -1, sway * 2);
-    leafRow(ctx, cx, cy + row - 3, height === 64 ? 20 : 17, 1, sway * 2);
+  const cx = topX + sway, cy = topY;
+  for (const f of FRONDS.filter((f) => f.back)) frond(ctx, cx, cy, f, sway * 2);
+  // coconut cluster under the crown
+  for (const [dx, dy, color] of [[-2, 3, P.trunkDark], [2, 3, P.woodDeep], [0, 5, P.trunkDark]] as const) {
+    ellipse(ctx, cx + dx, cy + dy, 2, 2, color);
+    px(ctx, cx + dx - 1, cy + dy - 1, P.thatchDark);
   }
-  leafRow(ctx, cx - 1, cy - 6, 14, -1, sway);
-  leafRow(ctx, cx + 1, cy - 6, 14, 1, sway);
-  for (let i = 0; i < 9; i++) {
-    px(ctx, cx + Math.round(sway * (i / 9)), cy - 6 - i, P.leaf);
-    px(ctx, cx + 1 + Math.round(sway * (i / 9)), cy - 6 - i, P.leafDark);
-  }
-  leafRow(ctx, cx, cy - 1, 16, -1, 3 + sway);
-  leafRow(ctx, cx, cy - 1, 16, 1, 3 + sway);
-  ellipse(ctx, cx, cy - 4, 3, 2, P.leafDark);
+  for (const f of FRONDS.filter((f) => !f.back)) frond(ctx, cx, cy, f, sway * 2);
+  ellipse(ctx, cx, cy - 1, 2, 1, P.leaf);
 }
 
 function umbrella(ctx: Ctx, a: string, b: string) {
