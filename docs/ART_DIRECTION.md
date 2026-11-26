@@ -92,7 +92,7 @@ colors change.
 |---|---|---|---|---|
 | Navy | `#114f6d` | `--sb-navy` | `navy` | Logo, wordmark, sign boards, headings |
 | Navy Dark | `#0c3b56` | `--sb-navy-dark` | `navyDark` | Sign shadows, pressed states |
-| Sign Teal | `#3d7a74` | `--sb-sign-teal` | `signTeal` | Interior sign boards, wave mats |
+| Sign Teal | `#3d7a74` | `--sb-sign-teal` | `signTeal` | Wave mats, counter marks, plaza inlay |
 | Sign Teal Dark | `#194e56` | `--sb-sign-teal-dark` | `signTealDark` | Sign borders |
 | Coral | `#e8734a` | `--sb-coral` | `coral` | Primary accent, CTAs, Boards shop |
 | Coral Dark | `#c4553a` | `--sb-coral-dark` | `coralDark` | Hover / pressed, danger |
@@ -261,10 +261,11 @@ Two layers with different jobs:
 
 | Use | Font | Size |
 |---|---|---|
-| Logo, HUD labels, prompt pill, section titles | Press Start 2P (`--sb-font-pixel`) | 10–16 px, max ~3 words |
+| HUD labels, prompt pill, section titles | Press Start 2P (`--sb-font-pixel`) | 10–16 px, max ~3 words |
 | Everything else (descriptions, prices, forms, checkout) | Inter (`--sb-font-body`) | ≥ 16 px body, ≥ 14 px secondary |
 
 Never set paragraphs, prices or form labels in the pixel font.
+Use the [SVG wordmark](SCENES.md#6-brand-mark) in the HUD and storefront header.
 
 ### Components
 

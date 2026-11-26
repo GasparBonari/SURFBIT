@@ -27,9 +27,3 @@
 .nav a:focus-visible {
   outline-color: var(--sb-cream);
 }
-
-.nav .brand {
-  font-size: 14px;
-  font-weight: 400;
-  text-decoration: none;
-}

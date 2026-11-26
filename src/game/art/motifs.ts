@@ -1,4 +1,107 @@
 import { px, rect, shade, type Ctx } from "./canvas";
+import { P } from "./palette";
+
+const SMALL_WAVE = [
+  "........",
+  "...###..",
+  "..##.#..",
+  "..##....",
+  ".##.#...",
+  ".#...##.",
+  "........",
+  "........",
+];
+
+const WAVE = [
+  "................",
+  "................",
+  "................",
+  "................",
+  ".......#####....",
+  ".....########...",
+  "....####...###..",
+  "...####..##..#..",
+  "..####..##......",
+  ".####...###...#.",
+  ".###.....######.",
+  "..........####..",
+  "................",
+  "................",
+  "................",
+  "................",
+];
+
+const PLAZA_WAVE = [
+  "....................#######..............",
+  "..................##++++++ff##...........",
+  ".................##+++++++ffff##.........",
+  "................##+++++++fffffff#........",
+  "................#+++++++fff##ffff#.......",
+  "...............#++++++tt##..#ffff#.......",
+  "...............#+++++tt##....##ff#.......",
+  "..............#++++ttt##....+..###.......",
+  "..............#+++ttt++#.................",
+  ".............#+++tttt+++#................",
+  "............#++tttttt++++#...............",
+  "..........#+++ttttttttt++++#.............",
+  "........#++++ttttttttttt++++tt#..........",
+  ".....#ttt+++++ttttttttttt++++++tttt#.....",
+];
+
+const PLAZA_WORDMARK = [
+  ".######..###..###..#######...#######..#######...#####..#######",
+  "#######..###..###..########..#######..########..#####..#######",
+  "###......###..###..###..###..#######..###..###...###...#######",
+  "###......###..###..###..###..###......###..###...###.....###..",
+  "######...###..###..###..###..###......###..###...###.....###..",
+  ".######..###..###..#######...######...#######....###.....###..",
+  "....###..###..###..######....######...#######....###.....###..",
+  "....###..###..###..###.###...###......###..###...###.....###..",
+  "....###..###..###..###.###...###......###..###...###.....###..",
+  "....###..###..###..###..###..###......###..###...###.....###..",
+  "#######..########..###..###..###......########..#####....###..",
+  "######....######...###..###..###......#######...#####....###..",
+];
+
+const INLAY_COLORS = {
+  "#": P.navy,
+  "+": P.productTeal,
+  t: P.signTeal,
+  f: P.parchment,
+};
+
+function drawPixelPattern(
+  ctx: Ctx,
+  rows: string[],
+  x: number,
+  y: number,
+  scale: number,
+  colors: Partial<Record<string, string>>,
+) {
+  for (const [dy, row] of rows.entries()) {
+    for (let dx = 0; dx < row.length; dx++) {
+      const color = colors[row[dx]];
+      if (color) rect(ctx, x + dx * scale, y + dy * scale, scale, scale, color);
+    }
+  }
+}
+
+export function drawSmallWaveMark(ctx: Ctx, x: number, y: number, color: string) {
+  drawPixelPattern(ctx, SMALL_WAVE, x, y, 1, { "#": color });
+}
+
+export function drawWaveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
+  drawPixelPattern(ctx, WAVE, x, y, scale, { "#": color });
+}
+
+export function drawPlazaInlay(ctx: Ctx, x: number) {
+  ctx.save();
+  // Let the plaza's mortar lines show through the colored stones.
+  ctx.globalAlpha = 0.88;
+  drawPixelPattern(ctx, PLAZA_WAVE, x, 0, 2, INLAY_COLORS);
+  drawPixelPattern(ctx, PLAZA_WORDMARK, x + 10, 30, 1, INLAY_COLORS);
+  ctx.restore();
+}
 
 export function drawBoard(ctx: Ctx, x: number, y: number, w: number, h: number, color: string, accent: string) {
   // vertical surfboard: pointed nose top, rounded tail bottom
@@ -21,18 +124,7 @@ export function drawShirt(ctx: Ctx, x: number, y: number, color: string, accent:
     rect(ctx, x, y + 4, 2, 5, color);
     rect(ctx, x + 8, y + 4, 2, 5, color);
   }
-  rect(ctx, x + 4, y + 3, 2, 2, accent);
+  drawSmallWaveMark(ctx, x + 1, y + 2, accent);
   px(ctx, x + 4, y, shade(color, -0.25));
   px(ctx, x + 5, y, shade(color, -0.25));
-}
-
-export function drawWaveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
-  const rows = [
-    [[8, 5]], [[6, 9]], [[5, 7], [13, 3]], [[4, 6]],
-    [[3, 6], [11, 2]], [[2, 6], [10, 5]], [[0, 7], [9, 10]],
-    [[0, 5], [10, 12]],
-  ];
-  rows.forEach((row, dy) => {
-    for (const [left, width] of row) rect(ctx, x + left * scale, y + dy * scale, width * scale, scale, color);
-  });
 }

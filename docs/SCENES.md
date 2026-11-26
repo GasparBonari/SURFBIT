@@ -274,9 +274,9 @@ curtains, counter banners, flags.
 | Pixel sign boards (navy board, cream wordmark, wave above) | Shop signs in world |
 | Plaza inlay (multi-tile, navy/teal cobbles) | Town plaza |
 
-Wordmark: bold, slightly rounded caps `SURFBIT` in Navy (`#114f6d`) with a
-cream outline. Sub-labels (`BOARDS`, `WEAR`, `GEAR`) are in letter-spaced caps
-under it.
+The SVG logo stacks a stepped turquoise wave with a cream crest above bold
+pixel caps in Navy Dark (`#0c3b56`) on cream. In-world shop sub-labels
+(`BOARDS`, `WEAR`, `GEAR`) are in letter-spaced caps below the wordmark.
 
 ---
 

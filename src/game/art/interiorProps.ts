@@ -1,6 +1,6 @@
 import { box, ellipse, px, rect, rng, shade, type Ctx } from "./canvas";
 import { drawText, textWidth } from "./font";
-import { drawBoard, drawShirt, drawWaveMark } from "./motifs";
+import { drawBoard, drawShirt, drawSmallWaveMark, drawWaveMark } from "./motifs";
 import { P } from "./palette";
 import type { PropSpec, Tint } from "./props";
 
@@ -8,15 +8,16 @@ function shopSign(label: string, trim: string): PropSpec {
   return {
     w: 90, h: 30, wall: true, outline: false,
     draw: (c, x) => {
-      box(c, x + 1, 7, 88, 22, P.signTeal, P.woodDeep);
-      box(c, x + 24, 1, 42, 10, P.signTeal, P.woodDeep);
+      box(c, x + 1, 7, 88, 22, P.navy, P.woodDeep);
+      box(c, x + 24, 1, 42, 10, P.navy, P.woodDeep);
       rect(c, x + 2, 8, 86, 1, trim);
       rect(c, x + 25, 2, 40, 1, trim);
-      rect(c, x + 25, 7, 40, 3, P.signTeal);
-      rect(c, x + 3, 26, 84, 2, P.signTealDark);
-      drawWaveMark(c, x + 34, 4, P.cream);
+      rect(c, x + 25, 7, 40, 3, P.navy);
+      rect(c, x + 3, 26, 84, 2, P.navyDark);
+      drawWaveMark(c, x + 37, 0, P.cream);
       drawText(c, "SURFBIT", x + 32, 13, P.cream);
-      drawText(c, label, x + (90 - textWidth(label)) / 2, 20, P.cream);
+      const spacing = 2;
+      drawText(c, label, x + (90 - textWidth(label, spacing)) / 2, 20, P.cream, spacing);
       rect(c, x + 11, 22, 12, 1, trim);
       rect(c, x + 67, 22, 12, 1, trim);
     },
@@ -32,7 +33,7 @@ function waveRug(w: number, h: number, scale: number): PropSpec {
         px(c, x + i, 2, accent);
         px(c, x + i, h - 3, accent);
       }
-      drawWaveMark(c, x + (w - 22 * scale) / 2, (h - 8 * scale) / 2, accent, scale);
+      drawWaveMark(c, x + (w - 16 * scale) / 2, (h - 16 * scale) / 2, accent, scale);
     },
   };
 }
@@ -189,7 +190,7 @@ export const INTERIOR_PROPS = {
       rect(c, x + 2, 2, 26, 21, color);
       ellipse(c, x + 20, 8, 4, 4, accent);
       rect(c, x + 2, 13, 26, 10, P.navy);
-      drawWaveMark(c, x + 4, 12, P.sky);
+      drawWaveMark(c, x + 7, 8, P.sky);
       rect(c, x + 3, 21, 24, 1, P.foamShade);
     },
   },
@@ -355,7 +356,7 @@ export const INTERIOR_PROPS = {
     for (const [index, fill] of [color, P.signTeal, P.deepBlue].entries()) {
       const left = x + 5 + index * 12;
       box(c, left, 5, 10, 8, fill, shade(fill, -0.25));
-      rect(c, left + 3, 7, 4, 2, accent);
+      drawSmallWaveMark(c, left + 1, 5, accent);
     }
   }),
   capTable: displayTable((c, x) => {

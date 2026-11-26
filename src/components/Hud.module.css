@@ -17,14 +17,16 @@
   align-items: center;
   gap: var(--sb-space-3);
   min-height: 44px;
-  padding: var(--sb-space-2) var(--sb-space-3);
+  padding: var(--sb-space-1) var(--sb-space-3);
   background: var(--sb-navy-dark);
   color: var(--sb-cream);
   font-size: 10px;
 }
 
-.brand {
-  font-size: 14px;
+.identity > img {
+  flex: none;
+  width: 48px;
+  height: auto;
 }
 
 .location {
@@ -79,10 +81,6 @@
     inset: max(var(--sb-space-3), env(safe-area-inset-top))
       max(var(--sb-space-3), env(safe-area-inset-right)) auto
       max(var(--sb-space-3), env(safe-area-inset-left));
-  }
-
-  .brand {
-    font-size: 12px;
   }
 
   .controls {

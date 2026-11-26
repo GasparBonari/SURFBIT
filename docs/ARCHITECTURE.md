@@ -90,6 +90,7 @@ src/
 │   ├── audio.ts              ✅ Web Audio ambience, shop music and UI cues
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  React UI
+    ├── BrandLogo.tsx          ✅ shared SVG logo for the HUD and storefront
     ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
     ├── Joystick.tsx           ✅ coarse-pointer movement via virtualStick (with CSS module)
     ├── DialogBox.tsx          ✅ NPC and sign dialog (with CSS module)
@@ -106,6 +107,8 @@ src/
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
+
+✅ `public/brand/` contains the vector wave mark (also the favicon) and wordmark.
 
 ✅ `docs/art-references/` contains the town, Boards, and Wear concept images.
 [Visual references](ART_DIRECTION.md#visual-references)

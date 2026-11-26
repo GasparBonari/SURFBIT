@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
   description:
     "Explore a pixel-art beach town and shop surfboards, surf wear and gear from SURFBIT.",
+  icons: {
+    icon: { url: "/brand/surfbit-mark.svg", type: "image/svg+xml", sizes: "any" },
+  },
 };
 
 export const viewport: Viewport = {

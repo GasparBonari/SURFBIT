@@ -95,7 +95,7 @@ function drawSign(ctx: Ctx, w: number, eave: number, label: string, front: Build
   box(ctx, x - 2, y - 2, width + 4, 34, P.woodLight, P.woodDeep);
   box(ctx, x, y, width, 30, P.navy, P.navyDark);
   rect(ctx, x + 2, y + 1, width - 4, 1, P.deepBlue);
-  drawWaveMark(ctx, w / 2 - 11, y + 3, P.cream);
+  drawWaveMark(ctx, w / 2 - 8, y - 1, P.cream);
   ctx.save();
   ctx.translate(Math.floor((w - labelWidth) / 2), y + 13);
   ctx.scale(scale, scale);

@@ -184,8 +184,8 @@ parallel with phases 2–5 and doesn't block them. Spec: ART_DIRECTION.md →
 Production art; asset list: SCENES.md §7.
 
 - [x] **A.1 Choose the art source** *(owner decision)* — edited free asset pack, recolored to the palette, with hand-drawn brand pieces. See ARCHITECTURE.md → Decisions D14.
-- [ ] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
-- [ ] **A.3 Style test slice** — *(needs the owner to choose the base pack first, recorded in `assets/LICENSES.md` per D14)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
+- [x] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
+- [ ] **A.3 Style test slice** — *(base pack: Coastal Village Lite, see `assets/LICENSES.md`; the owner places the downloaded files in `assets/packs/coastal-village-lite/` first)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
 - [ ] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
 - [ ] **A.5 Characters** — player, 3 shopkeepers, townsfolk, surfer (16 × 32 sheets).
 - [ ] **A.6 Buildings** — all town buildings and cottages.
@@ -247,3 +247,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 4.5 complete. Added gesture-unlocked beach and shop ambience, an indoor chiptune loop, and interaction and cart cues. Verified live audio settings, navigation, and desktop and touch playback in Chromium.
 - 2026-11-26 — Step 4.6 complete. Added keyboard access and visible focus for the canvas, live location and interaction announcements, and accessible button contrast. Verified focus return and the keyboard-only demo purchase in Chromium.
 - 2026-11-26 — Step A.1 complete. Chose an edited free asset pack with hand-drawn brand pieces and a bolder pixel look (D14). Updated the art tooling docs to allow free editors.
+- 2026-11-26 — Step A.2 complete. Added a stacked pixel-style SVG logo to the HUD and storefront, a matching wave favicon, and 8 × 8 and 16 × 16 waves for shop signs, props and the plaza inlay.

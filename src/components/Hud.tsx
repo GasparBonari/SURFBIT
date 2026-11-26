@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { cartCount, useCart } from "@/state/cart";
 import { useSettings } from "@/state/settings";
 import { useUI } from "@/state/ui";
+import { BrandLogo } from "./BrandLogo";
 import { CartButton } from "./CartDrawer";
 import styles from "./Hud.module.css";
 
@@ -51,7 +52,7 @@ export function Hud() {
   return (
     <header className={styles.hud}>
       <div className={`sb-panel sb-pixel ${styles.identity}`}>
-        <span className={styles.brand}>SURFBIT</span>
+        <BrandLogo />
         <span className={styles.location} role="status">
           <span className="sr-only">Location: </span>{location}
         </span>

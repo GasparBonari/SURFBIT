@@ -1,9 +1,9 @@
 import { P } from "./palette";
 import { type Ctx, box, ellipse, px, rect, shade } from "./canvas";
 import { autoOutline } from "./characters";
-import { drawText, textWidth } from "./font";
+import { drawText } from "./font";
 import { INTERIOR_PROPS } from "./interiorProps";
-import { drawBoard, drawShirt, drawWaveMark } from "./motifs";
+import { drawBoard, drawPlazaInlay, drawShirt, drawSmallWaveMark, drawWaveMark } from "./motifs";
 
 export interface Tint {
   color: string;
@@ -228,20 +228,12 @@ export const PROPS = {
       rect(c, ox + 12, 0, 2, 43, P.ironDark);
       rect(c, ox + 14, 3, 14, 11, P.flagBlue);
       rect(c, ox + 24, 3 + frame, 4, 9, P.navy);
-      rect(c, ox + 18, 7, 5, 2, P.cream);
-      rect(c, ox + 16, 9, 4, 2, P.cream);
+      drawSmallWaveMark(c, ox + 15, 5, P.cream);
     },
   },
   plazaLogo: {
-    w: 96, h: 40, foot: { w: 6, h: 3 }, flat: true,
-    draw: (c, ox) => {
-      drawWaveMark(c, ox + 26, 2, P.navy, 2);
-      c.save();
-      c.translate(ox + 48 - textWidth("SURFBIT"), 23);
-      c.scale(2, 2);
-      drawText(c, "SURFBIT", 0, 0, P.navy);
-      c.restore();
-    },
+    w: 96, h: 44, foot: { w: 6, h: 3 }, flat: true, outline: false,
+    draw: (c, ox) => drawPlazaInlay(c, ox + 7),
   },
   signpost: {
     w: 31, h: 46, foot: { w: 1, h: 1 }, solid: true, outline: false,
@@ -363,7 +355,7 @@ export const PROPS = {
       rect(c, ox + 1, 7, 46, 3, P.woodLight);
       for (let x = 6; x < 46; x += 8) rect(c, ox + x, 12, 1, 15, P.woodDark);
       rect(c, ox + 12, 13, 24, 11, P.cream);
-      drawWaveMark(c, ox + 13, 14, P.signTeal);
+      drawWaveMark(c, ox + 16, 11, P.signTeal);
       box(c, ox + 30, 0, 12, 8, P.ink, P.outline);
       rect(c, ox + 32, 2, 8, 3, P.teal);
       rect(c, ox + 6, 3, 6, 4, P.cream);
@@ -388,7 +380,7 @@ export const PROPS = {
         rect(c, ox + x, 9, 1, 31, x % 4 < 2 ? P.cream : P.sandLight);
       }
       rect(c, ox + 5, 8, 22, 2, P.woodDeep);
-      drawWaveMark(c, ox + 5, 23, P.navy);
+      drawWaveMark(c, ox + 8, 18, P.navy);
     },
   },
   window: {
