@@ -4,45 +4,78 @@ Columns: 8
 #
  43  36  51	outline
  61  51  70	ink
-243 217 164	sand
-251 233 195	sandLight
-226 191 127	sandDark
-216 181 122	sandWet
-199 160 102	sandWetDark
-124 196 106	grass
-164 220 124	grassLight
- 84 154  79	grassDark
- 61 122  69	grassDeep
- 47 179 198	water
- 95 211 220	waterLight
- 30 142 168	waterDeep
- 24 115 143	waterDeeper
-244 251 255	foam
-191 233 240	foamShade
-185 122  75	wood
-212 154  98	woodLight
-138  85  52	woodDark
-102  60  37	woodDeep
-217 201 173	stone
-235 223 200	stoneLight
-182 163 133	stoneDark
+253 218 138	sand
+254 233 176	sandLight
+233 191 110	sandDark
+217 176 113	sandWet
+167 144 111	sandWetDark
+111 158  60	grass
+162 160  66	grassLight
+ 58 107  54	grassDark
+ 20  62  52	grassDeep
+ 15 176 188	water
+ 55 192 198	waterLight
+  2 145 159	waterDeep
+  1 122 138	waterDeeper
+252 251 240	foam
+191 230 224	foamShade
+236 190 120	stone
+250 213 160	stoneLight
+203 162  96	stoneDark
+122 106  69	grout
+186 151 128	wallStone
+238 200 152	wallStoneLight
+124 116  95	wallStoneDark
+165 129 116	rock
+110  91  95	rockDark
+ 63  57  72	rockDeep
+201 122  67	wood
+231 155  91	woodLight
+138  74  38	woodDark
+ 85  47  38	woodDeep
+240 161  75	thatch
+252 202 110	thatchLight
+185 126  81	thatchDark
+108  71  56	thatchDeep
+228  95  42	terracotta
+240 138  85	terracottaLight
+179  70  31	terracottaDark
+106 103 150	roofIndigo
+ 82  79 143	roofIndigoDark
+ 35  47  76	roofIndigoDeep
+135 145 186	roofSlate
+108  90 105	roofSlateDark
+ 17  79 109	navy
+ 12  59  86	navyDark
+ 61 122 116	signTeal
+ 25  78  86	signTealDark
+ 87 117  89	wallSage
+ 35  65  68	wallSageDark
 232 115  74	coral
 196  85  58	coralDark
- 63 167 160	teal
- 44 127 124	tealDark
+ 60 140 132	teal
+ 44 111 106	tealDark
 242 182  50	sun
 209 143  29	sunDark
-123 198 232	sky
+111 204 210	sky
  47 111 143	deepBlue
+ 22 132 198	flagBlue
 255 243 214	cream
 255 255 255	white
- 79 174  91	leaf
-127 211 107	leafLight
- 47 127  72	leafDark
+ 79 138  58	leaf
+162 160  66	leafLight
+224 209  60	leafGlint
+ 43  94  54	leafDark
+ 20  62  52	leafDeep
 168 117  74	trunk
 124  81  50	trunkDark
+232  80  91	hibiscus
 242 155 176	pink
 169 155 224	lilac
+ 79  86  92	iron
+ 23  30  42	ironDark
+253 242 173	glow
+228 171  63	glowWarm
 245 207 166	skin1
 217 161 115	skin2
 168 111  72	skin3

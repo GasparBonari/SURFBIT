@@ -4,27 +4,35 @@
  * (same hex values, same names where they overlap). See docs/ART_DIRECTION.md.
  */
 :root {
-  /* Brand */
+  /* Brand (sampled from docs/art-references) */
+  --sb-navy: #114f6d;
+  --sb-navy-dark: #0c3b56;
+  --sb-sign-teal: #3d7a74;
+  --sb-sign-teal-dark: #194e56;
   --sb-coral: #e8734a;
   --sb-coral-dark: #c4553a;
-  --sb-teal: #3fa7a0;
-  --sb-teal-dark: #2c7f7c;
+  --sb-teal: #3c8c84;
+  --sb-teal-dark: #2c6f6a;
   --sb-sun: #f2b632;
   --sb-sun-dark: #d18f1d;
-  --sb-sky: #7bc6e8;
+  --sb-sky: #6fccd2;
   --sb-deep-blue: #2f6f8f;
   --sb-cream: #fff3d6;
 
   /* World */
-  --sb-sand: #f3d9a4;
-  --sb-sand-light: #fbe9c3;
-  --sb-sand-dark: #e2bf7f;
-  --sb-water: #2fb3c6;
-  --sb-water-deep: #1e8ea8;
-  --sb-foam: #f4fbff;
-  --sb-grass: #7cc46a;
-  --sb-wood: #b97a4b;
-  --sb-wood-dark: #8a5534;
+  --sb-sand: #fdda8a;
+  --sb-sand-light: #fee9b0;
+  --sb-sand-dark: #e9bf6e;
+  --sb-water: #0fb0bc;
+  --sb-water-deep: #02919f;
+  --sb-foam: #fcfbf0;
+  --sb-grass: #6f9e3c;
+  --sb-wood: #c97a43;
+  --sb-wood-light: #e79b5b;
+  --sb-wood-dark: #8a4a26;
+  --sb-thatch: #f0a14b;
+  --sb-terracotta: #e45f2a;
+  --sb-glow: #fdf2ad;
 
   /* Neutrals */
   --sb-outline: #2b2433;

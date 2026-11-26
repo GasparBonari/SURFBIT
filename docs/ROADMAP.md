@@ -12,6 +12,9 @@ Agents (Codex, Claude) and humans work **top to bottom, one step at a time**.
    bottom. **Don't commit** — the owner commits. Suggest a message instead:
    `feat(world): 1.4 player movement and collision`.
 5. If a step is too big, split it here into `1.4a`, `1.4b` before coding.
+   Visual steps (anything that renders) also need a screenshot compared with
+   the matching image in `docs/art-references/`, with the main differences
+   listed in your summary.
 6. If you must deviate from the spec or architecture, record it in
    [ARCHITECTURE.md → Decisions](ARCHITECTURE.md#decisions) as part of the same change.
 
@@ -60,26 +63,40 @@ Goal: walk a character around an animated beach town with collisions.
     - `index.ts`: lazy `MAPS` loaders.
   - Accept: unit tests cover `buildGround` autotiling, `buildBlocked`, and `validateMap` passing on `town`.
 
-- [ ] **1.3 Mount Phaser in Next.js**
-  - Files: `src/game/config.ts`, `src/game/WorldClient.tsx`, `src/game/scenes/BootScene.ts`, `src/game/scenes/MapScene.ts` (stub), `src/game/textures.ts`, `src/app/page.tsx`, `src/app/page.module.css`
+- [x] **1.3 Mount Phaser in Next.js**
+  - Files: `src/game/config.ts`, `src/game/WorldClient.tsx`, `src/game/scenes/bootScene.ts`, `src/game/scenes/mapScene.ts` (stub), `src/game/textures.ts`, `src/app/World.tsx`, `src/app/page.tsx`, `src/app/page.module.css`
   - Do:
     - `WorldClient.tsx` (`"use client"`): full-viewport `<div>`; in `useEffect`, `const Phaser = await import("phaser")`, create the game, destroy it on unmount (guard against React strict-mode double mount).
-    - Config: `type: AUTO`, `pixelArt: true`, `roundPixels: true`, `backgroundColor: "#2fb3c6"`, `scale.mode: RESIZE`, no physics.
+    - Config: `type: AUTO`, `pixelArt: true`, `roundPixels: true`, `backgroundColor: P.water`, `scale.mode: RESIZE`, no physics.
     - `textures.ts`: `registerTextures(scene)` adds the tileset (`buildTileset`), player sheet (`buildCharacterSheet(PLAYER_LOOK)`), shadow, every `PROPS` entry (frames added with `texture.add(i, 0, x, 0, w, h)`), gull/wave/surfer/footprint/marker. Export `ensureTinted(scene, propKey, tint)` that lazily generates `"${prop}:${color}:${accent}"`.
     - `BootScene` calls `registerTextures`, then starts `MapScene` with `{ map: "town", spawn: "default" }`.
-    - `MapScene` stub: loads the `MapDef`, renders the ground with `this.make.tilemap({ data, tileWidth: 16, tileHeight: 16 })` + `addTilesetImage`.
-    - `page.tsx`: render `<WorldClient />`. Keep a `<noscript>` / link to `/shop` for no-JS & SEO.
+    - `MapScene` stub: loads the `MapDef` and renders the ground at 2× zoom with `this.make.tilemap({ data, tileWidth: 16, tileHeight: 16 })` + `addTilesetImage`.
+    - `page.tsx`: render `<WorldClient />` through the App Router client entry in `World.tsx`. Include a `<noscript>` fallback with a link to `/shop`, which is implemented in step 3.4.
   - Accept: `npm run dev` shows the town ground, crisp at integer zoom, no console errors, no SSR errors, `npm run build` passes.
 
+- [ ] **1.3b Town layout to match the reference**
+  - Files: `src/game/art/tiles.ts`, `src/game/maps/town.ts`, `src/game/maps/build.ts`, `src/game/maps/build.test.ts`, `src/game/art/props.ts`
+  - Do: rework the town to [SCENES.md → Beach town](SCENES.md#1-beach-town-town) (reference: `docs/art-references/beach-town.webp`).
+    - Legend/tiles: `:` becomes cobblestone street, `#` plaza pavers (both in `stone*`/`grout`). Add `P` raised planter (solid), `S` stone retaining wall (solid), `s` stone stairs, `d` wooden deck. Drop the full-width boardwalk and the pier.
+    - Ground: cobblestone town, planted beds instead of open lawn, stone wall with 2 stair openings plus deck stairs, beach below, **diagonal shoreline** in the bottom-right (stair-stepped, with foam corner tiles).
+    - Objects: building positions, sizes and roof materials from the SCENES.md table (`goods` is the 12 × 8 terracotta flagship; `beach-club` gets a deck); signpost, notice board, planters, plaza logo inlay, loungers, volleyball net, rock clusters, trash bins. Add any missing `PROPS` as simple placeholders.
+    - Extend `BuildingStyle` if needed (e.g. `roof: "thatch" | "terracotta" | "indigo" | "slate"`, `awnings`) and update ARCHITECTURE.md.
+  - Accept: `validateMap` passes; tests updated for the new legend and foam corners; a screenshot of the town is visibly close in composition to `beach-town.webp` (shops, plaza, wall + stairs, beach, diagonal water in the same places).
+
+- [ ] **1.3c Characters at 16 × 32**
+  - Files: `src/game/art/characters.ts`, `src/game/textures.ts`, ARCHITECTURE.md (hitbox notes)
+  - Do: `CHAR_H = 32`, chibi proportions per ART_DIRECTION.md. Support caps (forward/backward), straw and bucket hats, a backpack, beards, curly hair and ponytails in `Look`. `PLAYER_LOOK` = the player in [SCENES.md → Characters](SCENES.md#5-characters). Export the three shopkeeper looks.
+  - Accept: sheet is 48 × 128; all 4 directions × 3 frames read clearly at 3× zoom; feet stay on the bottom row so the hitbox and shadow need no changes.
+
 - [ ] **1.4 Player movement, collision, camera**
-  - Files: `src/game/systems/Player.ts`, `src/game/systems/collision.ts`, `src/game/systems/collision.test.ts`, `src/game/scenes/MapScene.ts`
+  - Files: `src/game/systems/Player.ts`, `src/game/systems/collision.ts`, `src/game/systems/collision.test.ts`, `src/game/scenes/mapScene.ts`
   - Do: implement per [ARCHITECTURE.md → Player & collision](ARCHITECTURE.md#player--collision). Keys: WASD + arrows, Shift to run; register keys with `enableCapture = false` so form inputs keep working. Read `virtualStick` too. Walk animations at 8 fps; idle = stand frame of last facing. Shadow sprite follows the feet. Camera follows with integer zoom, recomputed on resize. Pause movement (and `resetKeys()`) while `isOverlayOpen(useUI.getState())`.
   - Accept: smooth movement; cannot walk through water, buildings or solid props; slides along walls; camera clamped to map; collision helper unit-tested.
 
 - [ ] **1.5 Buildings and props with y-sorting**
-  - Files: `src/game/art/buildings.ts`, `src/game/systems/objects.ts`, `src/game/scenes/MapScene.ts`
-  - Do: `buildBuilding(w, h, style, label)` → canvas: roof ≈ top 45% (stripes/shingles in `style.roof`), plank walls (`style.wall`), centered door, two windows, sign board with the label in the 3×5 font; "coming soon" buildings get boards across the door + a `SOON` tag. Spawn all objects per the coordinate/depth rules in ARCHITECTURE.md.
-  - Accept: player passes behind palms/buildings when north of their base and in front when south; flat props are always under the player.
+  - Files: `src/game/art/buildings.ts`, `src/game/systems/objects.ts`, `src/game/scenes/mapScene.ts`
+  - Do: `buildBuilding(w, h, style, label)` → canvas: roof ≈ top 45% in the building's roof material (thatch, terracotta gable, indigo tiles, slate), plank walls, centered door, windows, a **navy sign board with the wave mark** and the label in cream; per-shop signature details from the [SCENES.md buildings table](SCENES.md#buildings) (awnings, boards leaning outside, window displays, open garage, deck). "Coming soon" buildings get boards across the door + a `SOON` tag. Use selective outlines (ART_DIRECTION.md). Spawn all objects per the coordinate/depth rules in ARCHITECTURE.md.
+  - Accept: player passes behind palms/buildings when north of their base and in front when south; flat props are always under the player; each shop is recognisable from its silhouette and sign, as in `beach-town.webp`.
 
 - [ ] **1.6 Environmental animation**
   - Files: `src/game/systems/ambient.ts`, `src/state/settings.ts` (read only)
@@ -96,18 +113,16 @@ Goal: walk a character around an animated beach town with collisions.
   - Accept: correct prompt for each object type; no double-trigger when closing a dialog with E.
 
 - [ ] **2.2 Doors and scene transitions**
-  - Files: `src/game/scenes/MapScene.ts`
+  - Files: `src/game/scenes/mapScene.ts`
   - Do: `enter`/`exit` interactions → camera fade out (skip if reduced motion) → load target map → `scene.restart({ map, spawn })` → fade in. `useUI.getState().setLocation(key, name)`. Handle `gameEvents.on("travel")`. Unsubscribe bridge listeners on scene shutdown.
   - Accept: entering a shop and exiting returns the player in front of that shop's door, facing down.
 
 - [ ] **2.3 Three shop interiors**
   - Files: `src/game/maps/{boards,wear,gear}.ts`, `src/game/maps/index.ts`
-  - Do: each ~16×12 tiles: `X` border, 2 rows of wall (`W`, `V` or `K`), floor (`_` boards, `+` wear, `o` gear), exit mat `D` at bottom center with an `exit` interaction, spawn `door` just above the mat facing up.
-    - **Boards:** 5 `boardDisplay`s along the back wall (one per board product handle), counter, surf posters, window, plant, rug.
-    - **Wear:** `clothesRack`s and `mannequin`s for the 4 wear products, `fittingRoom`, shelf, counter, rug.
-    - **Gear:** `pegboard` (fins), `shelf` (wax, pads, leash), `wetsuitHanger`, board bag display, counter.
-    - Every display uses a real `productId` from `src/commerce/mock/catalog.ts` and a `tint` matching the product art color.
-  - Accept: `validateMap` passes for all; every catalog product is reachable in-world; interiors lazy-load (separate chunks in the build output).
+  - Do: build each room exactly as briefed in [SCENES.md §2–4](SCENES.md#2-boards-interior-boards) (references: `boards-interior.webp`, `wear-interior.webp`). Shell: ~20 × 14 tiles, back wall 3 rows tall (wood planks for Boards/Gear, sage `wallSage` for Wear), 1-tile side wall columns, warm wood floor, low wooden railing along the bottom with a 2-tile opening, exit mat `D` with an `exit` interaction, spawn `door` just above the mat facing up. Add the props SCENES.md lists (wall sign boards, pendant lamps, vines, rugs, freestanding board racks with placards, fitting rooms, mirrors, display tables…) as placeholders where missing.
+    - Display → product mapping: use the tables in SCENES.md. Every display uses a real `productId` from `src/commerce/mock/catalog.ts` and a `tint` matching the product art color; decorative duplicates have no interaction.
+    - If `docs/art-references/gear-interior.webp` doesn't exist yet, ask the owner before inventing the Gear layout beyond SCENES.md §4.
+  - Accept: `validateMap` passes for all; every catalog product is reachable in-world; interiors lazy-load (separate chunks in the build output); screenshots of Boards and Wear match their reference in layout (sign, counter, racks, aisle, entrance in the same places).
 
 - [ ] **2.4 NPCs and dialog**
   - Files: `src/game/systems/Npc.ts`, `src/components/DialogBox.tsx`, `src/components/DialogBox.module.css`, maps
@@ -153,6 +168,25 @@ Goal: walk a character around an animated beach town with collisions.
 
 ---
 
+## Phase A — Production art (parallel track)
+
+The game is built on procedural placeholder art (phases 1–4). Matching the
+detail of `docs/art-references/` needs real pixel art. This track can run in
+parallel with phases 2–5 and doesn't block them. Spec: ART_DIRECTION.md →
+Production art; asset list: SCENES.md §7.
+
+- [ ] **A.1 Choose the art source** *(owner decision)* — pixel artist commission, edited asset pack, or AI-assisted sprites cleaned up in Aseprite. Record it in ARCHITECTURE.md → Decisions.
+- [ ] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
+- [ ] **A.3 Style test slice** — one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
+- [ ] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
+- [ ] **A.5 Characters** — player, 3 shopkeepers, townsfolk, surfer (16 × 32 sheets).
+- [ ] **A.6 Buildings** — all town buildings and cottages.
+- [ ] **A.7 Town props** — everything in the SCENES.md town props table.
+- [ ] **A.8 Interior props** — Boards, Wear, Gear sets.
+- [ ] **A.9 Integration** — load the PNG/JSON assets in `BootScene` under the same texture keys (ART_DIRECTION.md → Replacing placeholder art), pack atlases, compare every scene with its reference.
+
+---
+
 ## Phase 5 — Real commerce (Shopify)
 
 - [ ] **5.1 Shopify provider** — `src/commerce/shopify/{client,queries,provider}.ts` implementing `CommerceProvider` via Storefront GraphQL (`products`, `productByHandle`, `cartCreate` → `checkoutUrl`). Map to SURFBIT types; images → `ProductImage.src`. Product `metafields` carry `store` (boards/wear/gear) and specs.
@@ -161,7 +195,7 @@ Goal: walk a character around an animated beach town with collisions.
 
 ## Phase 6 — Production polish
 
-- [ ] **6.1 Real art** — swap generators for Aseprite exports per ART_DIRECTION.md → "Replacing placeholder art".
+- [ ] **6.1 Real art** — finish Phase A, then remove placeholder generators that are no longer used.
 - [ ] **6.2 Tiled importer (optional)** — `scripts/tiled-to-mapdef.ts` converting Tiled JSON to `MapDef`.
 - [ ] **6.3 Performance** — texture atlases, preload only the town, measure LCP/INP, keep initial JS for `/` < 400 KB gz (Phaser chunk loaded after first paint).
 - [ ] **6.4 Analytics & error tracking** — page views, product inspects, add-to-cart, checkout starts.
@@ -181,3 +215,5 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Phase 0 complete: scaffold, tokens, commerce seam, stores, art foundation, docs.
 - 2026-11-26 — Step 1.1 complete. Added Vitest to `npm run check` and covered commerce helpers and cart actions.
 - 2026-11-26 — Step 1.2 complete. Added the town map, lazy loader, and tested terrain, collision, and validation builders.
+- 2026-11-26 — Step 1.3 complete. Mounted Phaser on the home page, registered generated textures, and rendered the town ground at 2× zoom.
+- 2026-11-26 — Visual target added: `docs/art-references/`, palette resampled from it, `docs/SCENES.md` scene briefs, new steps 1.3b (town layout) and 1.3c (16 × 32 characters), Phase A (production art).

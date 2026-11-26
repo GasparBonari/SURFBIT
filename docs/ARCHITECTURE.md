@@ -42,7 +42,9 @@ src/
 ├── app/                         Next.js App Router
 │   ├── layout.tsx            ✅ fonts, metadata, global CSS
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
-│   ├── page.tsx              ✅ placeholder → 🔲 world page (WorldClient + HUD)
+│   ├── page.tsx              ✅ world page and no-JavaScript fallback → 🔲 HUD
+│   ├── page.module.css       ✅ fullscreen canvas and fallback layout
+│   ├── World.tsx             ✅ App Router client entry for the world
 │   ├── shop/page.tsx         🔲 direct shopping mode (all products)
 │   ├── products/[handle]/    🔲 SEO product pages (generateStaticParams)
 │   ├── checkout/             🔲 checkout review + success pages
@@ -71,14 +73,14 @@ src/
 │   │   ├── characters.ts     ✅ character spritesheets, autoOutline, shadow
 │   │   ├── props.ts          ✅ PROPS registry + effects (gull, wave, surfer…)
 │   │   └── buildings.ts      🔲 building facade generator
-│   ├── textures.ts           🔲 registers all generated art with Phaser
-│   ├── config.ts             🔲 Phaser game config
+│   ├── textures.ts           ✅ generated textures and lazy prop tints
+│   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, town and lazy loader
 │   │                         🔲 shop interiors
-│   ├── scenes/               🔲 BootScene, MapScene
+│   ├── scenes/               ✅ BootScene, MapScene ground layer
 │   ├── systems/              🔲 Player, Npc, collision, interaction, ambient
 │   ├── audio.ts              🔲 WebAudio ambience + music
-│   └── WorldClient.tsx       🔲 React component that mounts Phaser
+│   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  🔲 React UI (HUD, ProductModal, CartDrawer, …)
 ```
 
@@ -105,6 +107,11 @@ src/
    server**; client prices are display-only snapshots.
 5. **Config over code.** New shops, displays, NPCs and signs are added by
    editing map definitions, not by changing systems.
+
+The home page uses `app/World.tsx` as its client entry. Its `WorldClient`
+component imports Phaser and the game configuration inside an effect. The
+configuration passes the loaded Phaser runtime to the scene factories. The
+ground preview uses 2× zoom until the player camera in step 1.4.
 
 ## Data flow: buying a board
 
@@ -220,7 +227,7 @@ if you change your mind.
 | # | Decision | Why |
 |---|---|---|
 | D1 | **Mock commerce provider first**, Shopify behind `CommerceProvider` | The world and UI can be built and tested without a store; Shopify is a drop-in (roadmap phase 5). |
-| D2 | **Procedural placeholder art** in `src/game/art` until real Aseprite assets exist | Keeps palette/proportions cohesive from day one; real assets replace generators **with the same texture keys and frame sizes**. |
+| D2 | **Procedural placeholder art** in `src/game/art` until production pixel art exists (roadmap Phase A) | Lets the game be built and tested now with the right grid, palette and layout. It can't reach the detail of the references; real assets replace generators **with the same texture keys and frame sizes**. |
 | D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the MVP | Type-checked, diff-able, easy for AI agents to edit. A Tiled importer that outputs the same `MapDef` can be added later (phase 6) without touching systems. |
 | D4 | **One `MapScene` class** started with a map key, instead of one Phaser class per shop | Each interior is still an independent scene instance (own map, objects, audio); no duplicated logic. Map data is lazy-loaded. |
 | D5 | **Free (8-way) movement with 4-directional animation** | Feels smoother than grid-locked 4-way (Stardew-like). To get strict 4-way, zero the minor axis in `Player`. |
@@ -229,3 +236,6 @@ if you change your mind.
 | D8 | **Currency USD** (placeholder) | Set by the real store once Shopify is connected. |
 | D9 | **WebAudio-generated ambience/music** until real audio files exist | No asset dependency; replace with files in `public/audio` later. |
 | D10 | **Vanilla CSS + CSS Modules** with tokens in `globals.css` (no Tailwind) | Small, explicit, easy to keep pixel-perfect. |
+| D11 | **`docs/art-references/` is the visual target**; layouts in `docs/SCENES.md` | One shared picture of "done" for every agent and artist. Concept art guides composition, palette and density; it isn't traced or used as game assets. |
+| D12 | **Characters 16 × 32 px** (chibi, Stardew density) on the 16 px tile grid | The references' characters (cap, backpack, readable face) don't fit in 16 × 24. Feet stay at the bottom, so hitboxes are unchanged. |
+| D13 | **Town and interiors follow the reference layouts** (cobblestone town, stone wall + stairs, diagonal shoreline, ~20 × 14 interiors) instead of the earlier grass town and boardwalk | Matches the approved look; see roadmap 1.3b and 2.3. |

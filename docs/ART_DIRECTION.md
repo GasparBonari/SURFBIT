@@ -5,24 +5,53 @@ rule here, fix the asset, not the rule (or update the rule here first).
 
 ## Mood
 
-Relaxed, sunny, nostalgic. Late-90s surf shop meets 16-bit handheld RPG.
-Warm sand, turquoise water, sun-bleached wood, coral and teal accents.
+Relaxed, sunny, nostalgic. A lush tropical surf village in the detail and
+density of Stardew Valley: golden sand, deep turquoise water, warm
+orange-brown timber, beige cobblestones, dense palms and hibiscus, navy-and-teal
+SURFBIT signage, and golden lamp light indoors.
 
 ## Visual references
 
-Use these concept images for layout, atmosphere, and visual detail. Build the
-scenes with the palette and pixel rules below, including the 16 × 16 px tile
-grid and 16 × 24 px character frames. Follow the roadmap for map layouts and
-which shops players can enter. [Roadmap](ROADMAP.md)
+**`docs/art-references/` is the visual target.** When a choice isn't covered
+by a rule here, do what the references do. Scene-by-scene layouts, building
+specs, product placements and the asset checklist are in
+[SCENES.md](SCENES.md).
+
+The images are AI concept art. Match their **composition, palette, detail
+density and mood**. Don't trace them pixel for pixel: their perspective is
+painterly and their pixel size is uneven. We rebuild them on the 16 × 16 px
+grid with 16 × 32 px characters (rules below).
+
+### Style traits to reproduce
+
+- **Saturated and warm.** Every scene leans golden: sand `#fdda8a`, wood
+  `#c97a43`, thatch `#f0a14b`. Shadows go warm brown or deep teal, never grey.
+- **Density.** No empty ground. Fill the gaps between shops with planters,
+  palms, shrubs, flowers, lamps and benches. Interiors have plants, posters,
+  rugs and hanging vines in every corner.
+- **Readable silhouettes.** Each building has its own roof material and color
+  (thatch, terracotta, indigo, slate), a navy sign with the wave mark, and a
+  display in the window or front showing what it sells.
+- **Selective outlines.** Dark, colored outlines (the darkest shade of each
+  ramp) instead of one flat black line around everything. Characters keep a
+  full `#2b2433` outline so they stay readable.
+- **Soft top-left light**, with chunky 2–3-shade ramps per material. Interiors
+  get warm pools of light under pendant lamps.
+- **Brand everywhere.** Wave mark on signs, rugs, mats, tees, curtains,
+  flags and the plaza inlay (SCENES.md → Brand mark).
+
+Before marking any visual roadmap step done, take a screenshot of the scene
+and compare it side by side with its reference. Mention the main remaining
+differences in your summary.
 
 ### Beach Town
 
 ![Pixel-art beach town with shopfronts around a stone plaza and a sandy shoreline below](art-references/beach-town.webp)
 
-Use the central plaza as a landmark with clear paths to the shops, boardwalk,
-and beach. Give each storefront a readable sign and a display that identifies
-what it sells. Group palms, flowers, and benches along the paths so the routes
-stay legible.
+Use the central plaza as a landmark with clear paths to the shops, the stone
+stairs and the beach. Give each storefront a readable sign and a display that
+identifies what it sells. Group palms, flowers, and benches along the paths so
+the routes stay legible. Layout: [SCENES.md → Beach town](SCENES.md#1-beach-town-town).
 
 ### Boards interior
 
@@ -30,7 +59,7 @@ stay legible.
 
 Make upright surfboards the focal point. Use warm timber and surf posters to
 give the room character, and keep a clear aisle from the entrance to the
-displays and counter.
+displays and counter. Layout: [SCENES.md → Boards interior](SCENES.md#2-boards-interior-boards).
 
 ### Wear interior
 
@@ -38,6 +67,13 @@ displays and counter.
 
 Pair teal walls with warm wood. Place clothing racks and mannequins along the
 main aisle, and make the fitting rooms easy to spot from the entrance.
+Layout: [SCENES.md → Wear interior](SCENES.md#3-wear-interior-wear).
+
+### Gear interior
+
+No reference yet. Follow [SCENES.md → Gear interior](SCENES.md#4-gear-interior-gear)
+and the shared look of the two interiors above. A `gear-interior.webp`
+concept in the same style should be added before roadmap step 2.3.
 
 ## Palette
 
@@ -45,32 +81,64 @@ One palette for the whole project. **UI tokens** live in
 `src/app/globals.css` (`--sb-*`); **game colors** live in
 `src/game/art/palette.ts` (`P.*`). Shared colors must have the same hex in both.
 
+All values are sampled from the reference images. The Aseprite version of the
+palette is `assets/palette/surfbit.gpl`; regenerate it from `palette.ts` when
+colors change.
+
 ### Brand
 
 | Name | Hex | CSS token | `P.` key | Use |
 |---|---|---|---|---|
+| Navy | `#114f6d` | `--sb-navy` | `navy` | Logo, wordmark, sign boards, headings |
+| Navy Dark | `#0c3b56` | `--sb-navy-dark` | `navyDark` | Sign shadows, pressed states |
+| Sign Teal | `#3d7a74` | `--sb-sign-teal` | `signTeal` | Interior sign boards, wave mats |
+| Sign Teal Dark | `#194e56` | `--sb-sign-teal-dark` | `signTealDark` | Sign borders |
 | Coral | `#e8734a` | `--sb-coral` | `coral` | Primary accent, CTAs, Boards shop |
 | Coral Dark | `#c4553a` | `--sb-coral-dark` | `coralDark` | Hover / pressed, danger |
-| Teal | `#3fa7a0` | `--sb-teal` | `teal` | Wear shop, success |
-| Teal Dark | `#2c7f7c` | `--sb-teal-dark` | `tealDark` | Hover |
+| Teal | `#3c8c84` | `--sb-teal` | `teal` | Wear shop, success |
+| Teal Dark | `#2c6f6a` | `--sb-teal-dark` | `tealDark` | Hover |
 | Sun | `#f2b632` | `--sb-sun` | `sun` | Gear shop, highlights, warnings |
 | Sun Dark | `#d18f1d` | `--sb-sun-dark` | `sunDark` | Hover |
-| Sky | `#7bc6e8` | `--sb-sky` | `sky` | Sky, windows, cool accents |
-| Deep Blue | `#2f6f8f` | `--sb-deep-blue` | `deepBlue` | Focus rings, secondary text accents |
-| Cream | `#fff3d6` | `--sb-cream` | `cream` | Page background, light fills |
+| Sky | `#6fccd2` | `--sb-sky` | `sky` | Sky in windows, cool accents |
+| Deep Blue | `#2f6f8f` | `--sb-deep-blue` | `deepBlue` | Focus rings |
+| Flag Blue | `#1684c6` | — | `flagBlue` | SURFBIT flags, blue awnings |
+| Cream | `#fff3d6` | `--sb-cream` | `cream` | Page background, light fills, sign lettering |
 
-### World
+### Terrain
 
 | Name | Hex | `P.` key | Use |
 |---|---|---|---|
-| Sand / Light / Dark | `#f3d9a4` / `#fbe9c3` / `#e2bf7f` | `sand*` | Beach, paths |
-| Wet sand | `#d8b57a` | `sandWet` | Shoreline row |
-| Water / Light / Deep | `#2fb3c6` / `#5fd3dc` / `#1e8ea8` | `water*` | Ocean |
-| Foam | `#f4fbff` | `foam` | Wave crests, swash |
-| Grass / Light / Dark | `#7cc46a` / `#a4dc7c` / `#549a4f` | `grass*` | Town ground |
-| Leaf / Light / Dark | `#4fae5b` / `#7fd36b` / `#2f7f48` | `leaf*` | Palms, bushes, plants |
-| Wood / Light / Dark / Deep | `#b97a4b` / `#d49a62` / `#8a5534` / `#663c25` | `wood*` | Boardwalk, furniture, buildings |
-| Stone / Light / Dark | `#d9c9ad` / `#ebdfc8` / `#b6a385` | `stone*` | Plaza, rocks |
+| Sand / Light / Dark | `#fdda8a` / `#fee9b0` / `#e9bf6e` | `sand*` | Beach |
+| Wet sand / Dark | `#d9b071` / `#a7906f` | `sandWet*` | Shoreline, footprints |
+| Water / Light / Deep / Deeper | `#0fb0bc` / `#37c0c6` / `#02919f` / `#017a8a` | `water*` | Ocean |
+| Foam / Shade | `#fcfbf0` / `#bfe6e0` | `foam*` | Wave crests, swash |
+| Cobblestone / Light / Dark | `#ecbe78` / `#fad5a0` / `#cba260` | `stone*` | Streets, plaza |
+| Grout | `#7a6a45` | `grout` | Gaps between cobbles |
+| Wall stone / Light / Dark | `#ba9780` / `#eec898` / `#7c745f` | `wallStone*` | Retaining walls, planters, stairs |
+| Rock / Dark / Deep | `#a58174` / `#6e5b5f` / `#3f3948` | `rock*` | Beach rocks |
+| Grass / Light / Dark / Deep | `#6f9e3c` / `#a2a042` / `#3a6b36` / `#143e34` | `grass*` | Garden beds (sparingly) |
+
+### Materials
+
+| Name | Hex | `P.` key | Use |
+|---|---|---|---|
+| Wood / Light / Dark / Deep | `#c97a43` / `#e79b5b` / `#8a4a26` / `#552f26` | `wood*` | Floors, decks, furniture, walls |
+| Thatch / Light / Dark / Deep | `#f0a14b` / `#fcca6e` / `#b97e51` / `#6c4738` | `thatch*` | Boards and Gear roofs |
+| Terracotta / Light / Dark | `#e45f2a` / `#f08a55` / `#b3461f` | `terracotta*` | SURFBIT Goods roof, cottages |
+| Indigo roof / Dark / Deep | `#6a6796` / `#524f8f` / `#232f4c` | `roofIndigo*` | Wear and Beach Club roofs |
+| Slate roof / Dark | `#8791ba` / `#6c5a69` | `roofSlate*` | Workshop roof |
+| Sage wall / Dark | `#577559` / `#234144` | `wallSage*` | Wear interior back wall |
+| Iron / Dark | `#4f565c` / `#171e2a` | `iron*` | Street lamps, racks |
+| Glow / Warm | `#fdf2ad` / `#e4ab3f` | `glow*` | Lamp light, windows at dusk |
+
+### Foliage
+
+| Name | Hex | `P.` key | Use |
+|---|---|---|---|
+| Leaf / Light / Glint | `#4f8a3a` / `#a2a042` / `#e0d13c` | `leaf*` | Palms, shrubs (light = sunlit tips) |
+| Leaf Dark / Deep | `#2b5e36` / `#143e34` | `leafDark`, `leafDeep` | Shaded leaves, outlines |
+| Trunk / Dark | `#a8754a` / `#7c5132` | `trunk*` | Palm trunks |
+| Hibiscus / Pink / Lilac | `#e8505b` / `#f29bb0` / `#a99be0` | `hibiscus`, `pink`, `lilac` | Flowers |
 
 ### Neutrals
 
@@ -91,10 +159,10 @@ should use a mix.
 | Rule | Value |
 |---|---|
 | Tile size | **16 × 16 px** |
-| Character frame | **16 × 24 px**, feet at the bottom, ~1px empty margin |
+| Character frame | **16 × 32 px**, chibi proportions (head ≈ 40% of height), feet at the bottom |
 | Character sheet | 3 columns × 4 rows = `[stand, stepA, stepB]` × `[down, left, right, up]` |
-| Outline | 1px `#2b2433` around characters and standing props (`autoOutline`) |
-| Light source | Top-left; shade the bottom/right edges |
+| Outline | Characters: full 1px `#2b2433` outline (`autoOutline`). Environment and props: selective outline using the darkest shade of each material's ramp |
+| Light source | Top-left, warm; shade the bottom/right edges with warm browns or deep teal |
 | Perspective | Three-quarter (top-down with visible front faces) — buildings show a roof + front wall |
 | Rendering | `pixelArt: true`, `roundPixels: true`, `image-rendering: pixelated` |
 | Zoom | **Integer only** (2×, 3×, 4×). Never non-integer scale pixel art |
@@ -106,12 +174,16 @@ should use a mix.
 
 | Thing | Size (px) | Footprint (tiles) |
 |---|---|---|
-| Player / NPC | 16 × 24 | 1 × 1 at the feet |
+| Player / NPC | 16 × 32 | 1 × 1 at the feet |
 | Palm | 48 × 64 | 1 × 1 (trunk) |
 | Umbrella | 32 × 44 | non-solid |
-| Small shop | 128 × 96 (8 × 6 tiles) | full rect except door |
+| Shop (Boards, Gear, Wear) | 144 × 112 (9 × 7 tiles, roof included) | full rect except door |
+| Flagship / Beach Club | 192 × 128 (12 × 8 tiles) | full rect except door |
+| Interior room | ~20 × 14 tiles, back wall 3 tiles tall | — |
 | Surfboard display | 14 × 48 | 1 × 1 |
 | Counter | 48 × 28 | 3 × 1 |
+
+Full scene layouts: [SCENES.md](SCENES.md).
 
 ### Animation timing
 
@@ -129,7 +201,20 @@ should use a mix.
 flicker or camera fades. Water tiles still animate at ¼ speed. Walking
 animation stays (it is feedback, not decoration).
 
-## Replacing placeholder art with real assets (Aseprite)
+## Production art
+
+The procedural sprites in `src/game/art/*` are **placeholders**. They get the
+grid, palette, layout and mood right, which is enough to build and test the
+game. They can't reach the hand-made detail of the references. Reaching that
+needs production pixel art; see ROADMAP.md → Phase A. The full list of
+needed assets is in [SCENES.md → Asset checklist](SCENES.md#7-asset-checklist-production-art).
+
+Whoever makes the art (a pixel artist, an edited asset pack, or AI-assisted
+sprites cleaned up by hand) must follow the palette and pixel rules in this
+file. Never drop a reference image straight into the game: it isn't on a pixel
+grid, it can't be split into layers, and it blurs when zoomed.
+
+### Replacing placeholder art with real assets (Aseprite)
 
 1. Draw in Aseprite at 1× using the palette above (import `assets/palette/surfbit.gpl`).
 2. Export spritesheets as PNG + JSON (array) into

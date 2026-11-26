@@ -16,6 +16,7 @@ them through a normal cart + checkout (React + commerce provider).
 | [docs/ROADMAP.md](docs/ROADMAP.md) | **Always.** It tells you what to build next and when it's done. |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Before touching `src/game`, `src/state`, `src/commerce`, or adding routes. |
 | [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md) | Before drawing sprites, choosing colors or building UI. |
+| [docs/SCENES.md](docs/SCENES.md) + [docs/art-references/](docs/art-references/) | Before building or changing maps, buildings, props, characters or anything visual. The images are the visual target. |
 | [docs/SPEC.md](docs/SPEC.md) | Product intent. The source of truth for *what*, not *how*. |
 
 ## Workflow
@@ -84,12 +85,16 @@ npm run check       # lint + typecheck + tests + build
 1. Colors come from `src/game/art/palette.ts` (game) and `--sb-*` tokens in
    `src/app/globals.css` (UI). **No ad-hoc hex values** in components or
    sprites. Need a new color? Add it to both files and to ART_DIRECTION.md.
-2. 16 px tiles, 16×24 characters, 1 px `#2b2433` outlines, integer zoom only,
-   no rotating pixel sprites, no smoothing. See ART_DIRECTION.md.
-3. Pixel font (Press Start 2P) only for short labels; body, prices, forms and
+2. 16 px tiles, 16×32 characters, outlines per ART_DIRECTION.md, integer
+   zoom only, no rotating pixel sprites, no smoothing.
+3. **Match the references.** Scenes must follow `docs/SCENES.md` and look like
+   `docs/art-references/`. For visual steps, compare a screenshot with the
+   reference and list the main differences in your summary. Never put a
+   reference image into the game itself.
+4. Pixel font (Press Start 2P) only for short labels; body, prices, forms and
    checkout use Inter.
-4. Respect `prefersReducedMotion()` for every decorative animation.
-5. Keyboard + touch must both work for every interaction.
+5. Respect `prefersReducedMotion()` for every decorative animation.
+6. Keyboard + touch must both work for every interaction.
 
 ## Code conventions
 

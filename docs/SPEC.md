@@ -191,6 +191,8 @@ The pixel art should feel handcrafted and cohesive rather than being a collectio
 
 The overall atmosphere should be relaxed, adventurous and nostalgic.
 
+Visual target: the concept images in [`docs/art-references/`](art-references/), broken down scene by scene in [SCENES.md](SCENES.md).
+
 ## 9. Environmental animations
 
 The world should feel alive even when the user is not moving.

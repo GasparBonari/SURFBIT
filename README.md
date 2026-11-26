@@ -31,8 +31,10 @@ npm run check                # lint + typecheck + tests + build
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Step-by-step build plan with acceptance criteria |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Structure, data flow, map format, decisions |
 | [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md) | Palette, pixel rules, UI guidelines |
+| [docs/SCENES.md](docs/SCENES.md) | Scene layouts, buildings, product placement, asset checklist |
+| [docs/art-references/](docs/art-references/) | Visual target (concept art) |
 | [docs/SPEC.md](docs/SPEC.md) | Full product concept |
 
 ## Status
 
-The town map and its builder are complete. The next roadmap step is **1.3 Mount Phaser in Next.js**.
+The town ground renders on the home page. The next roadmap step is **1.4 Player movement, collision, camera**.
