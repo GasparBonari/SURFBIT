@@ -44,6 +44,11 @@ describe("moveWithCollision", () => {
     expect(moveWithCollision(grid, { x: 24, y: 24 }, 32, 0)).toEqual({ x: 24, y: 24 });
   });
 
+  it("can stop inside a doorway during a long frame", () => {
+    const reachesDoorway = (_x: number, y: number) => y > 16 && y <= 32;
+    expect(moveWithCollision(grid, { x: 8, y: 8 }, 0, 32, [], reachesDoorway)).toEqual({ x: 8, y: 24 });
+  });
+
   it("cannot skip past a character during a long frame", () => {
     const obstacle = [{ x: 16, y: 17 }];
     expect(moveWithCollision(grid, { x: 16, y: 30 }, 0, -16, obstacle)).toEqual({ x: 16, y: 30 - 16 / 3 });

@@ -25,6 +25,7 @@ function canStandAt(blocked: BlockedGrid, obstacles: readonly Point[], x: number
 
 export function moveWithCollision(
   blocked: BlockedGrid, { x, y }: Point, dx: number, dy: number, obstacles: readonly Point[] = [],
+  stopAt?: (x: number, y: number) => boolean,
 ): Point {
   // Keep long frames from skipping over tiles or the narrower character hitboxes.
   const maxStep = obstacles.length ? HITBOX_HEIGHT : TILE / 2;
@@ -35,6 +36,7 @@ export function moveWithCollision(
   for (let step = 0; step < steps; step++) {
     if (stepX && canStandAt(blocked, obstacles, x + stepX, y)) x += stepX;
     if (stepY && canStandAt(blocked, obstacles, x, y + stepY)) y += stepY;
+    if (stopAt?.(x, y)) break;
   }
 
   return { x, y };

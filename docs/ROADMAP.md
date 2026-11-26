@@ -110,14 +110,14 @@ Goal: walk a character around an animated beach town with collisions.
 
 - [x] **2.1 Interaction system + prompt pill**
   - Files: `src/game/systems/{interaction,Player}.ts`, `src/game/scenes/mapScene.ts`, `src/app/page.tsx`, `src/components/InteractPrompt.tsx`, `src/components/InteractPrompt.module.css`
-  - Do: each frame find the nearest interactable whose interaction point is within 14 px of a probe 10 px in front of the player's feet. Call `useUI.getState().setPrompt({ verb, label })` (`Enter` + building label, `Inspect` + product handle, `Read` + title, `Talk` + name, `Exit`) or `null`. Show the bobbing `marker` sprite above the target. **E / Space / Enter** triggers, debounced by 250 ms after `lastClosedAt`. React pill resolves product handles to titles via `useCatalog`; on touch it shows an **A** button that emits `gameEvents.emit("interact")`.
-    Emit the selected action on the scene for the transition and overlay handlers added in later steps.
+  - Do: each frame find the nearest product, sign, or NPC whose interaction point is within 14 px of a probe 10 px in front of the player's feet. Call `useUI.getState().setPrompt({ verb, label })` (`Inspect` + product handle, `Read` + title, `Talk` + name) or `null`. Show the bobbing `marker` sprite above the target. **E / Space / Enter** triggers, debounced by 250 ms after `lastClosedAt`. React pill resolves product handles to titles via `useCatalog`; on touch it shows an **A** button that emits `gameEvents.emit("interact")`.
+    Emit the selected action on the scene for the overlay handlers added in later steps.
   - Accept: correct prompt for each object type; no double-trigger when closing a dialog with E.
 
 - [x] **2.2 Doors and scene transitions**
   - Files: `src/game/scenes/mapScene.ts`, `src/game/systems/interaction.ts`
-  - Do: `enter`/`exit` interactions → camera fade out (skip if reduced motion) → load target map → `scene.restart({ map, spawn })` → fade in. `useUI.getState().setLocation(key, name)`. Handle `gameEvents.on("travel")`. Unsubscribe bridge listeners on scene shutdown.
-  - Accept: entering a shop and exiting returns the player in front of that shop's door, facing down. Verify with temporary map fixtures before the shop interiors land in step 2.3.
+  - Do: stepping through the configured door tile or onto an exit mat triggers `enter`/`exit` → camera fade out (skip if reduced motion) → load target map → `scene.restart({ map, spawn })` → fade in. `useUI.getState().setLocation(key, name)`. Handle `gameEvents.on("travel")`. Unsubscribe bridge listeners on scene shutdown.
+  - Accept: walking into a shop opens its interior. Walking onto the exit mat returns the player in front of that shop's door, facing down.
 
 - [x] **2.3 Three shop interiors**
   - Files: `src/game/maps/{boards,wear,gear}.ts`, `src/game/maps/index.ts`
@@ -231,3 +231,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 2.4 complete. Added four townsfolk, three shopkeepers, shared character collision, and keyboard and touch dialog for conversations and signs.
 - 2026-11-26 — Step 3.1 complete. Hydrated the catalog on the world page, added a stock-aware product modal, and verified all three shops add to one cart.
 - 2026-11-26 — Step 2.3 follow-up. Shop cameras fill the viewport at integer zoom and refit when it resizes.
+- 2026-11-26 — Step 2.2 follow-up. Walking through shop doors and onto exit mats now triggers travel automatically.

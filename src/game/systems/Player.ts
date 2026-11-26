@@ -25,7 +25,7 @@ export class Player extends Character {
     };
   }
 
-  update(delta: number, obstacles: readonly Point[]) {
+  update(delta: number, obstacles: readonly Point[], stopAt?: (x: number, y: number) => boolean) {
     if (isOverlayOpen(useUI.getState())) {
       this.keyboard?.resetKeys();
       this.stand();
@@ -46,7 +46,7 @@ export class Player extends Character {
     const running = shift?.isDown;
     const distance = WALK_SPEED * (running ? RUN_MULTIPLIER : 1) * delta / 1000;
     const scale = distance / Math.max(1, Math.hypot(x, y));
-    const next = moveWithCollision(this.blocked, this.sprite, x * scale, y * scale, obstacles);
+    const next = moveWithCollision(this.blocked, this.sprite, x * scale, y * scale, obstacles, stopAt);
     if (next.x === this.sprite.x && next.y === this.sprite.y) {
       this.stand();
       return;

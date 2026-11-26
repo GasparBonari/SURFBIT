@@ -237,10 +237,12 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
   `depth = 1`. `wall` props use `depth = 2`. Footprints `3`, wave foam `4`,
   gulls and in-world markers `100000`.
 - **Interaction point:** center of the first tile row below the footprint,
-  aligned with its horizontal center. Building doors use their configured
-  door tile center. Enter and exit props use the center of the footprint's
-  bottom tile row. NPC interaction points follow their sprite, half a tile south
-  of the feet so customers can talk across counters.
+  aligned with its horizontal center. Building signs use their configured
+  door tile center. NPC interaction points follow their sprite, half a tile
+  south of the feet so customers can talk across counters.
+- **Walk-through threshold:** building travel uses the configured door tile.
+  Enter and exit props use their footprint. Arrival spawns sit outside these
+  areas so the player can move away from the doorway after arriving.
 
 ## Player & collision
 
@@ -268,14 +270,16 @@ a probe 10 px ahead of the player's feet. It publishes the prompt to
 `useUI` and shows a marker at the target. Reduced motion keeps the marker
 stationary.
 
-E, Space, Enter and the touch button share one activation path. Activation
+E, Space, Enter and the touch button activate Inspect, Talk and Read. Activation
 emits `WORLD_INTERACTION` on the Phaser scene with the selected map
 `Interaction` as its payload and the live NPC when present. `MapScene` handles
-doors, opens the product modal for Inspect, and opens dialog for Talk and Read.
-Both use the shared UI store and return focus to the canvas when closed. Open
-overlays and a 250 ms cooldown after closing an overlay block world activation.
+the action and opens the product modal or dialog. Both overlays use the shared
+UI store and return focus to the canvas when closed. Open overlays pause world
+interactions. Button activation resumes 250 ms after an overlay closes.
 
-Door actions and `gameEvents` travel resolve through the same lazy map
+Walking onto a doorway threshold emits `WORLD_INTERACTION` once per crossing.
+Player movement stops at the first threshold crossed in a frame. Door actions
+and `gameEvents` travel resolve through the same lazy map
 registry. The camera fades out, the target map loads, and `MapScene` restarts
 at the named spawn and publishes the map name and key to `useUI`. The camera
 then fades in. Reduced motion skips both fades. Travel to an unregistered map

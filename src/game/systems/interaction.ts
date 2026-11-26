@@ -18,8 +18,12 @@ const FACING: Record<Dir, readonly [number, number]> = {
   up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0],
 };
 
+type TravelAction = Extract<Interaction, { kind: "enter" | "exit" }>;
+type PromptAction = Exclude<Interaction, TravelAction>;
+type Doorway = ReturnType<typeof getFootprint> & { action: TravelAction };
+
 type Target = {
-  action: Interaction;
+  action: PromptAction;
   prompt: Prompt;
 } & ({ x: number; y: number; markerY: number; npc?: never } | { npc: Npc });
 
@@ -32,40 +36,46 @@ function getAction(object: StaticObject): Interaction | undefined {
   }
 }
 
-function getPrompt(action: Interaction, object: MapObject): Prompt {
+function getPrompt(action: PromptAction): Prompt {
   switch (action.kind) {
-    case "enter":
-      return { verb: "Enter", label: object.type === "building" ? object.label : action.target };
-    case "exit": return { verb: "Exit", label: "" };
     case "product": return { verb: "Inspect", label: action.productId };
     case "read": return { verb: "Read", label: action.title };
     case "talk": return { verb: "Talk", label: action.name };
   }
 }
 
-function getTargets(objects: MapObject[]): Target[] {
-  return objects.flatMap((object) => {
-    if (object.type === "npc") return [];
+function getTargets(objects: MapObject[]) {
+  const targets: Target[] = [];
+  const doorways: Doorway[] = [];
+  for (const object of objects) {
+    if (object.type === "npc") continue;
     const action = getAction(object);
-    if (!action) return [];
-    const prompt = getPrompt(action, object);
-    const { x, y, w, h } = getFootprint(object);
+    if (!action) continue;
+    const footprint = getFootprint(object);
+    if (action.kind === "enter" || action.kind === "exit") {
+      const threshold = object.type === "building" ? { ...object.door, w: 1, h: 1 } : footprint;
+      doorways.push({ ...threshold, action });
+      continue;
+    }
+
+    const prompt = getPrompt(action);
+    const { x, y, w, h } = footprint;
     const center = (x + w / 2) * TILE;
     const bottom = (y + h) * TILE;
 
     if (object.type === "building") {
       const { door } = object;
-      return [{ action, prompt, x: (door.x + 0.5) * TILE, y: (door.y + 0.5) * TILE, markerY: y * TILE }];
+      targets.push({ action, prompt, x: (door.x + 0.5) * TILE, y: (door.y + 0.5) * TILE, markerY: y * TILE });
+    } else {
+      targets.push({ action, prompt, x: center, y: bottom + TILE / 2, markerY: bottom - PROPS[object.prop].h });
     }
-
-    const door = action.kind === "enter" || action.kind === "exit";
-    const top = bottom - PROPS[object.prop].h;
-    return [{ action, prompt, x: center, y: bottom + (door ? -TILE / 2 : TILE / 2), markerY: top }];
-  });
+  }
+  return { targets, doorways };
 }
 
 export class Interactions {
   private readonly targets: Target[];
+  private readonly doorways: Doorway[];
   private readonly marker: Phaser.GameObjects.Sprite;
   private readonly keyboard: Phaser.Input.Keyboard.KeyboardPlugin | null;
   private readonly unsubscribeInteract: () => void;
@@ -73,9 +83,12 @@ export class Interactions {
   private readonly motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   private reduced = prefersReducedMotion();
   private current?: Target;
+  private occupiedDoorway?: Doorway;
 
   constructor(private readonly scene: Phaser.Scene, objects: MapObject[], npcs: readonly Npc[]) {
-    this.targets = getTargets(objects);
+    const { targets, doorways } = getTargets(objects);
+    this.targets = targets;
+    this.doorways = doorways;
     for (const npc of npcs) {
       const { name, lines } = npc.definition;
       this.targets.push({ action: { kind: "talk", name, lines }, prompt: { verb: "Talk", label: name }, npc });
@@ -90,9 +103,21 @@ export class Interactions {
 
   update(time: number, feet: { x: number; y: number }, facing: Dir) {
     const ui = useUI.getState();
+    if (isOverlayOpen(ui)) {
+      this.clearTarget();
+      return;
+    }
+
+    const doorway = this.findDoorway(feet.x, feet.y);
+    const enteredDoorway = doorway && doorway !== this.occupiedDoorway;
+    this.occupiedDoorway = doorway;
+    if (enteredDoorway) {
+      this.scene.events.emit(WORLD_INTERACTION, doorway.action);
+      return;
+    }
+
     const [dx, dy] = FACING[facing];
-    this.current = isOverlayOpen(ui) ? undefined
-      : this.findClosest(feet.x + dx * PROBE_OFFSET, feet.y + dy * PROBE_OFFSET);
+    this.current = this.findClosest(feet.x + dx * PROBE_OFFSET, feet.y + dy * PROBE_OFFSET);
     ui.setPrompt(this.current?.prompt ?? null);
     this.marker.setVisible(Boolean(this.current));
     if (this.current) {
@@ -116,6 +141,18 @@ export class Interactions {
     this.unsubscribeSettings();
     this.marker.destroy();
     useUI.getState().setPrompt(null);
+  }
+
+  readonly reachesDoorway = (x: number, y: number): boolean => {
+    const doorway = this.findDoorway(x, y);
+    return doorway !== undefined && doorway !== this.occupiedDoorway;
+  };
+
+  private findDoorway(x: number, y: number): Doorway | undefined {
+    const col = Math.floor(x / TILE);
+    // The hitbox stops at the feet. Match collision's tile-edge convention.
+    const row = Math.ceil(y / TILE) - 1;
+    return this.doorways.find(({ x, y, w, h }) => col >= x && col < x + w && row >= y && row < y + h);
   }
 
   private findClosest(x: number, y: number): Target | undefined {

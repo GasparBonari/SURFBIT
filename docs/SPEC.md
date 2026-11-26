@@ -101,7 +101,7 @@ The town should be designed to accommodate additional buildings without requirin
 
 Every accessible building should have its own separate interior environment.
 
-When a player approaches a shop entrance, an interaction indicator appears. Upon entering, the screen transitions from the outdoor world to the shop interior.
+Walking through a shop doorway transitions from the outdoor world to the shop interior. Walking onto the exit mat returns the player to the town.
 
 Each interior should have:
 
@@ -165,7 +165,7 @@ The main HUD may include:
 - Store directory.
 - Optional full-screen mode.
 
-When approaching an interactive object, a small contextual message should appear, such as "Press E to enter" or "Press E to inspect."
+When approaching a product, sign, or NPC, a small contextual message should appear, such as "Press E to inspect."
 
 Menus, dialogs, buttons and transitions should maintain a consistent visual language inspired by retro games, while product descriptions and checkout information should prioritize readability.
 

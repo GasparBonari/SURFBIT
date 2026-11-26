@@ -201,7 +201,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
       if (!this.player) return;
       if (!this.transitioning) {
         const npcSprites = this.npcs.map((npc) => npc.sprite);
-        this.player.update(delta, npcSprites);
+        this.player.update(delta, npcSprites, this.interactions?.reachesDoorway);
         const pauseNpcs = isOverlayOpen(useUI.getState()) || prefersReducedMotion();
         for (const npc of this.npcs) {
           const obstacles = [this.player.sprite, ...npcSprites.filter((sprite) => sprite !== npc.sprite)];
