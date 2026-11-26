@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DialogBox } from "@/components/DialogBox";
 import { InteractPrompt } from "@/components/InteractPrompt";
 import { WorldClient } from "./World";
 import styles from "./page.module.css";
@@ -9,6 +10,7 @@ export default function Home() {
       <h1 className="sr-only">SURFBIT Beach Town</h1>
       <WorldClient className={styles.world} />
       <InteractPrompt />
+      <DialogBox />
       <noscript>
         <div className={styles.fallback}>
           <div className={`sb-panel ${styles.notice}`}>

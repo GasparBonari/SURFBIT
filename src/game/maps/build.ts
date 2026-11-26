@@ -108,8 +108,20 @@ export function validateMap(def: MapDef): void {
   }
 
   const blocked = buildBlocked(def);
+  const npcIds = new Set<string>();
+  const npcHomes = new Set<string>();
+  for (const object of def.objects) {
+    if (object.type !== "npc") continue;
+    const { id, x, y } = object;
+    const home = `${x},${y}`;
+    if (npcIds.has(id)) throw new Error(`${map} has duplicate NPC id "${id}"`);
+    if (blocked[y][x] || npcHomes.has(home)) throw new Error(`${map} NPC "${id}" is blocked at (${x}, ${y})`);
+    npcIds.add(id);
+    npcHomes.add(home);
+  }
+
   for (const [name, { x, y }] of Object.entries(def.spawns)) {
     if (!containsTile(bounds, x, y)) throw new Error(`${map} spawn "${name}" is out of bounds at (${x}, ${y})`);
-    if (blocked[y][x]) throw new Error(`${map} spawn "${name}" is blocked at (${x}, ${y})`);
+    if (blocked[y][x] || npcHomes.has(`${x},${y}`)) throw new Error(`${map} spawn "${name}" is blocked at (${x}, ${y})`);
   }
 }

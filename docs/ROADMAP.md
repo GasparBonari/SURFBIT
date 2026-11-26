@@ -126,7 +126,7 @@ Goal: walk a character around an animated beach town with collisions.
     - If `docs/art-references/gear-interior.webp` doesn't exist yet, ask the owner before inventing the Gear layout beyond SCENES.md §4.
   - Accept: `validateMap` passes for all; every catalog product is reachable in-world; interiors lazy-load (separate chunks in the build output); screenshots of Boards and Wear match their reference in layout (sign, counter, racks, aisle, entrance in the same places).
 
-- [ ] **2.4 NPCs and dialog**
+- [x] **2.4 NPCs and dialog**
   - Files: `src/game/systems/Npc.ts`, `src/components/DialogBox.tsx`, `src/components/DialogBox.module.css`, maps
   - Do: `idle` NPCs face the player when talked to; `wander` NPCs walk short random legs within 3 tiles of home with pauses, using the same collision. One shopkeeper per interior; 3–4 townsfolk outdoors with varied `Look`s. Dialog box per ART_DIRECTION.md; E/Enter/Space/click advances, Esc closes.
   - Accept: NPCs never walk through solids or the player; dialogs open/advance/close cleanly.
@@ -227,3 +227,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 2.1 complete. Added proximity prompts and a target marker, with shared keyboard and touch activation and a dialog-close cooldown.
 - 2026-11-26 — Step 2.2 complete. Added door and bridge travel with lazy loading and reduced-motion-aware camera fades. Verified all three return spawns with browser fixtures.
 - 2026-11-26 — Step 2.3 complete. Added lazy-loaded Boards, Wear, and Gear interiors with reachable displays for all 15 products, and compared Boards and Wear screenshots with their references.
+- 2026-11-26 — Step 2.4 complete. Added four townsfolk, three shopkeepers, shared character collision, and keyboard and touch dialog for conversations and signs.

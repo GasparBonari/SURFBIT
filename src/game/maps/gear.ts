@@ -1,3 +1,4 @@
+import { GEAR_SHOPKEEPER_LOOK } from "../art/characters";
 import { P } from "../art/palette";
 import type { MapDef } from "./types";
 
@@ -37,6 +38,10 @@ const def: MapDef = {
     { type: "prop", prop: "wetsuitHanger", x: 8, y: 4, tint: { color: P.ink, accent: P.teal } },
     { type: "display", prop: "shelf", x: 10, y: 4, productId: "tropical-wax", tint: { color: P.cream, accent: P.productTeal } },
     { type: "prop", prop: "counter", x: 15, y: 5 },
+    {
+      type: "npc", id: "shopkeeper", x: 16, y: 4, look: GEAR_SHOPKEEPER_LOOK, behavior: "idle", name: "Noa",
+      lines: ["Heading out for a surf? The leashes are on the left wall.", "The water stays warm here. Look for the tropical wax on the back shelf."],
+    },
     { type: "display", prop: "leashHooks", x: 1, y: 7, productId: "coil-leash", tint: { color: P.coral, accent: P.gearCharcoal } },
     { type: "display", prop: "bagRack", x: 17, y: 7, productId: "day-board-bag", tint: { color: P.bagSilver, accent: P.deepBlue } },
     { type: "prop", prop: "rug", x: 5, y: 9, tint: { color: P.sandDark, accent: P.sun } },

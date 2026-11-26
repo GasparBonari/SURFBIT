@@ -75,18 +75,19 @@ src/
 │   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   └── buildings.ts      ✅ procedural shop façades and signage
-│   ├── textures.ts           ✅ generated textures and lazy prop tints
+│   ├── textures.ts           ✅ generated textures, lazy NPC sheets and prop tints
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         ✅ Boards, Wear and Gear interiors + catalog reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
-│   │                         🔲 Npc
+│   │                         ✅ NPC movement and shared character sprites
 │   ├── audio.ts              🔲 WebAudio ambience + music
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  React UI
     ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
-    └── …                      🔲 HUD, ProductModal, CartDrawer, DialogBox
+    ├── DialogBox.tsx          ✅ NPC and sign dialog (with CSS module)
+    └── …                      🔲 HUD, ProductModal, CartDrawer
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -199,7 +200,7 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
 ```
 
 `validateMap` checks the rectangular ground grid, tile characters, object
-footprints, doors and spawns. `buildGround` and `buildBlocked` expect valid map
+footprints, doors, NPC homes and spawns. `buildGround` and `buildBlocked` expect valid map
 data. Autotiling uses adjacent tiles within the map and picks terrain variants
 deterministically by cell coordinates.
 
@@ -234,7 +235,8 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
 - **Interaction point:** center of the first tile row below the footprint,
   aligned with its horizontal center. Building doors use their configured
   door tile center. Enter and exit props use the center of the footprint's
-  bottom tile row.
+  bottom tile row. NPC interaction points follow their sprite, half a tile south
+  of the feet so customers can talk across counters.
 
 ## Player & collision
 
@@ -242,12 +244,16 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
   bottom row in every pose. Use a bottom-center sprite origin `(0.5, 1)`.
   The 10×6 px hitbox and 14×5 px shadow are anchored to that same point.
 - Collision: Move X then Y, test the four hitbox corners
-  against the blocked-tile grid; cancel the axis that collides. Split long
-  moves into substeps to prevent skipping solid tiles. No Arcade physics.
+  against the blocked-tile grid and check for overlap with other characters.
+  Cancel the axis that collides. Split long moves into substeps to keep
+  characters from skipping solids or one another. No Arcade physics.
 - Speed 80 px/s walking, ×1.6 with Shift. Diagonal input is normalised.
 - Facing = dominant axis of the input vector; animations are 4-directional.
 - Camera: `startFollow(player, true)`, bounded to the map, integer zoom
   `max(2, floor(viewportHeight / 240))`, `roundPixels: true`.
+- NPCs start at their home tile centers. Wanderers take short walks within
+  three tiles of home and pause between legs. Reduced motion or an open
+  overlay pauses wandering. NPCs turn toward the player when spoken to.
 
 ## World interactions
 
@@ -258,9 +264,10 @@ stationary.
 
 E, Space, Enter and the touch button share one activation path. Activation
 emits `WORLD_INTERACTION` on the Phaser scene with the selected map
-`Interaction` as its payload. `MapScene` handles door actions. Dialogs and
-product overlays subscribe in their respective roadmap steps. Open overlays
-and a 250 ms cooldown after closing an overlay block activation.
+`Interaction` as its payload and the live NPC when present. `MapScene` handles
+doors and opens dialog for Talk and Read actions. The dialog uses the shared
+UI store and returns focus to the canvas when closed. Open overlays and a
+250 ms cooldown after closing an overlay block world activation.
 
 Door actions and `gameEvents` travel resolve through the same lazy map
 registry. The camera fades out, the target map loads, and `MapScene` restarts

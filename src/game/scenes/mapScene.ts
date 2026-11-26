@@ -1,6 +1,6 @@
 import type Phaser from "phaser";
 import { prefersReducedMotion } from "@/state/settings";
-import { useUI } from "@/state/ui";
+import { isOverlayOpen, useUI } from "@/state/ui";
 import { P } from "../art/palette";
 import { TILE } from "../art/tiles";
 import { gameEvents } from "../bridge";
@@ -8,7 +8,9 @@ import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
 import type { Interaction, MapDef, MapKey } from "../maps/types";
 import { Ambient } from "../systems/ambient";
+import type { BlockedGrid } from "../systems/collision";
 import { Interactions, WORLD_INTERACTION } from "../systems/interaction";
+import { Npc } from "../systems/Npc";
 import { Player } from "../systems/Player";
 import { spawnObjects } from "../systems/objects";
 import { TILESET_KEY } from "../textures";
@@ -39,6 +41,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
   return class MapScene extends phaser.Scene {
     private player?: Player;
+    private npcs: Npc[] = [];
+    private blocked: BlockedGrid = [];
     private ambient?: Ambient;
     private interactions?: Interactions;
     private transitioning = false;
@@ -63,7 +67,10 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         this.ambient = undefined;
         this.interactions?.destroy();
         this.interactions = undefined;
+        if (useUI.getState().dialog) useUI.getState().closeAll();
         this.player = undefined;
+        this.npcs = [];
+        this.blocked = [];
         if (updateZoom) scale.off(RESIZE, updateZoom);
         events.off(SHUTDOWN, cleanup);
         events.off(DESTROY, cleanup);
@@ -92,8 +99,10 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         if (!ground) throw new Error(`Could not create the ground layer for "${map}"`);
 
         const animatedProps = spawnObjects(this, def);
-        const player = new Player(this, start, buildBlocked(def));
-        this.interactions = new Interactions(this, def.objects);
+        this.blocked = buildBlocked(def);
+        const player = new Player(this, start, this.blocked);
+        this.npcs = def.objects.flatMap((object) => object.type === "npc" ? [new Npc(this, def.key, object)] : []);
+        this.interactions = new Interactions(this, def.objects, this.npcs);
         this.ambient = new Ambient(this, def, ground, animatedProps, player.sprite);
         const camera = this.cameras.main;
         camera.setBackgroundColor(def.kind === "interior" ? P.outline : P.water);
@@ -123,6 +132,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
           this.transitioning = true;
           this.interactions?.clearTarget();
+          if (useUI.getState().dialog) useUI.getState().closeAll();
           const fade = !prefersReducedMotion();
 
           const loadDestination = async () => {
@@ -148,9 +158,14 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
           }
         };
 
-        const onInteraction = (action: Interaction) => {
+        const onInteraction = (action: Interaction, npc?: Npc) => {
           if (action.kind === "enter" || action.kind === "exit") {
             travel({ map: action.target, spawn: action.spawn });
+          } else if (action.kind === "talk") {
+            npc?.turnToward(player.sprite);
+            useUI.getState().openDialog(action.name, action.lines);
+          } else if (action.kind === "read") {
+            useUI.getState().openDialog(action.title, action.text);
           }
         };
         events.on(WORLD_INTERACTION, onInteraction);
@@ -173,7 +188,13 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
     update(time: number, delta: number) {
       if (!this.player) return;
       if (!this.transitioning) {
-        this.player.update(delta);
+        const npcSprites = this.npcs.map((npc) => npc.sprite);
+        this.player.update(delta, npcSprites);
+        const pauseNpcs = isOverlayOpen(useUI.getState()) || prefersReducedMotion();
+        for (const npc of this.npcs) {
+          const obstacles = [this.player.sprite, ...npcSprites.filter((sprite) => sprite !== npc.sprite)];
+          npc.update(delta, this.blocked, obstacles, pauseNpcs);
+        }
         this.interactions?.update(time, this.player.sprite, this.player.direction);
       }
       this.ambient?.update(delta, this.player.sprite);

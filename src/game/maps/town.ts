@@ -130,6 +130,26 @@ const def: MapDef = {
     { type: "prop", prop: "stringLights", x: 48, y: 24 },
     { type: "prop", prop: "boardsInSand", x: 24, y: 31 },
     { type: "prop", prop: "volleyballNet", x: 2, y: 38 },
+    {
+      type: "npc", id: "tali", x: 23, y: 15, behavior: "wander", name: "Tali",
+      look: { skin: P.skin3, hair: P.woodDeep, hairStyle: "long", shirt: P.coral, shorts: P.navy, hat: { style: "straw", color: P.thatchLight, brim: P.woodDark } },
+      lines: ["Morning! Boards is just across the plaza to the northwest.", "I like to get there before the morning surf crowd."],
+    },
+    {
+      type: "npc", id: "rui", x: 31, y: 23, behavior: "wander", name: "Rui",
+      look: { skin: P.skin2, hair: P.ink, hairStyle: "short", shirt: P.sun, shorts: P.tealDark, hat: { style: "backwardCap", color: P.deepBlue, brim: P.navy } },
+      lines: ["The stairs just south of the plaza go straight down to the sand."],
+    },
+    {
+      type: "npc", id: "bea", x: 8, y: 31, behavior: "wander", name: "Bea",
+      look: { skin: P.skin1, hair: P.woodDark, hairStyle: "curly", shirt: P.productTeal, shorts: P.coralDark, hat: { style: "bucket", color: P.cream, brim: P.sandDark } },
+      lines: ["Set your towel above the wet sand. The tide comes in quickly here."],
+    },
+    {
+      type: "npc", id: "imani", x: 43, y: 30, behavior: "idle", name: "Imani",
+      look: { skin: P.skin4, hair: P.outline, hairStyle: "bun", shirt: P.lilac, shorts: P.navyDark },
+      lines: ["I come here to watch for sets. The waves look smaller from the deck."],
+    },
     ...placeProps("volleyballPost", [[2, 38], [5, 38]]),
     ...placeProps("fence", [[1, 6], [5, 6], [17, 6], [21, 6]]),
     ...placeProps("cafeTable", [[43, 26], [50, 26]]),

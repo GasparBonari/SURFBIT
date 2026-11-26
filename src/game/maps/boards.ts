@@ -1,3 +1,4 @@
+import { BOARDS_SHOPKEEPER_LOOK } from "../art/characters";
 import { P } from "../art/palette";
 import type { MapDef } from "./types";
 
@@ -44,6 +45,10 @@ const def: MapDef = {
     { type: "display", prop: "boardDisplay", x: 8, y: 4, productId: "foamie-softboard", tint: { color: P.foamLime, accent: P.deepBlue } },
     { type: "prop", prop: "shelf", x: 9, y: 4, tint: jute },
     { type: "prop", prop: "counter", x: 12, y: 5 },
+    {
+      type: "npc", id: "shopkeeper", x: 13, y: 4, look: BOARDS_SHOPKEEPER_LOOK, behavior: "idle", name: "Kai",
+      lines: ["Hey, welcome to Boards. What kind of waves are you chasing?", "For the little waves by the point, I’d take a longboard. You can check one out by the back wall."],
+    },
     { type: "prop", prop: "shelf", x: 15, y: 4 },
     { type: "prop", prop: "pottedPalm", x: 5, y: 5 },
     { type: "prop", prop: "plant", x: 16, y: 5 },

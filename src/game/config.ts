@@ -17,6 +17,8 @@ export function createGameConfig(
     scale: { mode: phaser.Scale.RESIZE, width: "100%", height: "100%" },
     callbacks: {
       postBoot(game) {
+        game.canvas.id = "world-canvas";
+        game.canvas.tabIndex = -1;
         game.canvas.setAttribute("role", "img");
         game.canvas.setAttribute("aria-label", "SURFBIT beach town map");
       },

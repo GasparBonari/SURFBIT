@@ -7,6 +7,7 @@ import { TILE } from "../art/tiles";
 import { gameEvents } from "../bridge";
 import { getFootprint } from "../maps/build";
 import type { Interaction, MapObject } from "../maps/types";
+import type { Npc } from "./Npc";
 
 export const WORLD_INTERACTION = "world-interaction";
 
@@ -17,18 +18,16 @@ const FACING: Record<Dir, readonly [number, number]> = {
   up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0],
 };
 
-interface Target {
+type Target = {
   action: Interaction;
   prompt: Prompt;
-  x: number;
-  y: number;
-  markerY: number;
-}
+} & ({ x: number; y: number; markerY: number; npc?: never } | { npc: Npc });
 
-function getAction(object: MapObject): Interaction | undefined {
+type StaticObject = Exclude<MapObject, { type: "npc" }>;
+
+function getAction(object: StaticObject): Interaction | undefined {
   switch (object.type) {
     case "display": return { kind: "product", productId: object.productId };
-    case "npc": return { kind: "talk", name: object.name, lines: object.lines };
     default: return object.interact;
   }
 }
@@ -46,6 +45,7 @@ function getPrompt(action: Interaction, object: MapObject): Prompt {
 
 function getTargets(objects: MapObject[]): Target[] {
   return objects.flatMap((object) => {
+    if (object.type === "npc") return [];
     const action = getAction(object);
     if (!action) return [];
     const prompt = getPrompt(action, object);
@@ -59,7 +59,7 @@ function getTargets(objects: MapObject[]): Target[] {
     }
 
     const door = action.kind === "enter" || action.kind === "exit";
-    const top = object.type === "npc" ? bottom - TILE / 2 - CHAR_H : bottom - PROPS[object.prop].h;
+    const top = bottom - PROPS[object.prop].h;
     return [{ action, prompt, x: center, y: bottom + (door ? -TILE / 2 : TILE / 2), markerY: top }];
   });
 }
@@ -74,8 +74,12 @@ export class Interactions {
   private reduced = prefersReducedMotion();
   private current?: Target;
 
-  constructor(private readonly scene: Phaser.Scene, objects: MapObject[]) {
+  constructor(private readonly scene: Phaser.Scene, objects: MapObject[], npcs: readonly Npc[]) {
     this.targets = getTargets(objects);
+    for (const npc of npcs) {
+      const { name, lines } = npc.definition;
+      this.targets.push({ action: { kind: "talk", name, lines }, prompt: { verb: "Talk", label: name }, npc });
+    }
     this.marker = scene.add.sprite(0, 0, "marker", 0).setOrigin(0.5, 1).setDepth(100000).setVisible(false);
     this.keyboard = scene.input.keyboard;
     this.keyboard?.on("keydown", this.onKeyDown);
@@ -93,7 +97,9 @@ export class Interactions {
     this.marker.setVisible(Boolean(this.current));
     if (this.current) {
       const bob = this.reduced ? 0 : Math.round(2 * Math.sin(time / 160));
-      this.marker.setPosition(this.current.x, this.current.markerY - 3 + bob);
+      const { npc } = this.current;
+      if (npc) this.marker.setPosition(npc.sprite.x, npc.sprite.y - CHAR_H - 3 + bob);
+      else this.marker.setPosition(this.current.x, this.current.markerY - 3 + bob);
     }
   }
 
@@ -116,7 +122,11 @@ export class Interactions {
     let closest: Target | undefined;
     let bestDistance = REACH ** 2;
     for (const target of this.targets) {
-      const distance = (target.x - x) ** 2 + (target.y - y) ** 2;
+      const { npc } = target;
+      const point = npc ? npc.sprite : target;
+      // Let customers talk across a counter while keeping the marker on the sprite.
+      const targetY = point.y + (npc ? TILE / 2 : 0);
+      const distance = (point.x - x) ** 2 + (targetY - y) ** 2;
       if (distance > bestDistance || (closest && distance === bestDistance)) continue;
       closest = target;
       bestDistance = distance;
@@ -140,7 +150,7 @@ export class Interactions {
   private readonly activate = () => {
     const ui = useUI.getState();
     if (!this.current || isOverlayOpen(ui) || Date.now() - ui.lastClosedAt < CLOSE_COOLDOWN) return false;
-    this.scene.events.emit(WORLD_INTERACTION, this.current.action);
+    this.scene.events.emit(WORLD_INTERACTION, this.current.action, this.current.npc);
     return true;
   };
 }

@@ -1,3 +1,4 @@
+import { WEAR_SHOPKEEPER_LOOK } from "../art/characters";
 import { P } from "../art/palette";
 import type { MapDef } from "./types";
 
@@ -40,6 +41,10 @@ const def: MapDef = {
     { type: "prop", prop: "plant", x: 4, y: 4 },
     { type: "prop", prop: "capShelf", x: 5, y: 4 },
     { type: "prop", prop: "counter", x: 8, y: 5 },
+    {
+      type: "npc", id: "shopkeeper", x: 9, y: 4, look: WEAR_SHOPKEEPER_LOOK, behavior: "idle", name: "Mika",
+      lines: ["Welcome to Wear! The tees are on your left, and the swimwear’s by the fitting rooms.", "It gets breezy on the deck at dusk. I always take a hoodie."],
+    },
     { type: "prop", prop: "plant", x: 11, y: 5 },
     { type: "prop", prop: "wallMirror", x: 13, y: 3 },
     { type: "prop", prop: "fittingRoom", x: 14, y: 4 },
