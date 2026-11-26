@@ -12,6 +12,7 @@ export interface PropSpec {
   w: number;
   h: number;
   frames?: number;
+  animation?: { frameMs: number; pingPong?: boolean };
   /** Footprint in tiles (placement + collision). Defaults to ceil(w/16) × 1. */
   foot?: { w: number; h: number };
   solid?: boolean;
@@ -117,9 +118,12 @@ export function drawWaveMark(ctx: Ctx, x: number, y: number, color: string, scal
   });
 }
 
+const palmSway = { frameMs: 450, pingPong: true };
+const flagWave = { frameMs: 160 };
+
 export const PROPS = {
-  palm: { w: 48, h: 64, frames: 3, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f) },
-  palmSmall: { w: 48, h: 48, frames: 3, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f, 48) },
+  palm: { w: 48, h: 64, frames: 3, animation: palmSway, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f) },
+  palmSmall: { w: 48, h: 48, frames: 3, animation: palmSway, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f, 48) },
   bush: {
     w: 16, h: 15, solid: true,
     draw: (c, ox) => {
@@ -243,7 +247,7 @@ export const PROPS = {
     draw: (c, ox) => { box(c, ox, 0, 14, 14, P.wood, P.woodDeep); rect(c, ox + 1, 6, 12, 1, P.woodDark); rect(c, ox + 6, 1, 1, 12, P.woodDark); },
   },
   flag: {
-    w: 16, h: 38, frames: 3, foot: { w: 1, h: 1 }, solid: true,
+    w: 16, h: 38, frames: 3, animation: flagWave, foot: { w: 1, h: 1 }, solid: true,
     draw: (c, ox, f) => {
       rect(c, ox + 3, 0, 2, 38, P.ink);
       for (let x = 0; x < 10; x++) {
@@ -254,7 +258,7 @@ export const PROPS = {
     },
   },
   beachFlag: {
-    w: 28, h: 43, frames: 3, foot: { w: 1, h: 1 }, solid: true, outline: false,
+    w: 28, h: 43, frames: 3, animation: flagWave, foot: { w: 1, h: 1 }, solid: true, outline: false,
     draw: (c, ox, frame) => {
       rect(c, ox + 12, 0, 2, 43, P.ironDark);
       rect(c, ox + 14, 3, 14, 11, P.flagBlue);
@@ -532,9 +536,9 @@ export function drawSurfer(ctx: Ctx, ox: number, frame: number) {
 
 export function drawWave(ctx: Ctx) {
   for (let x = 0; x < 28; x++) {
-    const y = Math.round(2 - Math.sin((x / 27) * Math.PI) * 2);
-    px(ctx, x, y + 2, P.foam);
-    if (x > 2 && x < 25) px(ctx, x, y + 3, P.foamShade);
+    const y = Math.round(12 - x / 3 - Math.sin((x / 27) * Math.PI) * 3);
+    px(ctx, x, y, P.foam);
+    if (x > 2 && x < 25) px(ctx, x, y + 1, P.foamShade);
   }
 }
 

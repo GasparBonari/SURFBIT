@@ -3,6 +3,7 @@ import { TILE } from "../art/tiles";
 import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
 import type { MapKey } from "../maps/types";
+import { Ambient } from "../systems/ambient";
 import { Player } from "../systems/Player";
 import { spawnObjects } from "../systems/objects";
 import { TILESET_KEY } from "../textures";
@@ -17,6 +18,7 @@ export interface MapSceneData {
 export function createMapScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
   return class MapScene extends phaser.Scene {
     private player?: Player;
+    private ambient?: Ambient;
 
     constructor() {
       super(MAP_SCENE_KEY);
@@ -31,6 +33,8 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
       const cleanup = () => {
         active = false;
+        this.ambient?.destroy();
+        this.ambient = undefined;
         this.player = undefined;
         if (updateZoom) scale.off(RESIZE, updateZoom);
         events.off(SHUTDOWN, cleanup);
@@ -56,10 +60,14 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         });
         const tileset = tilemap.addTilesetImage(TILESET_KEY);
         if (!tileset) throw new Error(`Missing texture "${TILESET_KEY}"`);
-        tilemap.createLayer(0, tileset);
+        const ground = tilemap.createLayer(0, tileset);
+        if (!ground) throw new Error(`Could not create the ground layer for "${map}"`);
 
-        spawnObjects(this, def);
+        const animatedProps = spawnObjects(this, def);
         const player = new Player(this, start, buildBlocked(def));
+        if (def.kind === "outdoor") {
+          this.ambient = new Ambient(this, def.ground, ground, animatedProps, player.sprite);
+        }
         const camera = this.cameras.main;
         updateZoom = () => camera.setZoom(Math.max(2, Math.floor(scale.height / 240)));
         updateZoom();
@@ -75,7 +83,9 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
     }
 
     update(_time: number, delta: number) {
-      this.player?.update(delta);
+      if (!this.player) return;
+      this.player.update(delta);
+      this.ambient?.update(delta, this.player.sprite);
     }
   };
 }

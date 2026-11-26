@@ -6,7 +6,15 @@ import { getFootprint } from "../maps/build";
 import type { MapDef } from "../maps/types";
 import { ensureTinted } from "../textures";
 
+export interface AnimatedProp {
+  sprite: Phaser.GameObjects.Sprite;
+  frames: number;
+  frameMs: number;
+  pingPong?: boolean;
+}
+
 export function spawnObjects(scene: Phaser.Scene, { key: map, objects }: MapDef) {
+  const animated: AnimatedProp[] = [];
   for (const object of objects) {
     if (object.type === "npc") continue;
 
@@ -29,7 +37,11 @@ export function spawnObjects(scene: Phaser.Scene, { key: map, objects }: MapDef)
       const bottom = (object.y + 1) * TILE;
       const depth = prop.flat ? 1 : prop.wall ? 2 : bottom;
       const key = object.tint ? ensureTinted(scene, object.prop, object.tint) : object.prop;
-      scene.add.sprite(x, bottom, key, 0).setOrigin(0.5, 1).setDepth(depth);
+      const sprite = scene.add.sprite(x, bottom, key, 0).setOrigin(0.5, 1).setDepth(depth);
+      if (prop.animation && prop.frames && prop.frames > 1) {
+        animated.push({ sprite, frames: prop.frames, ...prop.animation });
+      }
     }
   }
+  return animated;
 }

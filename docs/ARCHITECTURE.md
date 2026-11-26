@@ -78,8 +78,8 @@ src/
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         🔲 shop interiors
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
-│   ├── systems/              ✅ Player, collision and its unit tests, object placement
-│   │                         🔲 Npc, interaction, ambient
+│   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation
+│   │                         🔲 Npc, interaction
 │   ├── audio.ts              🔲 WebAudio ambience + music
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  🔲 React UI (HUD, ProductModal, CartDrawer, …)

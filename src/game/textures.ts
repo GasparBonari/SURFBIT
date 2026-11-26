@@ -64,7 +64,7 @@ export function registerTextures({ textures }: Phaser.Scene) {
   for (const [key, prop] of Object.entries(PROPS)) addProp(textures, key, prop, tint);
 
   addStrip(textures, "gull", { w: 13, h: 8, frames: 2 }, drawGull);
-  addStrip(textures, "wave", { w: 28, h: 6 }, drawWave);
+  addStrip(textures, "wave", { w: 28, h: 14 }, drawWave);
   addStrip(textures, "surfer", { w: 16, h: 13, frames: 2 }, drawSurfer);
   addStrip(textures, "footprint", { w: 5, h: 4 }, drawFootprint);
   addStrip(textures, "marker", { w: 7, h: 7 }, drawMarker);

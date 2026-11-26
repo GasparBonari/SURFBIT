@@ -98,8 +98,9 @@ Goal: walk a character around an animated beach town with collisions.
   - Do: `buildBuilding(w, h, style, label)` → canvas: roof ≈ top 45% in the building's roof material (thatch, terracotta gable, indigo tiles, slate), plank walls, centered door, windows, a **navy sign board with the wave mark** and the label in cream; per-shop signature details from the [SCENES.md buildings table](SCENES.md#buildings) (awnings, boards leaning outside, window displays, open garage, deck). "Coming soon" buildings get boards across the door + a `SOON` tag. Use selective outlines (ART_DIRECTION.md). Spawn all objects per the coordinate/depth rules in ARCHITECTURE.md.
   - Accept: player passes behind palms/buildings when north of their base and in front when south; flat props are always under the player; each shop is recognisable from its silhouette and sign, as in `beach-town.webp`.
 
-- [ ] **1.6 Environmental animation**
-  - Files: `src/game/systems/ambient.ts`, `src/state/settings.ts` (read only)
+- [x] **1.6 Environmental animation**
+  - Files: `src/game/systems/{ambient,objects}.ts`, `src/game/scenes/mapScene.ts`,
+    `src/game/art/props.ts`, `src/game/textures.ts`, `src/state/settings.ts` (read only)
   - Do: water/foam tile frame cycling (300 ms); palm sway frames (randomised phase); flags; gulls crossing the sky; wave foam arcs travelling toward the shore and fading; 1–2 surfers bobbing in the water; temporary footprints when walking on sand. All respect `prefersReducedMotion()` per ART_DIRECTION.md.
   - Accept: the town feels alive while idle; with reduced motion on, only water (slowed) and walking animate.
 
@@ -221,3 +222,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.3c complete. Added 16 × 32 player and shopkeeper sprites, verified bottom-row foot alignment, and checked all poses at 3× against the visual references.
 - 2026-11-26 — Step 1.4 complete. Added walking and running, tile collision with wall sliding, and a bounded camera that follows the player at integer zoom.
 - 2026-11-26 — Step 1.5 complete. Added the town façades and prop layer, verified player depth sorting in the browser, and compared the town with the visual reference.
+- 2026-11-26 — Step 1.6 complete. Animated the shoreline, palms, flags, gulls, surfers, and sand footprints. Verified reduced motion in the browser.
