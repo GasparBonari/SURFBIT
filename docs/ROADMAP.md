@@ -169,7 +169,7 @@ Goal: walk a character around an animated beach town with collisions.
 - [x] **4.2 Store directory** — panel listing Boards/Wear/Gear (+ "coming soon" ones) with **Walk there** (`gameEvents.emit("travel", { map: "town", spawn: "from-boards" })`) and **Browse online** (`/shop#boards`).
 - [x] **4.3 Mobile controls** — `src/components/Joystick.tsx` (pointer events, writes `virtualStick`, dead zone 0.15), action button; shown only on `(pointer: coarse)`. Prevent page scroll/zoom on the canvas (`touch-action: none`).
 - [x] **4.4 Settings** — mute, music volume, ambience volume, reduced motion (System/On/Off). Persisted via `useSettings`.
-- [ ] **4.5 Audio** — `src/game/audio.ts`: WebAudio context unlocked on first gesture; beach ambience (filtered noise with slow swell) outdoors; softer shop ambience + a gentle chiptune loop indoors; UI blips on interact/add-to-cart. Respect settings live.
+- [x] **4.5 Audio** — `src/game/audio.ts`: WebAudio context unlocked on first gesture; beach ambience (filtered noise with slow swell) outdoors; softer shop ambience + a gentle chiptune loop indoors; UI blips on interact/add-to-cart. Respect settings live.
 - [ ] **4.6 Accessibility pass** — keyboard-only full purchase flow, focus return to canvas, screen-reader live region announcing location changes and prompts, contrast check against ART_DIRECTION.md.
 
 **MVP complete when Phases 1–4 are checked and the spec §13 list is satisfied.**
@@ -244,3 +244,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 4.2 complete. Added the HUD store directory with travel to shop entrances, links to storefront sections, and coming-soon listings. Verified keyboard and touch controls.
 - 2026-11-26 — Step 4.3 complete. Added a coarse-pointer joystick with a 0.15 dead zone, paired it with the contextual A button, and blocked canvas scroll and zoom gestures. Verified touch movement, shop entry, and interaction in Chromium.
 - 2026-11-26 — Step 4.4 complete. Added HUD settings for mute, music and ambience volume, and System/On/Off reduced motion. Verified keyboard and touch controls, live motion changes, and persistence after reload.
+- 2026-11-26 — Step 4.5 complete. Added gesture-unlocked beach and shop ambience, an indoor chiptune loop, and interaction and cart cues. Verified live audio settings, navigation, and desktop and touch playback in Chromium.

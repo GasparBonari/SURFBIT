@@ -3,7 +3,7 @@ import { prefersReducedMotion } from "@/state/settings";
 import { isOverlayOpen, useUI } from "@/state/ui";
 import { P } from "../art/palette";
 import { TILE } from "../art/tiles";
-import { gameEvents } from "../bridge";
+import { gameEvents, type Ambience } from "../bridge";
 import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
 import type { Interaction, MapDef, MapKey } from "../maps/types";
@@ -35,7 +35,11 @@ function getSpawn(def: MapDef, spawn: string) {
   return def.spawns[spawn];
 }
 
-export function createMapScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
+export function createMapScene(
+  phaser: typeof Phaser,
+  reportError: (error: unknown) => void,
+  setAmbience: (ambience: Ambience) => void,
+) {
   const { red, green, blue } = phaser.Display.Color.HexStringToColor(P.outline);
   const { FADE_IN_COMPLETE, FADE_OUT_COMPLETE } = phaser.Cameras.Scene2D.Events;
 
@@ -195,6 +199,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         this.game.canvas.setAttribute("aria-label", def.name);
         const ui = useUI.getState();
         ui.setLocation(def.key, def.name);
+        setAmbience(def.ambience);
         if (def.key === "town") {
           ui.setUpcomingStores(def.objects.flatMap((object) =>
             object.type === "building" && object.upcomingStoreName

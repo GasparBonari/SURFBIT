@@ -40,7 +40,8 @@ Status: ✅ exists · 🔲 to be built (see [ROADMAP.md](ROADMAP.md))
 ```
 src/
 ├── app/                         Next.js App Router
-│   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, cart drawer
+│   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, audio and cart drawer
+│   ├── StoreAudio.tsx        ✅ client entry for the shared audio lifecycle
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
 │   ├── page.tsx              ✅ world page, catalog hydration, and HUD
 │   ├── page.module.css       ✅ fullscreen canvas and fallback layout
@@ -68,7 +69,7 @@ src/
 │   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location, and travel readiness
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
 ├── game/                        Phaser world — never imported by server code
-│   ├── bridge.ts             ✅ gameEvents + virtualStick (Phaser-free)
+│   ├── bridge.ts             ✅ world controls and audio events + virtualStick (Phaser-free)
 │   ├── art/                     procedural placeholder pixel art
 │   │   ├── palette.ts        ✅ the palette (mirror of CSS tokens)
 │   │   ├── canvas.ts         ✅ makeCanvas, rect, px, ellipse, box, rng, shade
@@ -86,7 +87,7 @@ src/
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         ✅ NPC movement and shared character sprites
-│   ├── audio.ts              🔲 WebAudio ambience + music
+│   ├── audio.ts              ✅ Web Audio ambience, shop music and UI cues
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  React UI
     ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
@@ -305,6 +306,15 @@ The HUD directory uses `STORES` for the online catalog sections. The town map
 publishes its `upcomingStoreName` entries to `useUI`, and the directory uses
 `worldReady` to enable travel once the scene can handle it. Choosing **Walk there**
 closes the panel and emits a travel request for the shop's `from-<shop>` spawn.
+
+## Audio
+
+The root layout mounts `StoreAudio`. Its Web Audio context unlocks on the first
+user gesture. The world publishes the active map's `ambience` through the bridge
+and clears it when the world unmounts. Beach and shop ambience use filtered
+noise, and interiors add a looping chiptune. Successful world interactions
+and add-to-cart actions emit cues through the same bridge. Mute applies to all
+audio, and the music and ambience sliders adjust their levels live.
 
 ## Decisions
 

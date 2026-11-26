@@ -1,13 +1,16 @@
-/**
- * Tiny, Phaser-free channel from React to the game. React UI imports this
- * without pulling Phaser into its bundle.
- */
+import type { MapDef } from "./maps/types";
 
+export type Ambience = MapDef["ambience"];
+export type SoundCue = "interact" | "add-to-cart";
+
+/** Phaser-free events for world controls and audio. */
 type Events = {
   /** Mobile action button / tap on the prompt. */
   interact: void;
   /** Store directory "walk me there". */
   travel: { map: string; spawn: string };
+  ambience: Ambience | null;
+  sound: SoundCue;
 };
 
 type Handler<T> = (payload: T) => void;

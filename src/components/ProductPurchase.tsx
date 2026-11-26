@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { defaultSelection, findVariant, formatMoney } from "@/commerce/format";
 import type { Product, ProductVariant } from "@/commerce/types";
+import { gameEvents } from "@/game/bridge";
 import { useCart } from "@/state/cart";
 import styles from "./ProductPurchase.module.css";
 
@@ -49,6 +50,7 @@ export function ProductPurchase({ product }: { product: Product }) {
     if (added <= 0) return;
 
     cart.add(product, variant, added);
+    gameEvents.emit("sound", "add-to-cart");
     setRequested(1);
     setConfirmation(`Added ${added} to cart. ${alreadyAdded + added} in cart for this selection.`);
   }

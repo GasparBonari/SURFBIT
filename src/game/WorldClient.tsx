@@ -2,6 +2,7 @@
 
 import type { Game } from "phaser";
 import { useEffect, useRef, useState } from "react";
+import { gameEvents, type Ambience } from "./bridge";
 
 export function WorldClient({ className }: { className: string }) {
   const host = useRef<HTMLDivElement>(null);
@@ -16,6 +17,7 @@ export function WorldClient({ className }: { className: string }) {
 
     function reportError(error: unknown) {
       if (cancelled) return;
+      gameEvents.emit("ambience", null);
       console.error("Could not load the SURFBIT beach town", error);
       setFailed(true);
     }
@@ -27,7 +29,9 @@ export function WorldClient({ className }: { className: string }) {
           import("./config"),
         ]);
         if (cancelled) return;
-        game = new Phaser.Game(createGameConfig(Phaser, parent, reportError));
+        game = new Phaser.Game(createGameConfig(Phaser, parent, reportError, (ambience: Ambience) => {
+          if (!cancelled) gameEvents.emit("ambience", ambience);
+        }));
       } catch (error) {
         reportError(error);
       }
@@ -37,6 +41,7 @@ export function WorldClient({ className }: { className: string }) {
 
     return () => {
       cancelled = true;
+      gameEvents.emit("ambience", null);
       // A fullscreen change can arrive after the host is detached and before Phaser's next frame.
       game?.scale.stopListeners();
       game?.destroy(true);

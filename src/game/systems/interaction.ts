@@ -188,6 +188,7 @@ export class Interactions {
     const ui = useUI.getState();
     if (!this.current || isOverlayOpen(ui) || Date.now() - ui.lastClosedAt < CLOSE_COOLDOWN) return false;
     this.scene.events.emit(WORLD_INTERACTION, this.current.action, this.current.npc);
+    gameEvents.emit("sound", "interact");
     return true;
   };
 }
