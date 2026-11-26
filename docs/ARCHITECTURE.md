@@ -294,6 +294,12 @@ the action and opens the product modal or dialog. Both overlays use the shared
 UI store and return focus to the canvas when closed. Open overlays pause world
 interactions. Button activation resumes 250 ms after an overlay closes.
 
+The canvas is in the Tab order with a screen-reader description of the controls.
+Tab leaves the canvas for the HUD. Keyboard movement pauses when focus is on
+page controls. The HUD and interaction pill announce location and prompt
+changes through persistent, polite live regions. A link at the start of the
+Tab order opens the catalog directly.
+
 Walking onto a doorway threshold emits `WORLD_INTERACTION` once per crossing.
 Player movement stops at the first threshold crossed in a frame. Door actions
 and `gameEvents` travel resolve through the same lazy map

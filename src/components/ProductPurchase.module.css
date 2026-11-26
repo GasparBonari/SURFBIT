@@ -84,20 +84,6 @@
   flex: 1;
   min-height: 46px;
   white-space: nowrap;
-  color: var(--sb-outline);
-}
-
-.add:hover {
-  background: color-mix(in srgb, var(--sb-coral-dark) 90%, var(--sb-outline));
-  color: var(--sb-white);
-}
-
-.add[aria-disabled="true"] {
-  transform: none;
-  background: var(--sb-cream);
-  color: var(--sb-text);
-  box-shadow: none;
-  cursor: not-allowed;
 }
 
 .confirmation {

@@ -3,6 +3,18 @@
   background: var(--sb-water);
 }
 
+.shopLink {
+  position: absolute;
+  z-index: calc(var(--sb-z-hud) + 1);
+  inset: auto auto max(var(--sb-space-5), env(safe-area-inset-bottom))
+    max(var(--sb-space-4), env(safe-area-inset-left));
+  min-height: 44px;
+}
+
+.shopLink:not(:focus) {
+  clip-path: inset(50%);
+}
+
 .world {
   width: 100%;
   height: 100dvh;
@@ -12,6 +24,19 @@
 .world canvas {
   display: block;
   touch-action: none;
+}
+
+.world canvas:focus-visible {
+  outline: 3px solid var(--sb-cream);
+  outline-offset: -6px;
+}
+
+.world:has(canvas:focus-visible)::after {
+  position: absolute;
+  inset: 0;
+  border: var(--sb-border);
+  pointer-events: none;
+  content: "";
 }
 
 .worldControls {

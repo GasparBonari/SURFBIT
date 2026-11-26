@@ -57,7 +57,7 @@ export function ProductPurchase({ product }: { product: Product }) {
 
   return (
     <form className={styles.form} onSubmit={addToCart}>
-      <div className={styles.availability}>
+      <div className={styles.availability} role="status">
         {variant && <strong className={styles.price}>{formatMoney(variant.price)}</strong>}
         <span>{stockLabel}</span>
       </div>

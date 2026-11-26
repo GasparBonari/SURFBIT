@@ -21,6 +21,13 @@ export default async function Home() {
     <main className={styles.main}>
       <h1 className="sr-only">SURFBIT Beach Town</h1>
       <CatalogHydrator products={products} />
+      <Link href="/shop" prefetch={false} className={`sb-btn sb-btn--secondary ${styles.shopLink}`}>
+        Browse the shop
+      </Link>
+      <p id="world-instructions" className="sr-only">
+        Use the arrow keys or WASD to walk. Press E, Space, or Enter to interact when prompted.
+        Press Tab to reach the game controls.
+      </p>
       <WorldClient className={styles.world} />
       <Hud />
       <StoreDirectory />

@@ -55,7 +55,7 @@
   --sb-text: var(--sb-ink);
   --sb-text-muted: var(--sb-muted);
   --sb-accent: var(--sb-coral);
-  --sb-accent-hover: var(--sb-coral-dark);
+  --sb-accent-hover: color-mix(in srgb, var(--sb-coral-dark) 90%, var(--sb-outline));
   --sb-success: var(--sb-teal);
   --sb-warning: var(--sb-sun);
   --sb-danger: var(--sb-coral-dark);
@@ -155,7 +155,7 @@ button {
   border: var(--sb-border);
   border-radius: var(--sb-radius);
   background: var(--sb-accent);
-  color: var(--sb-white);
+  color: var(--sb-outline);
   box-shadow: var(--sb-shadow-sm);
   font-weight: 700;
   text-decoration: none;
@@ -165,6 +165,7 @@ button {
 
 .sb-btn:hover {
   background: var(--sb-accent-hover);
+  color: var(--sb-white);
 }
 
 .sb-btn:active {
@@ -184,6 +185,15 @@ button {
 
 .sb-btn--secondary:hover {
   background: var(--sb-sand-light);
+  color: var(--sb-text);
+}
+
+.sb-btn[aria-disabled="true"] {
+  transform: none;
+  background: var(--sb-cream);
+  color: var(--sb-text);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 /* Retro panel: dialogs, modals, HUD chips */

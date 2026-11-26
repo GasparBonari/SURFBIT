@@ -11,6 +11,8 @@ export function DialogBox() {
 
 function DialogPanel({ dialog }: { dialog: Dialog }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const advanceRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
   const { advanceDialog, closeAll } = useUI.getState();
   const lastLine = dialog.index === dialog.lines.length - 1;
 
@@ -26,6 +28,15 @@ function DialogPanel({ dialog }: { dialog: Dialog }) {
 
   function onKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.altKey || event.ctrlKey || event.metaKey || event.nativeEvent.isComposing) return;
+    if (event.key === "Tab") {
+      const first = advanceRef.current;
+      const last = closeRef.current;
+      if (event.shiftKey ? event.target === first : event.target === last) {
+        event.preventDefault();
+        (event.shiftKey ? last : first)?.focus();
+      }
+      return;
+    }
     const interactKey = event.key === "e" || event.key === "E";
     if (!interactKey && event.key !== " " && event.key !== "Enter") return;
     if (!event.repeat && !interactKey && event.target instanceof HTMLButtonElement) return;
@@ -47,6 +58,7 @@ function DialogPanel({ dialog }: { dialog: Dialog }) {
     >
       <h2 id="dialog-speaker" className={`sb-pixel ${styles.speaker}`}>{dialog.name}</h2>
       <button
+        ref={advanceRef}
         type="button"
         className={styles.advance}
         aria-label={lastLine ? "Finish dialog" : "Continue"}
@@ -55,7 +67,7 @@ function DialogPanel({ dialog }: { dialog: Dialog }) {
         <span id="dialog-line" aria-live="polite">{dialog.lines[dialog.index]}</span>
         <span className={styles.indicator} aria-hidden="true">▼</span>
       </button>
-      <button type="button" className={styles.close} aria-label="Close dialog" onClick={closeAll}>
+      <button ref={closeRef} type="button" className={styles.close} aria-label="Close dialog" onClick={closeAll}>
         ×
       </button>
     </dialog>

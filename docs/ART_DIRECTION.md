@@ -263,7 +263,7 @@ Never set paragraphs, prices or form labels in the pixel font.
 
 | Component | Spec |
 |---|---|
-| Button | `.sb-btn` — coral fill, white text, 3px outline, 2px hard shadow, press = translate(2px,2px) + no shadow. Secondary = `.sb-btn--secondary` |
+| Button | `.sb-btn` — Coral fill, Outline text, 3px outline, 2px hard shadow, press = translate(2px,2px) + no shadow. Secondary = `.sb-btn--secondary` |
 | Panel | `.sb-panel` — white, 3px outline, 6px radius, 4px hard shadow |
 | Joystick | Navy base with a cream thumb at bottom left on coarse pointers |
 | Prompt pill | Bottom-center with the **E** keycap on desktop. Bottom-right with a tappable **A** on coarse pointers. |
@@ -273,10 +273,12 @@ Never set paragraphs, prices or form labels in the pixel font.
 
 ### Accessibility
 
-- Text contrast ≥ 4.5:1 (Ink on Cream/White passes; white on Coral passes for
-  bold ≥ 16px — use Coral Dark for small text on white).
+- Text contrast ≥ 4.5:1. Outline on Coral is 4.98:1. Primary button hover uses
+  White on a blend of Coral Dark and Outline at 5.04:1. Use Muted on White
+  for secondary text and Ink on Cream.
 - Every interactive element reachable by keyboard with a visible focus ring
-  (`--sb-focus`).
+  (`--sb-focus`). Use Cream and Outline together over the game canvas.
 - Modals trap focus, close on `Esc`, return focus to the canvas.
+- Announce location and contextual prompt changes with polite live regions.
 - Touch targets ≥ 44 × 44 px.
 - Every product reachable without the game (`/shop`, `/products/[handle]`).

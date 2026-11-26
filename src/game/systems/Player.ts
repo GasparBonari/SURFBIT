@@ -14,7 +14,7 @@ export class Player extends Character {
   private readonly keyboard: Phaser.Input.Keyboard.KeyboardPlugin | null;
   private readonly keys;
 
-  constructor(scene: Phaser.Scene, spawn: Spawn, private readonly blocked: BlockedGrid) {
+  constructor(private readonly scene: Phaser.Scene, spawn: Spawn, private readonly blocked: BlockedGrid) {
     super(scene, (spawn.x + 0.5) * TILE, (spawn.y + 0.5) * TILE, "player", spawn.facing);
     this.keyboard = scene.input.keyboard;
     const addKey = (name: string) => this.keyboard?.addKey(name, false);
@@ -31,6 +31,9 @@ export class Player extends Character {
       this.stand();
       return;
     }
+
+    const focused = document.activeElement;
+    if (focused !== document.body && focused !== this.scene.game.canvas) this.keyboard?.resetKeys();
 
     const { w, a, s, d, up, left, down, right, shift } = this.keys;
     let x = Number(!!(d?.isDown || right?.isDown)) - Number(!!(a?.isDown || left?.isDown));

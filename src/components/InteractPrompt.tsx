@@ -22,22 +22,28 @@ export function InteractPrompt() {
   const handle = prompt?.verb === "Inspect" ? prompt.label : null;
   const title = useCatalog((state) => handle ? state.products[handle]?.title : undefined);
 
-  if (!prompt || overlayOpen) return null;
-  const label = title ?? prompt.label;
+  const activePrompt = overlayOpen ? null : prompt;
+  const label = title ?? activePrompt?.label;
+  const actionName = activePrompt ? [activePrompt.verb, label].filter(Boolean).join(" ") : "";
 
   return (
-    <div className={`sb-panel sb-pixel ${styles.pill}`}>
-      <kbd className={styles.key}>E</kbd>
-      <button
-        type="button"
-        className={`sb-btn sb-btn--secondary ${styles.action}`}
-        aria-label={[prompt.verb, label].filter(Boolean).join(" ")}
-        onClick={() => gameEvents.emit("interact")}
-        onPointerUp={activateSecondaryTouch}
-      >
-        A
-      </button>
-      <span>{label ? `${prompt.verb} · ${label}` : prompt.verb}</span>
-    </div>
+    <>
+      <span className="sr-only" role="status">{actionName}</span>
+      {activePrompt && (
+        <div className={`sb-panel sb-pixel ${styles.pill}`}>
+          <kbd className={styles.key} aria-hidden="true">E</kbd>
+          <button
+            type="button"
+            className={`sb-btn sb-btn--secondary ${styles.action}`}
+            aria-label={actionName}
+            onClick={() => gameEvents.emit("interact")}
+            onPointerUp={activateSecondaryTouch}
+          >
+            A
+          </button>
+          <span aria-hidden="true">{label ? `${activePrompt.verb} · ${label}` : activePrompt.verb}</span>
+        </div>
+      )}
+    </>
   );
 }

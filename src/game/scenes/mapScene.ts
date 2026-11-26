@@ -196,7 +196,6 @@ export function createMapScene(
           events.off(WORLD_INTERACTION, onInteraction);
         };
 
-        this.game.canvas.setAttribute("aria-label", def.name);
         const ui = useUI.getState();
         ui.setLocation(def.key, def.name);
         setAmbience(def.ambience);

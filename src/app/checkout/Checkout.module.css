@@ -91,12 +91,3 @@
 .content :is(a, button) {
   min-height: 44px;
 }
-
-.primary:not(:disabled) {
-  color: var(--sb-outline);
-}
-
-.primary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--sb-coral-dark) 90%, var(--sb-outline));
-  color: var(--sb-white);
-}

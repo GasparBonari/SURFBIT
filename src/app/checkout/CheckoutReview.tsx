@@ -88,9 +88,10 @@ export function CheckoutReview() {
       </p>
       {error && <p role="alert" className={styles.error}>{error}</p>}
       <div className={styles.actions}>
-        <button type="submit" className={`sb-btn ${styles.primary}`} disabled={submitting}>
+        <button type="submit" className="sb-btn" aria-disabled={submitting}>
           {submitting ? "Placing order…" : "Place demo order"}
         </button>
+        <span role="status" className="sr-only">{submitting ? "Placing order…" : ""}</span>
         <ReturnToTown />
       </div>
     </form>

@@ -52,7 +52,9 @@ export function Hud() {
     <header className={styles.hud}>
       <div className={`sb-panel sb-pixel ${styles.identity}`}>
         <span className={styles.brand}>SURFBIT</span>
-        <span className={styles.location}>{location}</span>
+        <span className={styles.location} role="status">
+          <span className="sr-only">Location: </span>{location}
+        </span>
       </div>
 
       <div className={styles.controls} role="group" aria-label="Game controls">

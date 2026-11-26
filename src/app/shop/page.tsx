@@ -54,10 +54,10 @@ function ProductCard({ product }: { product: Product }) {
 
   return (
     <li className={styles.item}>
-      <Link href={productPath(product.handle)} className={`sb-panel ${styles.card}`} aria-labelledby={`${product.handle}-title`}>
-        {image && <ProductArt image={image} />}
+      <Link href={productPath(product.handle)} className={`sb-panel ${styles.card}`}>
+        {image && <div aria-hidden="true"><ProductArt image={image} /></div>}
         <div className={styles.info}>
-          <h3 id={`${product.handle}-title`}>{product.title}</h3>
+          <h3>{product.title}</h3>
           <p>{product.category}</p>
           <strong>{product.variants.length ? priceRange(product) : "Unavailable"}</strong>
         </div>

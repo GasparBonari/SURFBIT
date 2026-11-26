@@ -108,7 +108,7 @@ function CartPanel() {
               <span>Subtotal</span>
               <strong>{formatMoney(cartSubtotal(cart))}</strong>
             </p>
-            <Link href="/checkout" prefetch={false} className={`sb-btn ${styles.checkout}`} onNavigate={closeAll}>
+            <Link href="/checkout" prefetch={false} className="sb-btn" onNavigate={closeAll}>
               Checkout
             </Link>
           </>

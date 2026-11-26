@@ -21,9 +21,10 @@ export function createGameConfig(
     callbacks: {
       postBoot(game) {
         game.canvas.id = "world-canvas";
-        game.canvas.tabIndex = -1;
-        game.canvas.setAttribute("role", "img");
-        game.canvas.setAttribute("aria-label", "SURFBIT beach town map");
+        game.canvas.tabIndex = 0;
+        game.canvas.setAttribute("role", "application");
+        game.canvas.setAttribute("aria-label", "SURFBIT world");
+        game.canvas.setAttribute("aria-describedby", "world-instructions");
       },
     },
     scene: [createBootScene(phaser, reportError), createMapScene(phaser, reportError, setAmbience)],
