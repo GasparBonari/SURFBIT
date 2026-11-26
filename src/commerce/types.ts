@@ -29,12 +29,9 @@ export interface ProductArt {
   accent: string;
 }
 
-export interface ProductImage {
-  /** Real photo URL. When absent, the UI renders `art` instead. */
-  src?: string;
-  alt: string;
-  art: ProductArt;
-}
+export type ProductImage =
+  | { src: string; alt: string; art?: never }
+  | { src?: never; alt: string; art: ProductArt };
 
 export interface ProductOption {
   name: string;

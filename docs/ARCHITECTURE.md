@@ -20,7 +20,7 @@ Read this before touching `src/game`, `src/state` or `src/commerce`.
                                 │ server components / route handlers
 ┌───────────────────────────────▼──────────────────────────────────┐
 │  Next.js server: src/commerce (CommerceProvider)                 │
-│  mock provider today → Shopify Storefront provider later         │
+│  Active provider: mock. Shopify Storefront adapter available.    │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -61,7 +61,7 @@ src/
 │   ├── mock/catalog.ts       ✅ 15 demo products across the three shops
 │   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
 │   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
-│   └── shopify/              🔲 Storefront API provider
+│   └── shopify/              ✅ Storefront API client, queries, provider and tests
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
 │   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
@@ -153,6 +153,26 @@ configuration passes the loaded Phaser runtime to the scene factories.
    (mock: `/checkout/success`, Shopify: hosted `checkoutUrl`). The demo
    confirmation shows the order number and catalog-priced total. It clears the
    hydrated cart once when the return URL and submitted items match.
+
+## Shopify product data
+
+The Shopify provider factory takes a `.myshopify.com` domain and a Storefront
+public access token kept on the server. The token needs product listings,
+product inventory, and cart read/write access. The app switches providers in
+step 5.2. [Shopify API access scopes](https://shopify.dev/docs/api/usage/access-scopes)
+
+Publish SURFBIT products to the storefront used by that token. Keep their
+handles aligned with the in-world displays. Define these product metafields
+with Storefront `PUBLIC_READ` access. [Shopify Storefront metafields](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/metafields)
+
+| Metafield | Shopify type | Value |
+|---|---|---|
+| `surfbit.store` | `single_line_text_field` | Required. Use `boards`, `wear`, or `gear`. |
+| `surfbit.specs` | `json` | Optional ordered array of `{"label":"Length","value":"5′ 8″"}` entries. |
+
+Product category comes from Shopify's product type. Prices must be representable
+in integer cents under SURFBIT's `Money` contract. Shopify validates current
+inventory and pricing when it creates a cart and returns the hosted checkout URL.
 
 ## Map format (`src/game/maps`)
 

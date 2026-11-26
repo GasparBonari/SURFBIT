@@ -5,7 +5,7 @@ import styles from "./ProductArt.module.css";
 export function ProductArt({ image }: { image: ProductImage }) {
   return (
     <div className={styles.frame}>
-      {image.src ? (
+      {image.src !== undefined ? (
         <Image src={image.src} alt={image.alt} fill unoptimized className={styles.photo} />
       ) : (
         <svg viewBox="0 0 160 160" role="img" aria-label={image.alt} className={styles.illustration}>

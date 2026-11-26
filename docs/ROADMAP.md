@@ -197,7 +197,7 @@ Production art; asset list: SCENES.md §7.
 
 ## Phase 5 — Real commerce (Shopify)
 
-- [ ] **5.1 Shopify provider** — `src/commerce/shopify/{client,queries,provider}.ts` implementing `CommerceProvider` via Storefront GraphQL (`products`, `productByHandle`, `cartCreate` → `checkoutUrl`). Map to SURFBIT types; images → `ProductImage.src`. Product `metafields` carry `store` (boards/wear/gear) and specs.
+- [x] **5.1 Shopify provider** — `src/commerce/shopify/{client,queries,provider}.ts` implementing `CommerceProvider` via Storefront GraphQL (`products`, `product(handle:)`, `cartCreate` → `checkoutUrl`). Map to SURFBIT types; images → `ProductImage.src`. Product `metafields` carry `store` (boards/wear/gear) and specs.
 - [ ] **5.2 Provider selection** — `src/commerce/index.ts` picks Shopify when `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` are set (see `.env.example`), else mock. Cache product reads with `'use cache'` + `cacheTag('products')`.
 - [ ] **5.3 Webhook revalidation** — `src/app/api/revalidate/route.ts` verifies the Shopify HMAC and calls `revalidateTag('products')` on product/inventory updates.
 
@@ -248,3 +248,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 4.6 complete. Added keyboard access and visible focus for the canvas, live location and interaction announcements, and accessible button contrast. Verified focus return and the keyboard-only demo purchase in Chromium.
 - 2026-11-26 — Step A.1 complete. Chose an edited free asset pack with hand-drawn brand pieces and a bolder pixel look (D14). Updated the art tooling docs to allow free editors.
 - 2026-11-26 — Step A.2 complete. Added a stacked pixel-style SVG logo to the HUD and storefront, a matching wave favicon, and 8 × 8 and 16 × 16 waves for shop signs, props and the plaza inlay.
+- 2026-11-26 — Step 5.1 complete. Added paginated Shopify catalog reads, product metafield and photo mapping, and hosted checkout. Verified the provider with mocked Storefront API responses.
