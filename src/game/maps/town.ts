@@ -79,6 +79,7 @@ const def: MapDef = {
     },
     {
       type: "building", id: "goods", label: "SURFBIT",
+      upcomingStoreName: "SURFBIT Goods",
       x: 24, y: 4, w: 12, h: 8, door: { x: 32, y: 11 },
       style: { roof: "terracotta", wall: P.cream, front: "flagship", awnings: stripedAwnings },
     },
@@ -90,6 +91,7 @@ const def: MapDef = {
     },
     {
       type: "building", id: "workshop", label: "Workshop",
+      upcomingStoreName: "Workshop",
       x: 49, y: 2, w: 10, h: 7, door: { x: 54, y: 8 },
       style: { roof: "slate", wall: P.wood, front: "shaping" },
       interact: { kind: "read", title: "Workshop", text: ["Our shaping room is coming soon."] },
@@ -102,6 +104,7 @@ const def: MapDef = {
     },
     {
       type: "building", id: "beach-club", label: "Beach Club",
+      upcomingStoreName: "Beach Club",
       x: 41, y: 17, w: 12, h: 7, door: { x: 47, y: 23 },
       style: { roof: "indigo", wall: P.wood, front: "cafe" },
       interact: { kind: "read", title: "Beach Club", text: ["The club opens soon. Enjoy the deck and the beach."] },

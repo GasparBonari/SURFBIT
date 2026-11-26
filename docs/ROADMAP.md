@@ -166,7 +166,7 @@ Goal: walk a character around an animated beach town with collisions.
   labels, ≥ 44 px targets. The Shop shortcut opens `/shop` until step 4.2, and
   Settings is disabled until step 4.4. The sound toggle persists the mute
   preference for step 4.5.
-- [ ] **4.2 Store directory** — panel listing Boards/Wear/Gear (+ "coming soon" ones) with **Walk there** (`gameEvents.emit("travel", { map: "town", spawn: "from-boards" })`) and **Browse online** (`/shop#boards`).
+- [x] **4.2 Store directory** — panel listing Boards/Wear/Gear (+ "coming soon" ones) with **Walk there** (`gameEvents.emit("travel", { map: "town", spawn: "from-boards" })`) and **Browse online** (`/shop#boards`).
 - [ ] **4.3 Mobile controls** — `src/components/Joystick.tsx` (pointer events, writes `virtualStick`, dead zone 0.15), action button; shown only on `(pointer: coarse)`. Prevent page scroll/zoom on the canvas (`touch-action: none`).
 - [ ] **4.4 Settings** — mute, music volume, ambience volume, reduced motion (System/On/Off). Persisted via `useSettings`.
 - [ ] **4.5 Audio** — `src/game/audio.ts`: WebAudio context unlocked on first gesture; beach ambience (filtered noise with slow swell) outdoors; softer shop ambience + a gentle chiptune loop indoors; UI blips on interact/add-to-cart. Respect settings live.
@@ -241,3 +241,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 3.3 complete. Added demo checkout review and confirmation, server-side repricing and combined stock validation, and cart clearing after confirmation.
 - 2026-11-26 — Step 3.4 complete. Added a filterable storefront, prerendered all 15 product pages, and added canonical metadata, Product structured data, a sitemap and robots.txt. Pixel Fish scored 100 for Lighthouse SEO.
 - 2026-11-26 — Step 4.1 complete. Added the town HUD with live location and cart count, the Shop shortcut, a persistent mute toggle, and fullscreen. Verified keyboard and touch controls.
+- 2026-11-26 — Step 4.2 complete. Added the HUD store directory with travel to shop entrances, links to storefront sections, and coming-soon listings. Verified keyboard and touch controls.

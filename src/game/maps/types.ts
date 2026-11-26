@@ -43,6 +43,7 @@ export type MapObject =
       h: number;
       style: BuildingStyle;
       label: string;
+      upcomingStoreName?: string;
       door: { x: number; y: number };
       interact?: Interaction;
     }

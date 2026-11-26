@@ -23,6 +23,7 @@ interface UIState {
   product: string | null;
   dialog: Dialog | null;
   panel: Panel;
+  upcomingStores: { id: string; name: string }[];
   /** Timestamp of the last overlay close; the game uses it to debounce input. */
   lastClosedAt: number;
   worldReady: boolean;
@@ -33,6 +34,7 @@ interface UIState {
   openDialog(name: string, lines: string[]): void;
   advanceDialog(): void;
   openPanel(panel: Panel): void;
+  setUpcomingStores(stores: UIState["upcomingStores"]): void;
   closeAll(): void;
   setWorldReady(ready: boolean): void;
 }
@@ -43,6 +45,7 @@ export const useUI = create<UIState>()((set, get) => ({
   product: null,
   dialog: null,
   panel: null,
+  upcomingStores: [],
   lastClosedAt: 0,
   worldReady: false,
 
@@ -73,6 +76,7 @@ export const useUI = create<UIState>()((set, get) => ({
     })),
   closeAll: () =>
     set({ product: null, dialog: null, panel: null, lastClosedAt: Date.now() }),
+  setUpcomingStores: (upcomingStores) => set({ upcomingStores }),
   setWorldReady: (worldReady) => set({ worldReady }),
 }));
 

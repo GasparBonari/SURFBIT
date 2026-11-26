@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { cartCount, useCart } from "@/state/cart";
 import { useSettings } from "@/state/settings";
@@ -57,7 +56,14 @@ export function Hud() {
       </div>
 
       <div className={styles.controls} role="group" aria-label="Game controls">
-        <Link href="/shop" className={controlClass}>Shop</Link>
+        <button
+          type="button"
+          className={controlClass}
+          aria-haspopup="dialog"
+          onClick={() => useUI.getState().openPanel("directory")}
+        >
+          Directory
+        </button>
         <CartButton className={styles.control} count={count} />
         <button
           type="button"

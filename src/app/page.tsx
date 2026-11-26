@@ -6,6 +6,7 @@ import { DialogBox } from "@/components/DialogBox";
 import { Hud } from "@/components/Hud";
 import { InteractPrompt } from "@/components/InteractPrompt";
 import { ProductModal } from "@/components/ProductModal";
+import { StoreDirectory } from "@/components/StoreDirectory";
 import { WorldClient } from "./World";
 import styles from "./page.module.css";
 
@@ -20,6 +21,7 @@ export default async function Home() {
       <CatalogHydrator products={products} />
       <WorldClient className={styles.world} />
       <Hud />
+      <StoreDirectory />
       <InteractPrompt />
       <DialogBox />
       <ProductModal />

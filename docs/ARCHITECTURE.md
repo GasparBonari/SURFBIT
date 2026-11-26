@@ -65,7 +65,7 @@ src/
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
 │   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
 │   ├── settings.ts           ✅ audio + reduced motion, persisted
-│   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location
+│   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location, and travel readiness
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
 ├── game/                        Phaser world — never imported by server code
 │   ├── bridge.ts             ✅ gameEvents + virtualStick (Phaser-free)
@@ -97,9 +97,10 @@ src/
     ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
     ├── StoreHydrator.tsx      ✅ restores cart and settings after the first client render
     ├── CartDrawer.tsx         ✅ shared cart button, line editing, subtotal, and checkout link (with CSS module)
-    ├── Hud.tsx                ✅ world location, cart count, shop shortcut, mute, and fullscreen (with CSS module)
+    ├── Hud.tsx                ✅ world location, cart count, directory shortcut, mute, and fullscreen (with CSS module)
+    ├── StoreDirectory.tsx     ✅ town shops, travel shortcuts, and storefront links (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── …                      🔲 directory, settings, and joystick
+    └── …                      🔲 settings and joystick
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -190,6 +191,7 @@ export type Interaction =
 export type MapObject =
   | { type: "building"; id: string; x: number; y: number; w: number; h: number;
       style: BuildingStyle; label: string; door: { x: number; y: number };
+      upcomingStoreName?: string; // optional coming-soon entry in the directory
       interact?: Interaction /* omitted for boarded shops and decorative buildings */ }
   | { type: "prop"; prop: keyof typeof PROPS; x: number; y: number;
       tint?: Tint; interact?: Interaction }
@@ -294,6 +296,11 @@ registry. The camera fades out, the target map loads, and `MapScene` restarts
 at the named spawn and publishes the map name and key to `useUI`. The camera
 then fades in. Reduced motion skips both fades. Travel to an unregistered map
 leaves the current map active. Movement and prompts pause during travel.
+
+The HUD directory uses `STORES` for the online catalog sections. The town map
+publishes its `upcomingStoreName` entries to `useUI`, and the directory uses
+`worldReady` to enable travel once the scene can handle it. Choosing **Walk there**
+closes the panel and emits a travel request for the shop's `from-<shop>` spawn.
 
 ## Decisions
 

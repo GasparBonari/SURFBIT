@@ -68,6 +68,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         this.interactions?.destroy();
         this.interactions = undefined;
         const ui = useUI.getState();
+        ui.setWorldReady(false);
         if (ui.dialog || ui.product) ui.closeAll();
         this.player = undefined;
         this.npcs = [];
@@ -122,16 +123,19 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         scale.on(RESIZE, updateZoom);
         this.player = player;
 
+        const finishTransition = () => {
+          this.transitioning = false;
+          useUI.getState().setWorldReady(true);
+        };
+
         const reveal = () => {
           if (prefersReducedMotion()) {
             camera.fadeEffect.reset();
-            this.transitioning = false;
+            finishTransition();
             return;
           }
           this.transitioning = true;
-          camera.once(FADE_IN_COMPLETE, () => {
-            this.transitioning = false;
-          });
+          camera.once(FADE_IN_COMPLETE, finishTransition);
           camera.fadeIn(FADE_MS, red, green, blue);
         };
 
@@ -142,6 +146,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
           this.transitioning = true;
           this.interactions?.clearTarget();
           const ui = useUI.getState();
+          ui.setWorldReady(false);
           if (ui.dialog || ui.product) ui.closeAll();
           const fade = !prefersReducedMotion();
 
@@ -156,7 +161,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
               if (!active) return;
               console.error(`Could not travel to "${map}"`, error);
               if (fade) reveal();
-              else this.transitioning = false;
+              else finishTransition();
             }
           };
 
@@ -187,9 +192,18 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
           events.off(WORLD_INTERACTION, onInteraction);
         };
 
-        if (destination?.fadeIn) reveal();
         this.game.canvas.setAttribute("aria-label", def.name);
-        useUI.getState().setLocation(def.key, def.name);
+        const ui = useUI.getState();
+        ui.setLocation(def.key, def.name);
+        if (def.key === "town") {
+          ui.setUpcomingStores(def.objects.flatMap((object) =>
+            object.type === "building" && object.upcomingStoreName
+              ? [{ id: object.id, name: object.upcomingStoreName }]
+              : []
+          ));
+        }
+        if (destination?.fadeIn) reveal();
+        else finishTransition();
       } catch (error) {
         if (!active) return;
         cleanup();
