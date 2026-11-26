@@ -56,7 +56,9 @@ export type MapObject =
     }
   | {
       type: "display";
-      prop: "boardDisplay" | "clothesRack" | "mannequin" | "shelf" | "pegboard" | "wetsuitHanger";
+      prop: "boardDisplay" | "boardRack" | "finTable"
+        | "clothesRack" | "hoodieRack" | "swimRack" | "mannequin" | "shortsMannequin" | "teeTable"
+        | "shelf" | "pegboard" | "wetsuitHanger" | "leashHooks" | "bagRack" | "padTable";
       x: number;
       y: number;
       productId: string;

@@ -22,6 +22,7 @@ export const TILE_NAMES = [
   "wallCream", "wallTeal", "wallCoral",
   "floorWood", "floorTile", "floorConcrete",
   "mat",
+  "wallWood", "wallSage", "railing", "floorWood1", "floorWood2",
 ] as const;
 
 export type TileName = (typeof TILE_NAMES)[number];
@@ -164,6 +165,39 @@ function wall(ctx: Ctx, ox: number, base: string) {
   rect(ctx, ox, 12, TILE, 1, P.woodLight);
 }
 
+function shopWall(ctx: Ctx, ox: number, color: string, seam: string) {
+  rect(ctx, ox, 0, TILE, TILE, color);
+  for (const x of [0, 8]) {
+    rect(ctx, ox + x, 0, 1, TILE, seam);
+    rect(ctx, ox + x + 1, 0, 1, TILE, shade(color, 0.13));
+    rect(ctx, ox + x + 5, x === 0 ? 5 : 11, 1, 4, shade(color, -0.13));
+  }
+}
+
+function shopFloor(ctx: Ctx, ox: number, variant: number) {
+  const base = shade(P.woodLight, -0.08);
+  rect(ctx, ox, 0, TILE, TILE, base);
+  const random = rng(15 + variant);
+  for (const y of [0, 8]) {
+    rect(ctx, ox, y, TILE, 1, P.wood);
+    rect(ctx, ox, y + 1, TILE, 1, shade(base, 0.1));
+    const grain = Math.floor(random() * 9) + 2;
+    rect(ctx, ox + grain, y + 4, 4, 1, shade(base, -0.06));
+  }
+  const y = variant % 2 === 0 ? 0 : 8;
+  rect(ctx, ox + [3, 11, 7][variant], y + 1, 1, 7, shade(P.wood, -0.08));
+}
+
+function railing(ctx: Ctx, ox: number) {
+  shopFloor(ctx, ox, 0);
+  rect(ctx, ox, 4, TILE, 6, P.woodDeep);
+  rect(ctx, ox, 4, TILE, 2, P.woodLight);
+  rect(ctx, ox + 5, 7, 4, 6, P.woodDark);
+  rect(ctx, ox + 5, 7, 1, 6, P.woodLight);
+  rect(ctx, ox, 12, TILE, 4, P.woodDark);
+  rect(ctx, ox, 12, TILE, 1, P.woodLight);
+}
+
 export function buildTileset(): HTMLCanvasElement {
   const [canvas, ctx] = makeCanvas(TILE * TILE_NAMES.length, TILE);
   TILE_NAMES.forEach((name, i) => {
@@ -247,8 +281,20 @@ export function buildTileset(): HTMLCanvasElement {
       case "wallCoral":
         wall(ctx, ox, "#f0a07a");
         break;
-      case "floorWood":
-        planksH(ctx, ox, P.wood, 9);
+      case "wallWood":
+        shopWall(ctx, ox, P.woodDark, P.woodDeep);
+        break;
+      case "wallSage":
+        shopWall(ctx, ox, P.wallSage, P.wallSageDark);
+        break;
+      case "railing":
+        railing(ctx, ox);
+        break;
+      case "floorWood": case "mat":
+        shopFloor(ctx, ox, 0);
+        break;
+      case "floorWood1": case "floorWood2":
+        shopFloor(ctx, ox, i - T.floorWood1 + 1);
         break;
       case "floorTile": {
         const a = P.cream, b = "#9fd8d2";
@@ -261,12 +307,6 @@ export function buildTileset(): HTMLCanvasElement {
         speckle(ctx, ox, 31, ["#b5aea2", "#d8d3ca"], 16);
         rect(ctx, ox, 15, TILE, 1, "#b5aea2");
         rect(ctx, ox + 15, 0, 1, TILE, "#b5aea2");
-        break;
-      case "mat":
-        rect(ctx, ox, 0, TILE, TILE, P.wood);
-        rect(ctx, ox + 1, 2, 14, 12, P.coralDark);
-        rect(ctx, ox + 2, 3, 12, 10, P.coral);
-        for (let x = 3; x < 13; x += 2) rect(ctx, ox + x, 4, 1, 8, P.coralDark);
         break;
     }
   });
@@ -288,7 +328,10 @@ export const LEGEND: Record<string, { tiles: TileName[]; solid?: boolean }> = {
   W: { tiles: ["wallCream"], solid: true },
   V: { tiles: ["wallTeal"], solid: true },
   K: { tiles: ["wallCoral"], solid: true },
-  _: { tiles: ["floorWood"] },
+  M: { tiles: ["wallWood"], solid: true },
+  G: { tiles: ["wallSage"], solid: true },
+  R: { tiles: ["railing"], solid: true },
+  _: { tiles: ["floorWood", "floorWood1", "floorWood2"] },
   "+": { tiles: ["floorTile"] },
   o: { tiles: ["floorConcrete"] },
   D: { tiles: ["mat"] },

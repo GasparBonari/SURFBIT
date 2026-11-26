@@ -2,6 +2,8 @@ import { P } from "./palette";
 import { type Ctx, box, ellipse, px, rect, shade } from "./canvas";
 import { autoOutline } from "./characters";
 import { drawText, textWidth } from "./font";
+import { INTERIOR_PROPS } from "./interiorProps";
+import { drawBoard, drawShirt, drawWaveMark } from "./motifs";
 
 export interface Tint {
   color: string;
@@ -79,43 +81,6 @@ function umbrella(ctx: Ctx, a: string, b: string) {
   }
   for (let x = 2; x < 31; x += 4) px(ctx, x, 14, P.outline);
   rect(ctx, 15, 0, 2, 2, P.cream);
-}
-
-export function drawBoard(ctx: Ctx, x: number, y: number, w: number, h: number, color: string, accent: string) {
-  // vertical surfboard: pointed nose top, rounded tail bottom
-  for (let i = 0; i < h; i++) {
-    const t = i / (h - 1);
-    const width = t < 0.25 ? Math.max(1, Math.round(w * Math.sqrt(t / 0.25))) : t > 0.9 ? Math.round(w * (1 - (t - 0.9) * 3)) : w;
-    const lx = x + Math.floor((w - width) / 2);
-    rect(ctx, lx, y + i, width, 1, color);
-    if (width > 2) px(ctx, lx, y + i, shade(color, 0.3));
-  }
-  rect(ctx, x + Math.floor(w / 2), y + 3, 1, h - 6, accent); // stringer
-  rect(ctx, x + 1, y + Math.floor(h * 0.45), w - 2, 2, accent); // stripe
-}
-
-export function drawShirt(ctx: Ctx, x: number, y: number, color: string, accent: string, long = false) {
-  rect(ctx, x + 2, y, 6, 1, color);
-  rect(ctx, x, y + 1, 10, 3, color);
-  rect(ctx, x + 2, y + 4, 6, 6, color);
-  if (long) {
-    rect(ctx, x, y + 4, 2, 5, color);
-    rect(ctx, x + 8, y + 4, 2, 5, color);
-  }
-  rect(ctx, x + 4, y + 3, 2, 2, accent);
-  px(ctx, x + 4, y, shade(color, -0.25));
-  px(ctx, x + 5, y, shade(color, -0.25));
-}
-
-export function drawWaveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
-  const rows = [
-    [[8, 5]], [[6, 9]], [[5, 7], [13, 3]], [[4, 6]],
-    [[3, 6], [11, 2]], [[2, 6], [10, 5]], [[0, 7], [9, 10]],
-    [[0, 5], [10, 12]],
-  ];
-  rows.forEach((row, dy) => {
-    for (const [left, width] of row) rect(ctx, x + left * scale, y + dy * scale, width * scale, scale, color);
-  });
 }
 
 const palmSway = { frameMs: 450, pingPong: true };
@@ -397,6 +362,8 @@ export const PROPS = {
       box(c, ox, 6, 48, 22, P.wood, P.woodDeep);
       rect(c, ox + 1, 7, 46, 3, P.woodLight);
       for (let x = 6; x < 46; x += 8) rect(c, ox + x, 12, 1, 15, P.woodDark);
+      rect(c, ox + 12, 13, 24, 11, P.cream);
+      drawWaveMark(c, ox + 13, 14, P.signTeal);
       box(c, ox + 30, 0, 12, 8, P.ink, P.outline);
       rect(c, ox + 32, 2, 8, 3, P.teal);
       rect(c, ox + 6, 3, 6, 4, P.cream);
@@ -413,11 +380,15 @@ export const PROPS = {
     },
   },
   fittingRoom: {
-    w: 32, h: 44, foot: { w: 2, h: 1 }, solid: true,
+    w: 32, h: 44, foot: { w: 2, h: 2 }, solid: true, outline: false,
     draw: (c, ox) => {
-      rect(c, ox + 1, 0, 30, 3, P.woodDark);
-      rect(c, ox + 1, 3, 2, 41, P.woodDark); rect(c, ox + 29, 3, 2, 41, P.woodDark);
-      for (let x = 3; x < 29; x++) rect(c, ox + x, 3, 1, 39, x % 4 < 2 ? P.coral : P.coralDark);
+      box(c, ox + 1, 1, 30, 42, P.wood, P.woodDeep);
+      rect(c, ox + 2, 2, 28, 2, P.woodLight);
+      for (let x = 5; x < 27; x++) {
+        rect(c, ox + x, 9, 1, 31, x % 4 < 2 ? P.cream : P.sandLight);
+      }
+      rect(c, ox + 5, 8, 22, 2, P.woodDeep);
+      drawWaveMark(c, ox + 5, 23, P.navy);
     },
   },
   window: {
@@ -459,7 +430,10 @@ export const PROPS = {
       rect(c, ox + 2, 2, 28, 2, P.ink);
       rect(c, ox + 2, 2, 2, 26, P.ink); rect(c, ox + 28, 2, 2, 26, P.ink);
       rect(c, ox, 27, 8, 2, P.ink); rect(c, ox + 24, 27, 8, 2, P.ink);
-      for (let i = 0; i < 3; i++) drawShirt(c, ox + 4 + i * 8, 5, i === 1 ? shade(t.color, -0.12) : t.color, t.accent, false);
+      for (const [index, color] of [P.deepBlue, P.signTeal, t.color].entries()) {
+        drawShirt(c, ox + 3 + index * 8, 6, color, t.accent);
+      }
+      rect(c, ox + 2, 24, 28, 3, P.wood);
     },
   },
   mannequin: {
@@ -487,7 +461,7 @@ export const PROPS = {
   pegboard: {
     w: 30, h: 28, foot: { w: 2, h: 1 }, solid: true,
     draw: (c, ox, _f, t) => {
-      box(c, ox, 0, 30, 22, "#d9c39a", P.woodDeep);
+      box(c, ox, 0, 30, 22, P.sandDark, P.woodDeep);
       for (let y = 3; y < 20; y += 4) for (let x = 3; x < 28; x += 4) px(c, ox + x, y, P.woodDark);
       for (let i = 0; i < 3; i++) {
         const x = ox + 4 + i * 9;
@@ -508,6 +482,7 @@ export const PROPS = {
       rect(c, ox + 3, 33, 10, 2, P.ink);
     },
   },
+  ...INTERIOR_PROPS,
 } satisfies Record<string, PropSpec>;
 
 // ------------------------------------------------------------- effects

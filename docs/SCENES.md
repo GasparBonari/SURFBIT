@@ -145,9 +145,9 @@ with a 2-tile opening in the center, sand strip outside.
 | Display | Product handle(s) | Prop |
 |---|---|---|
 | Back-wall rack (3 boards) | `drift-mid-length`, `lazy-days-longboard`, `foamie-softboard` | `boardDisplay` ×3 |
-| Rack A (center-left, on rug) | `sunset-shortboard` (+ decorative boards) | `boardDisplay` + placard |
-| Rack B (center-right, on rug) | `pixel-fish` (+ decorative boards) | `boardDisplay` + placard |
-| Fin table (bottom-right) | `keel-twin-fins` (cross-sell, also in Gear) | `pegboard`/table |
+| Rack A (center-left, on rug) | `sunset-shortboard` (+ decorative boards) | `boardRack` with placard |
+| Rack B (center-right, on rug) | `pixel-fish` (+ decorative boards) | `boardRack` with placard |
+| Fin table (bottom-right) | `keel-twin-fins` (cross-sell, also in Gear) | `finTable` |
 | Side-wall racks | decorative only | `prop`, no interaction |
 
 Other dressing: wicker armchair + pouf + round jute rug, potted palms, hanging
@@ -189,12 +189,12 @@ plants everywhere, soft golden light. Fitting rooms visible from the door.
 | Display | Product handle | Prop |
 |---|---|---|
 | Rack (left, tees) | `logo-tee` | `clothesRack` |
-| Rack (right, hoodies) | `offshore-hoodie` | `clothesRack` |
-| Mannequin A (tee + floral boardshorts + bucket hat) | `reef-boardshorts` | `mannequin` |
+| Rack (right, hoodies) | `offshore-hoodie` | `hoodieRack` |
+| Mannequin A (tee + floral boardshorts + bucket hat) | `reef-boardshorts` | `shortsMannequin` |
 | Mannequin B (hoodie + shorts) | `offshore-hoodie` | `mannequin` |
-| Swimwear rail next to the fitting rooms | `tide-one-piece` | `clothesRack` (small) |
-| Front tables | `logo-tee` / decorative caps | `shelf`/table |
-| Cap shelf behind the counter | decorative until a cap product exists | `shelf` |
+| Swimwear rail next to the fitting rooms | `tide-one-piece` | `swimRack` |
+| Front tables | `logo-tee` / decorative caps | `teeTable` / `capTable` |
+| Cap shelf behind the counter | decorative until a cap product exists | `capShelf` |
 
 Other dressing: two fitting rooms with cream curtains and wave marks (solid),
 wall mirror + standing oval mirror, board rack with 3 decorative boards,
@@ -237,9 +237,9 @@ step 2.3, so the three interiors match.
 | Pegboard of fins | `keel-twin-fins` | `pegboard` |
 | Wetsuit hangers | `springsuit-wetsuit` | `wetsuitHanger` |
 | Wax/bottle shelf | `tropical-wax` | `shelf` |
-| Leash hooks | `coil-leash` | `pegboard` (variant) |
-| Traction pad table | `grip-traction-pad` | `shelf`/table |
-| Board-bag rack | `day-board-bag` | `wetsuitHanger`/rack variant |
+| Leash hooks | `coil-leash` | `leashHooks` |
+| Traction pad table | `grip-traction-pad` | `padTable` |
+| Board-bag rack | `day-board-bag` | `bagRack` |
 
 Shopkeeper: woman with a ponytail, sun-yellow tee (`idle`, behind the counter).
 

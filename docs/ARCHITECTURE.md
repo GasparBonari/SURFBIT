@@ -54,7 +54,7 @@ src/
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
 │   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
-│   ├── mock/catalog.ts       ✅ 15 demo products (5 per shop)
+│   ├── mock/catalog.ts       ✅ 15 demo products across the three shops
 │   ├── mock/provider.ts      ✅ validates + reprices lines, fake checkout
 │   └── shopify/              🔲 Storefront API provider
 ├── state/                       Zustand stores (client)
@@ -72,11 +72,13 @@ src/
 │   │   ├── tiles.ts          ✅ tileset generator, TILE_NAMES, LEGEND
 │   │   ├── characters.ts     ✅ character spritesheets, autoOutline, shadow
 │   │   ├── props.ts          ✅ PROPS registry + effects (gull, wave, surfer…)
+│   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
+│   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   └── buildings.ts      ✅ procedural shop façades and signage
 │   ├── textures.ts           ✅ generated textures and lazy prop tints
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
-│   │                         🔲 shop interiors
+│   │                         ✅ Boards, Wear and Gear interiors + catalog reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         🔲 Npc
@@ -176,18 +178,23 @@ export type MapObject =
       interact?: Interaction /* omitted for boarded shops and decorative buildings */ }
   | { type: "prop"; prop: keyof typeof PROPS; x: number; y: number;
       tint?: Tint; interact?: Interaction }
-  | { type: "display"; prop: "boardDisplay" | "clothesRack" | "mannequin" | "shelf" | "pegboard" | "wetsuitHanger";
+  | { type: "display"; prop: "boardDisplay" | "boardRack" | "finTable"
+        | "clothesRack" | "hoodieRack" | "swimRack" | "mannequin" | "shortsMannequin" | "teeTable"
+        | "shelf" | "pegboard" | "wetsuitHanger" | "leashHooks" | "bagRack" | "padTable";
       x: number; y: number; productId: string; tint: Tint }
   | { type: "npc"; id: string; x: number; y: number; look: Look;
       behavior: "idle" | "wander"; name: string; lines: string[] };
 ```
 
-Loaders are lazy so interiors can ship in separate chunks. The registry starts
-with `town`. Step 2.3 adds the shop loaders under their reserved `MapKey`s.
+The registry maps each `MapKey` to a lazy loader so the town and each shop
+ship in separate chunks.
 
 ```ts
-export const MAPS: Partial<Record<MapKey, () => Promise<MapDef>>> = {
+export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   town: () => import("./town").then((module) => module.default),
+  boards: () => import("./boards").then((module) => module.default),
+  wear: () => import("./wear").then((module) => module.default),
+  gear: () => import("./gear").then((module) => module.default),
 };
 ```
 
@@ -201,6 +208,10 @@ Town streets (`:`) and plaza (`#`) use cobblestone variants. Raised planters
 are walkable. Stairs directly south of the deck use timber treads. Along the
 diagonal shore, north and west foam edges join through inside and outside
 corner tiles. Wet sand follows the same shoreline on its south and east edges.
+
+Shop floorboards (`_`) use deterministic variants. Interior wood walls
+(`M`), sage walls (`G`) and railings (`R`) are solid. Each two-tile
+opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
 
 ### Coordinates and depth (must be consistent everywhere)
 

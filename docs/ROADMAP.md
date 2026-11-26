@@ -119,7 +119,7 @@ Goal: walk a character around an animated beach town with collisions.
   - Do: `enter`/`exit` interactions → camera fade out (skip if reduced motion) → load target map → `scene.restart({ map, spawn })` → fade in. `useUI.getState().setLocation(key, name)`. Handle `gameEvents.on("travel")`. Unsubscribe bridge listeners on scene shutdown.
   - Accept: entering a shop and exiting returns the player in front of that shop's door, facing down. Verify with temporary map fixtures before the shop interiors land in step 2.3.
 
-- [ ] **2.3 Three shop interiors**
+- [x] **2.3 Three shop interiors**
   - Files: `src/game/maps/{boards,wear,gear}.ts`, `src/game/maps/index.ts`
   - Do: build each room exactly as briefed in [SCENES.md §2–4](SCENES.md#2-boards-interior-boards) (references: `boards-interior.webp`, `wear-interior.webp`). Shell: ~20 × 14 tiles, back wall 3 rows tall (wood planks for Boards/Gear, sage `wallSage` for Wear), 1-tile side wall columns, warm wood floor, low wooden railing along the bottom with a 2-tile opening, exit mat `D` with an `exit` interaction, spawn `door` just above the mat facing up. Add the props SCENES.md lists (wall sign boards, pendant lamps, vines, rugs, freestanding board racks with placards, fitting rooms, mirrors, display tables…) as placeholders where missing.
     - Display → product mapping: use the tables in SCENES.md. Every display uses a real `productId` from `src/commerce/mock/catalog.ts` and a `tint` matching the product art color; decorative duplicates have no interaction.
@@ -226,3 +226,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.6 complete. Animated the shoreline, palms, flags, gulls, surfers, and sand footprints. Verified reduced motion in the browser.
 - 2026-11-26 — Step 2.1 complete. Added proximity prompts and a target marker, with shared keyboard and touch activation and a dialog-close cooldown.
 - 2026-11-26 — Step 2.2 complete. Added door and bridge travel with lazy loading and reduced-motion-aware camera fades. Verified all three return spawns with browser fixtures.
+- 2026-11-26 — Step 2.3 complete. Added lazy-loaded Boards, Wear, and Gear interiors with reachable displays for all 15 products, and compared Boards and Wear screenshots with their references.

@@ -94,10 +94,9 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         const animatedProps = spawnObjects(this, def);
         const player = new Player(this, start, buildBlocked(def));
         this.interactions = new Interactions(this, def.objects);
-        if (def.kind === "outdoor") {
-          this.ambient = new Ambient(this, def.ground, ground, animatedProps, player.sprite);
-        }
+        this.ambient = new Ambient(this, def, ground, animatedProps, player.sprite);
         const camera = this.cameras.main;
+        camera.setBackgroundColor(def.kind === "interior" ? P.outline : P.water);
         updateZoom = () => camera.setZoom(Math.max(2, Math.floor(scale.height / 240)));
         updateZoom();
         camera.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
@@ -162,6 +161,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         };
 
         if (destination?.fadeIn) reveal();
+        this.game.canvas.setAttribute("aria-label", def.name);
         useUI.getState().setLocation(def.key, def.name);
       } catch (error) {
         if (!active) return;

@@ -2,7 +2,8 @@ import type { BuildingStyle } from "../maps/types";
 import { box, ellipse, makeCanvas, px, rect, rng, shade, type Ctx } from "./canvas";
 import { drawText, textWidth } from "./font";
 import { P } from "./palette";
-import { drawBoard, drawShirt, drawWaveMark, PROPS } from "./props";
+import { drawBoard, drawShirt, drawWaveMark } from "./motifs";
+import { PROPS } from "./props";
 
 const ROOFS = {
   thatch: { base: P.thatch, light: P.thatchLight, dark: P.thatchDark, edge: P.thatchDeep },

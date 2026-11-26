@@ -71,9 +71,9 @@ Layout: [SCENES.md → Wear interior](SCENES.md#3-wear-interior-wear).
 
 ### Gear interior
 
-No reference yet. Follow [SCENES.md → Gear interior](SCENES.md#4-gear-interior-gear)
-and the shared look of the two interiors above. A `gear-interior.webp`
-concept in the same style should be added before roadmap step 2.3.
+Follow the [Gear scene brief](SCENES.md#4-gear-interior-gear) and the shared
+look of the Boards and Wear interiors. Consult the owner before expanding
+the layout beyond that brief while there is no Gear concept image.
 
 ## Palette
 
@@ -81,7 +81,8 @@ One palette for the whole project. **UI tokens** live in
 `src/app/globals.css` (`--sb-*`); **game colors** live in
 `src/game/art/palette.ts` (`P.*`). Shared colors must have the same hex in both.
 
-All values are sampled from the reference images. The Aseprite version of the
+World colors are sampled from the reference images. Display colors also use
+the mock catalog's product artwork. The Aseprite version of the
 palette is `assets/palette/surfbit.gpl`; regenerate it from `palette.ts` when
 colors change.
 
@@ -130,6 +131,18 @@ colors change.
 | Sage wall / Dark | `#577559` / `#234144` | `wallSage*` | Wear interior back wall |
 | Iron / Dark | `#4f565c` / `#171e2a` | `iron*` | Street lamps, racks |
 | Glow / Warm | `#fdf2ad` / `#e4ab3f` | `glow*` | Lamp light, windows at dusk |
+
+### Product displays
+
+| Name | Hex | CSS token | `P.` key |
+|---|---|---|---|
+| Product teal | `#3fa7a0` | `--sb-product-teal` | `productTeal` |
+| Parchment | `#f6e7c1` | `--sb-parchment` | `parchment` |
+| Fin brown | `#7a4b2a` | `--sb-fin-brown` | `finBrown` |
+| Fish blue | `#7bc6e8` | `--sb-fish-blue` | `fishBlue` |
+| Foam lime | `#c9e86b` | `--sb-foam-lime` | `foamLime` |
+| Gear charcoal | `#2b2b3a` | `--sb-gear-charcoal` | `gearCharcoal` |
+| Bag silver | `#c8ccd4` | `--sb-bag-silver` | `bagSilver` |
 
 ### Foliage
 

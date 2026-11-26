@@ -83,6 +83,15 @@ export const P = {
   cream: "#fff3d6",
   white: "#ffffff",
 
+  // Product display colors from the mock catalog
+  productTeal: "#3fa7a0",
+  parchment: "#f6e7c1",
+  finBrown: "#7a4b2a",
+  fishBlue: "#7bc6e8",
+  foamLime: "#c9e86b",
+  gearCharcoal: "#2b2b3a",
+  bagSilver: "#c8ccd4",
+
   // Foliage
   leaf: "#4f8a3a",
   leafLight: "#a2a042",

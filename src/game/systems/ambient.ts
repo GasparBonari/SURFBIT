@@ -45,7 +45,7 @@ export class Ambient {
 
   constructor(
     private readonly scene: Phaser.Scene,
-    private readonly ground: MapDef["ground"],
+    private readonly map: MapDef,
     layer: Phaser.Tilemaps.TilemapLayer,
     props: AnimatedProp[],
     player: Phaser.GameObjects.Sprite,
@@ -63,13 +63,14 @@ export class Ambient {
     });
 
     const { width, height } = layer;
-    this.gulls = [0.46, 0.69].map((row, i) => {
+    const outdoor = map.kind === "outdoor";
+    this.gulls = (outdoor ? [0.46, 0.69] : []).map((row, i) => {
       const image = scene.add.sprite(0, Math.round(height * row), "gull", 0)
         .setDepth(100000).setFlipX(i === 1).setVisible(false);
       return { image, speed: i === 0 ? 46 : -38, start: width * (i === 0 ? 0.28 : 0.84), span: width + 32 };
     });
 
-    const shore = findShore(ground);
+    const shore = outdoor ? findShore(map.ground) : [];
     this.waves = shore.filter((_, i) => i % 5 === 2).map(({ x, y }, i) => {
       const endX = (x + 0.5) * TILE;
       const endY = (y + 1) * TILE;
@@ -77,7 +78,7 @@ export class Ambient {
       return { image, endX, endY, phase: (i % 3) * WAVE_PERIOD / 3 };
     });
 
-    const offshore = shore.filter(({ x, y }) => ground[y + 5]?.[x] === "~");
+    const offshore = shore.filter(({ x, y }) => map.ground[y + 5]?.[x] === "~");
     const surferCount = Math.min(offshore.length, 2);
     this.surfers = Array.from({ length: surferCount }, (_, i) => {
       const { x, y } = offshore[Math.floor((i + 0.5) * offshore.length / surferCount)];
@@ -105,7 +106,7 @@ export class Ambient {
     if (!this.reduced) {
       this.elapsed += delta;
       this.updateScenery();
-      this.updateFootprints(x, y);
+      if (this.map.kind === "outdoor") this.updateFootprints(x, y);
     }
     this.lastX = x;
     this.lastY = y;
@@ -163,7 +164,7 @@ export class Ambient {
       image.setAlpha(0.75 * (1 - (this.elapsed - born) / FOOTPRINT_LIFETIME));
     }
 
-    const sand = this.ground[Math.ceil(y / TILE) - 1]?.[Math.floor(x / TILE)] === ".";
+    const sand = this.map.ground[Math.ceil(y / TILE) - 1]?.[Math.floor(x / TILE)] === ".";
     if (!sand) {
       this.stride = 0;
       return;
