@@ -7,6 +7,16 @@
   font-size: 12px;
 }
 
+.badge {
+  min-width: 18px;
+  padding: var(--sb-space-1);
+  border-radius: var(--sb-radius);
+  background: var(--sb-navy-dark);
+  color: var(--sb-cream);
+  text-align: center;
+  line-height: 1;
+}
+
 .drawer {
   position: fixed;
   inset: var(--sb-space-4) max(var(--sb-space-4), env(safe-area-inset-right))

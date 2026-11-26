@@ -42,7 +42,7 @@ src/
 ├── app/                         Next.js App Router
 │   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, cart drawer
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
-│   ├── page.tsx              ✅ world page, catalog hydration, and shop links → 🔲 HUD
+│   ├── page.tsx              ✅ world page, catalog hydration, and HUD
 │   ├── page.module.css       ✅ fullscreen canvas and fallback layout
 │   ├── World.tsx             ✅ App Router client entry for the world
 │   ├── shop/                ✅ catalog grouped by store, filter chips and CSS module
@@ -96,9 +96,10 @@ src/
     ├── ProductArt.tsx         ✅ photos and fallback illustrations (with CSS module)
     ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
     ├── StoreHydrator.tsx      ✅ restores cart and settings after the first client render
-    ├── CartDrawer.tsx         ✅ cart entry, line editing, subtotal, and checkout link (with CSS module)
+    ├── CartDrawer.tsx         ✅ shared cart button, line editing, subtotal, and checkout link (with CSS module)
+    ├── Hud.tsx                ✅ world location, cart count, shop shortcut, mute, and fullscreen (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── …                      🔲 HUD
+    └── …                      🔲 directory, settings, and joystick
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.

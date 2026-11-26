@@ -3,6 +3,7 @@ import Link from "next/link";
 import { commerce } from "@/commerce";
 import { CatalogHydrator } from "@/components/CatalogHydrator";
 import { DialogBox } from "@/components/DialogBox";
+import { Hud } from "@/components/Hud";
 import { InteractPrompt } from "@/components/InteractPrompt";
 import { ProductModal } from "@/components/ProductModal";
 import { WorldClient } from "./World";
@@ -18,9 +19,7 @@ export default async function Home() {
       <h1 className="sr-only">SURFBIT Beach Town</h1>
       <CatalogHydrator products={products} />
       <WorldClient className={styles.world} />
-      <Link href="/shop" className={`sb-btn sb-btn--secondary sb-pixel ${styles.shop}`}>
-        Shop
-      </Link>
+      <Hud />
       <InteractPrompt />
       <DialogBox />
       <ProductModal />

@@ -37,6 +37,8 @@ export function WorldClient({ className }: { className: string }) {
 
     return () => {
       cancelled = true;
+      // A fullscreen change can arrive after the host is detached and before Phaser's next frame.
+      game?.scale.stopListeners();
       game?.destroy(true);
     };
   }, []);

@@ -1,25 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import { formatMoney } from "@/commerce/format";
 import { cartSubtotal, useCart, type CartLine } from "@/state/cart";
 import { useUI } from "@/state/ui";
 import styles from "./CartDrawer.module.css";
 
+export function CartButton({ className = styles.trigger, count }: { className?: string; count?: number }) {
+  return (
+    <button
+      className={`sb-btn sb-btn--secondary sb-pixel ${className}`}
+      type="button"
+      aria-haspopup="dialog"
+      onClick={() => useUI.getState().openPanel("cart")}
+    >
+      Cart
+      {count !== undefined && <span className={styles.badge}>{count}</span>}
+    </button>
+  );
+}
+
 export function CartDrawer() {
+  const pathname = usePathname();
   const open = useUI((state) => state.panel === "cart");
 
   return (
     <>
-      <button
-        className={`sb-btn sb-btn--secondary sb-pixel ${styles.trigger}`}
-        type="button"
-        aria-haspopup="dialog"
-        onClick={() => useUI.getState().openPanel("cart")}
-      >
-        Cart
-      </button>
+      {pathname !== "/" && <CartButton />}
       {open && <CartPanel />}
     </>
   );

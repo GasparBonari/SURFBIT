@@ -1,0 +1,104 @@
+.hud {
+  position: absolute;
+  z-index: var(--sb-z-hud);
+  inset: max(var(--sb-space-4), env(safe-area-inset-top))
+    max(var(--sb-space-4), env(safe-area-inset-right)) auto
+    max(var(--sb-space-4), env(safe-area-inset-left));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sb-space-2);
+  pointer-events: none;
+}
+
+.hud .identity {
+  display: flex;
+  align-items: center;
+  gap: var(--sb-space-3);
+  min-height: 44px;
+  padding: var(--sb-space-2) var(--sb-space-3);
+  background: var(--sb-navy-dark);
+  color: var(--sb-cream);
+  font-size: 10px;
+}
+
+.brand {
+  font-size: 14px;
+}
+
+.location {
+  padding-inline-start: var(--sb-space-3);
+  border-inline-start: 2px solid var(--sb-sign-teal);
+  color: var(--sb-sky);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sb-space-2);
+}
+
+.controls .control {
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--sb-space-3);
+  font-size: 10px;
+  pointer-events: auto;
+}
+
+.controls .control[aria-pressed="true"] {
+  background: var(--sb-sun);
+}
+
+.controls .control:disabled {
+  background: var(--sb-parchment);
+  color: var(--sb-text);
+}
+
+.controls .control:focus-visible {
+  outline-color: var(--sb-navy-dark);
+  box-shadow: 0 0 0 2px var(--sb-cream);
+}
+
+.icon {
+  display: none;
+  font: 22px / 1 var(--sb-font-body);
+}
+
+.status {
+  position: absolute;
+  inset: calc(100% + var(--sb-space-2)) 0 auto auto;
+  margin: 0;
+  padding: var(--sb-space-2) var(--sb-space-3);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .hud {
+    inset: max(var(--sb-space-3), env(safe-area-inset-top))
+      max(var(--sb-space-3), env(safe-area-inset-right)) auto
+      max(var(--sb-space-3), env(safe-area-inset-left));
+  }
+
+  .brand {
+    font-size: 12px;
+  }
+
+  .controls {
+    gap: var(--sb-space-1);
+  }
+
+  .controls .control {
+    gap: var(--sb-space-1);
+    padding-inline: var(--sb-space-1);
+  }
+
+  .label {
+    display: none;
+  }
+
+  .icon {
+    display: block;
+  }
+}
