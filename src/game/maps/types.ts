@@ -20,8 +20,9 @@ export interface Spawn {
 }
 
 export interface BuildingStyle {
-  roof: string;
+  roof: "thatch" | "terracotta" | "indigo" | "slate";
   wall: string;
+  awnings?: { window: string; door: string };
 }
 
 export type Interaction =

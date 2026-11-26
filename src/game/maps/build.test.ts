@@ -22,21 +22,31 @@ function makeMap(overrides: Partial<MapDef>): MapDef {
 const shop: Extract<MapObject, { type: "building" }> = {
   type: "building", id: "shop", label: "Shop",
   x: 2, y: 0, w: 3, h: 2, door: { x: 3, y: 1 },
-  style: { roof: P.coral, wall: P.woodLight },
+  style: { roof: "terracotta", wall: P.woodLight },
 };
 
 describe("buildGround", () => {
-  it("autotiles grass, sand, water, and the plaza from neighbouring terrain", () => {
-    const map = makeMap({ ground: ['""#~~', '".#~~', "..###", "~~||~", "~~||~"] });
+  it("autotiles the plaza, garden edges, and retaining wall", () => {
+    const map = makeMap({ ground: ['""##S', '".d#S', "PssS."] });
     const tiles = buildGround(map);
 
     expect([T.grass0, T.grass1, T.grass2]).toContain(tiles[0][0]);
-    expect(tiles[0].slice(1)).toEqual([T.grassEdge, T.plaza0, T.water0, T.water0]);
+    expect(tiles[0].slice(1)).toEqual([T.grassEdge, T.plaza0, T.plaza1, T.retainingWall]);
     expect(tiles[1][0]).toBe(T.grassEdge);
-    expect(tiles[1][2]).toBe(T.plaza1);
-    expect(tiles[2]).toEqual([T.sandWet, T.sandWet, T.plaza0, T.plaza1, T.plaza0]);
-    expect(tiles[3]).toEqual([T.foam0, T.foam0, T.pier, T.pier, T.foam0]);
-    expect(tiles[4]).toEqual([T.water0, T.water0, T.pier, T.pier, T.water0]);
+    expect(tiles[1][2]).toBe(T.deck);
+    expect(tiles[1][3]).toBe(T.plaza0);
+    expect(tiles[1][4]).toBe(T.retainingWallFace);
+    expect(tiles[2].slice(0, 4)).toEqual([T.planter, T.stairs, T.deckStairs, T.retainingWall]);
+  });
+
+  it("joins north and west swash around both sides of a shoreline step", () => {
+    const map = makeMap({ ground: ["....~~", "..~~~~", "..~~~~", "~~~~~~"] });
+    const tiles = buildGround(map);
+
+    expect(tiles[0].slice(2)).toEqual([T.sandWet, T.sandWetSouthEast, T.foamWest0, T.water0]);
+    expect(tiles[1].slice(1)).toEqual([T.sandWetEast, T.foamCorner0, T.foam0, T.foamInner0, T.water0]);
+    expect(tiles[2].slice(1)).toEqual([T.sandWetSouthEast, T.foamWest0, T.water0, T.water0, T.water0]);
+    expect(tiles[3]).toEqual([T.foam0, T.foam0, T.foamInner0, T.water0, T.water0, T.water0]);
   });
 
   it("chooses stable variants by position", () => {
@@ -50,6 +60,11 @@ describe("buildGround", () => {
 });
 
 describe("buildBlocked", () => {
+  it("blocks planters, retaining walls and water while keeping stairs and deck walkable", () => {
+    expect(buildBlocked(makeMap({ ground: ["PSSsd~"] })))
+      .toEqual([[true, true, true, false, false, true]]);
+  });
+
   it("combines solid terrain, props, displays and buildings while leaving doors open", () => {
     const map = makeMap({
       ground: ["~W.....", ".......", ".......", "......."],
@@ -114,7 +129,7 @@ describe("validateMap", () => {
   });
 });
 
-it("loads a valid town with a walkable route to each open shop and the pier", async () => {
+it("loads a valid town with walkable routes to each open shop and the beach stairs", async () => {
   const town = await MAPS.town!();
   expect(() => validateMap(town)).not.toThrow();
 
@@ -134,8 +149,10 @@ it("loads a valid town with a walkable route to each open shop and the pier", as
   const shops = town.objects.filter((object) => object.type === "building");
   const openShops = shops.filter((object) => object.interact?.kind === "enter");
   expect(openShops.map((object) => object.id).sort()).toEqual(["boards", "gear", "wear"]);
+  expect(shops.filter((object) => object.interact?.kind === "read").map((object) => object.id).sort())
+    .toEqual(["beach-club", "workshop"]);
   expect(shops.filter((object) => !object.interact).map((object) => object.id).sort())
-    .toEqual(["beach-club", "goods", "workshop"]);
+    .toEqual(["cottage-east", "cottage-west", "goods"]);
   for (const { id, door, interact } of openShops) {
     expect(interact).toEqual({ kind: "enter", target: id, spawn: "door" });
     expect(town.spawns[`from-${id}`]).toEqual({ x: door.x, y: door.y + 1, facing: "down" });
@@ -143,7 +160,21 @@ it("loads a valid town with a walkable route to each open shop and the pier", as
     expect(reachable.has(`${door.x},${door.y}`)).toBe(true);
   }
 
-  const pierY = town.ground.findLastIndex((row) => row.includes("|"));
-  const pierX = town.ground[pierY].indexOf("|");
-  expect(reachable.has(`${pierX},${pierY}`)).toBe(true);
+  const wall = town.ground[28];
+  expect(wall.match(/s+/g)).toEqual(["sss", "sssss", "sss"]);
+  expect(wall.replaceAll("s", "")).toMatch(/^S+$/);
+  for (const x of [12, 29, 47]) {
+    expect(wall[x]).toBe("s");
+    expect(reachable.has(`${x},28`)).toBe(true);
+    expect(reachable.has(`${x},30`)).toBe(true);
+  }
+
+  const club = shops.find((object) => object.id === "beach-club")!;
+  for (const row of town.ground.slice(club.y + club.h, club.y + club.h + 4)) {
+    expect(row.slice(club.x, club.x + club.w)).toBe("d".repeat(12));
+  }
+  const shoreline = town.ground.map((row) => row.indexOf("~")).filter((x) => x >= 0);
+  expect(shoreline.every((x, index) => index === 0 || x < shoreline[index - 1])).toBe(true);
+  expect(shoreline[0]).toBe(59);
+  expect(shoreline.at(-1)).toBe(19);
 });

@@ -1,6 +1,7 @@
 import { P } from "./palette";
 import { type Ctx, box, ellipse, px, rect, shade } from "./canvas";
 import { autoOutline } from "./characters";
+import { drawText, textWidth } from "./font";
 
 export interface Tint {
   color: string;
@@ -28,16 +29,16 @@ const leafRow = (ctx: Ctx, x: number, y: number, len: number, dir: number, sway:
     const xx = x + dir * i;
     const yy = y + Math.round(t * t * 6) + Math.round(sway * t);
     px(ctx, xx, yy, P.leafDark);
-    px(ctx, xx, yy - 1, P.leaf);
-    if (i % 2 === 0 && i < len - 2) px(ctx, xx, yy - 2, P.leafLight);
+    rect(ctx, xx, yy - 2, 1, t < 0.7 ? 2 : 1, P.leaf);
+    if (i % 2 === 0 && t < 0.85) px(ctx, xx, yy - 2, t < 0.45 ? P.leafLight : P.leafGlint);
     if (i % 3 === 1) px(ctx, xx, yy + 1, P.leafDark);
   }
 };
 
-function palm(ctx: Ctx, ox: number, frame: number) {
+function palm(ctx: Ctx, ox: number, frame: number, height = 64) {
   const sway = [-1, 0, 1][frame];
   // trunk: gentle curve from base (center bottom) to crown
-  const baseX = ox + 24, baseY = 63, topX = ox + 28, topY = 20;
+  const baseX = ox + 24, baseY = height - 1, topX = ox + 28, topY = height === 64 ? 20 : 14;
   for (let y = baseY; y >= topY; y--) {
     const t = (baseY - y) / (baseY - topY);
     const x = Math.round(baseX + (topX - baseX) * t * t);
@@ -46,13 +47,13 @@ function palm(ctx: Ctx, ox: number, frame: number) {
     if ((baseY - y) % 4 === 0) rect(ctx, x - 2, y, 5, 1, P.trunkDark);
   }
   // coconuts
-  ellipse(ctx, topX - 2, topY + 3, 2, 2, "#7c5132");
-  ellipse(ctx, topX + 2, topY + 4, 2, 2, "#6a4429");
+  ellipse(ctx, topX - 2, topY + 3, 2, 2, P.trunkDark);
+  ellipse(ctx, topX + 2, topY + 4, 2, 2, P.woodDeep);
   // fronds
   const cx = topX, cy = topY;
   for (let row = -1; row <= 1; row++) {
-    leafRow(ctx, cx, cy + row - 3, 22, -1, sway * 2);
-    leafRow(ctx, cx, cy + row - 3, 22, 1, sway * 2);
+    leafRow(ctx, cx, cy + row - 3, height === 64 ? 22 : 17, -1, sway * 2);
+    leafRow(ctx, cx, cy + row - 3, height === 64 ? 20 : 17, 1, sway * 2);
   }
   leafRow(ctx, cx - 1, cy - 6, 14, -1, sway);
   leafRow(ctx, cx + 1, cy - 6, 14, 1, sway);
@@ -105,8 +106,20 @@ function shirt(ctx: Ctx, x: number, y: number, color: string, accent: string, lo
   px(ctx, x + 5, y, shade(color, -0.25));
 }
 
+function waveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
+  const rows = [
+    [[8, 5]], [[6, 9]], [[5, 7], [13, 3]], [[4, 6]],
+    [[3, 6], [11, 2]], [[2, 6], [10, 5]], [[0, 7], [9, 10]],
+    [[0, 5], [10, 12]],
+  ];
+  rows.forEach((row, dy) => {
+    for (const [left, width] of row) rect(ctx, x + left * scale, y + dy * scale, width * scale, scale, color);
+  });
+}
+
 export const PROPS = {
   palm: { w: 48, h: 64, frames: 3, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f) },
+  palmSmall: { w: 48, h: 48, frames: 3, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f, 48) },
   bush: {
     w: 16, h: 15, solid: true,
     draw: (c, ox) => {
@@ -114,6 +127,19 @@ export const PROPS = {
       ellipse(c, ox + 7, 7, 5, 4, P.leaf);
       px(c, ox + 5, 5, P.leafLight); px(c, ox + 9, 6, P.leafLight); px(c, ox + 11, 9, P.leafLight);
       px(c, ox + 4, 9, P.pink); px(c, ox + 10, 4, P.pink);
+    },
+  },
+  hibiscusBush: {
+    w: 22, h: 19, foot: { w: 1, h: 1 }, solid: true, outline: false,
+    draw: (c, ox) => {
+      ellipse(c, ox + 11, 12, 10, 6, P.leafDeep);
+      ellipse(c, ox + 8, 9, 7, 6, P.leafDark);
+      ellipse(c, ox + 14, 8, 7, 6, P.leaf);
+      for (const [x, y] of [[4, 10], [10, 5], [14, 10], [18, 8]]) {
+        rect(c, ox + x - 1, y, 3, 2, P.hibiscus);
+        px(c, ox + x, y - 1, P.pink);
+        px(c, ox + x, y, P.sun);
+      }
     },
   },
   flowers: {
@@ -138,6 +164,7 @@ export const PROPS = {
   },
   umbrellaCoral: { w: 32, h: 44, foot: { w: 2, h: 1 }, solid: false, draw: (c, ox) => { c.save(); c.translate(ox, 0); umbrella(c, P.coral, P.cream); c.restore(); } },
   umbrellaTeal: { w: 32, h: 44, foot: { w: 2, h: 1 }, solid: false, draw: (c, ox) => { c.save(); c.translate(ox, 0); umbrella(c, P.teal, P.cream); c.restore(); } },
+  umbrellaBlue: { w: 32, h: 44, foot: { w: 2, h: 1 }, draw: (c, ox) => { c.save(); c.translate(ox, 0); umbrella(c, P.flagBlue, P.cream); c.restore(); } },
   towelCoral: {
     w: 14, h: 26, flat: true,
     draw: (c, ox) => { rect(c, ox + 1, 1, 12, 24, P.cream); for (let y = 3; y < 24; y += 5) rect(c, ox + 1, y, 12, 2, P.coral); },
@@ -179,6 +206,14 @@ export const PROPS = {
       rect(c, ox + 2, 25, 2, 9, P.woodDark); rect(c, ox + 28, 25, 2, 9, P.woodDark);
     },
   },
+  boardsInSand: {
+    w: 24, h: 35, solid: true,
+    draw: (c, ox) => {
+      board(c, ox + 1, 0, 10, 34, P.sun, P.cream);
+      board(c, ox + 12, 4, 11, 30, P.flagBlue, P.cream);
+      rect(c, ox, 33, 24, 2, P.sandDark);
+    },
+  },
   tower: {
     w: 34, h: 56, foot: { w: 2, h: 1 }, solid: true,
     draw: (c, ox) => {
@@ -189,6 +224,10 @@ export const PROPS = {
       for (let x = 2; x < 32; x += 4) rect(c, ox + x, 0, 2, 2, P.coral);
       for (let y = 0; y < 8; y++) rect(c, ox + 2 + y, 2 + y, 30 - y * 2, 1, y % 2 ? P.coral : P.cream);
       rect(c, ox + 16, 18, 2, 6, P.outline);
+      ellipse(c, ox + 25, 22, 4, 4, P.coral);
+      ellipse(c, ox + 25, 22, 2, 2, P.woodDark);
+      rect(c, ox + 24, 18, 2, 2, P.cream);
+      rect(c, ox + 24, 25, 2, 2, P.cream);
     },
   },
   statue: {
@@ -212,6 +251,139 @@ export const PROPS = {
         rect(c, ox + 5 + x, 2 + dy, 1, 7, x < 5 ? P.coral : P.cream);
         if (x === 4) rect(c, ox + 5 + x, 4 + dy, 1, 3, P.sun);
       }
+    },
+  },
+  beachFlag: {
+    w: 28, h: 43, frames: 3, foot: { w: 1, h: 1 }, solid: true, outline: false,
+    draw: (c, ox, frame) => {
+      rect(c, ox + 12, 0, 2, 43, P.ironDark);
+      rect(c, ox + 14, 3, 14, 11, P.flagBlue);
+      rect(c, ox + 24, 3 + frame, 4, 9, P.navy);
+      rect(c, ox + 18, 7, 5, 2, P.cream);
+      rect(c, ox + 16, 9, 4, 2, P.cream);
+    },
+  },
+  plazaLogo: {
+    w: 96, h: 40, foot: { w: 6, h: 3 }, flat: true,
+    draw: (c, ox) => {
+      waveMark(c, ox + 26, 2, P.navy, 2);
+      c.save();
+      c.translate(ox + 48 - textWidth("SURFBIT"), 23);
+      c.scale(2, 2);
+      drawText(c, "SURFBIT", 0, 0, P.navy);
+      c.restore();
+    },
+  },
+  signpost: {
+    w: 31, h: 46, foot: { w: 1, h: 1 }, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 13, 2, 5, 44, P.woodDeep);
+      for (const [row, label] of ["SURF", "SHOP", "BEACH"].entries()) {
+        const y = row * 11;
+        box(c, ox, y, 31, 10, P.woodDark, P.woodDeep);
+        drawText(c, label, ox + 2, y + 2, P.cream);
+        const x = ox + 25;
+        if (row === 2) {
+          rect(c, x, y + 2, 1, 5, P.cream);
+          rect(c, x - 1, y + 5, 3, 1, P.cream);
+        } else {
+          rect(c, x - 2, y + 4, 5, 1, P.cream);
+          rect(c, x + (row === 0 ? -1 : 1), y + 3, 1, 3, P.cream);
+        }
+      }
+    },
+  },
+  noticeBoard: {
+    w: 30, h: 29, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 3, 6, 3, 23, P.woodDeep);
+      rect(c, ox + 24, 6, 3, 23, P.woodDeep);
+      box(c, ox, 3, 30, 20, P.wood, P.woodDark);
+      rect(c, ox, 1, 30, 3, P.woodLight);
+      rect(c, ox + 5, 8, 8, 10, P.cream);
+      rect(c, ox + 17, 7, 7, 8, P.sandLight);
+      rect(c, ox + 7, 11, 4, 1, P.teal);
+      rect(c, ox + 19, 11, 3, 1, P.coral);
+    },
+  },
+  trashBin: {
+    w: 12, h: 16, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 1, 4, 10, 11, P.ironDark);
+      rect(c, ox + 2, 5, 8, 9, P.iron);
+      ellipse(c, ox + 6, 4, 5, 3, P.wallStoneDark);
+      ellipse(c, ox + 6, 4, 3, 1, P.ironDark);
+    },
+  },
+  lounger: {
+    w: 14, h: 23, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 1, 7, 12, 15, P.woodDark);
+      rect(c, ox + 2, 1, 10, 18, P.woodLight);
+      for (let y = 3; y < 18; y += 4) rect(c, ox + 2, y, 10, 1, P.wood);
+      rect(c, ox, 18, 14, 2, P.woodDeep);
+    },
+  },
+  volleyballNet: {
+    w: 64, h: 24, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 8, 2, 48, 2, P.cream);
+      for (let y = 6; y <= 14; y += 4) rect(c, ox + 8, y, 48, 1, P.sandWetDark);
+      for (let x = 12; x < 56; x += 4) rect(c, ox + x, 4, 1, 11, P.sandWetDark);
+      rect(c, ox + 8, 15, 48, 1, P.cream);
+    },
+  },
+  volleyballPost: {
+    w: 6, h: 24, solid: true, outline: false,
+    draw: (c, ox) => { rect(c, ox + 1, 1, 4, 23, P.woodDark); rect(c, ox + 1, 1, 1, 22, P.woodLight); },
+  },
+  rockCluster: {
+    w: 46, h: 25, solid: true, outline: false,
+    draw: (c, ox) => {
+      ellipse(c, ox + 23, 20, 22, 4, P.rockDeep);
+      ellipse(c, ox + 22, 13, 11, 11, P.rockDark);
+      ellipse(c, ox + 18, 10, 6, 6, P.rock);
+      ellipse(c, ox + 6, 18, 5, 5, P.rock);
+      ellipse(c, ox + 37, 17, 8, 7, P.rockDark);
+      ellipse(c, ox + 35, 14, 5, 3, P.rock);
+    },
+  },
+  fence: {
+    w: 48, h: 17, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox, 5, 48, 3, P.woodLight);
+      rect(c, ox, 11, 48, 3, P.woodDark);
+      for (let x = 3; x < 48; x += 14) rect(c, ox + x, 1, 3, 16, P.wood);
+    },
+  },
+  cafeTable: {
+    w: 29, h: 22, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 13, 8, 3, 14, P.woodDeep);
+      ellipse(c, ox + 14, 9, 10, 5, P.woodDark);
+      ellipse(c, ox + 14, 7, 10, 5, P.woodLight);
+      rect(c, ox + 5, 15, 5, 5, P.wood);
+      rect(c, ox + 20, 15, 5, 5, P.wood);
+      rect(c, ox + 14, 4, 3, 3, P.cream);
+    },
+  },
+  stringLights: {
+    w: 48, h: 25, outline: false,
+    draw: (c, ox) => {
+      for (let x = 0; x < 48; x++) {
+        const y = 3 + Math.round(Math.sin(x / 47 * Math.PI) * 6);
+        px(c, ox + x, y, P.woodDark);
+        if (x % 8 === 3) rect(c, ox + x, y + 1, 2, 3, P.glow);
+      }
+    },
+  },
+  chalkboard: {
+    w: 14, h: 22, solid: true, outline: false,
+    draw: (c, ox) => {
+      rect(c, ox + 2, 12, 2, 10, P.woodDeep);
+      rect(c, ox + 10, 12, 2, 10, P.woodDeep);
+      box(c, ox, 0, 14, 18, P.navyDark, P.woodLight);
+      for (const y of [4, 7, 10, 13]) rect(c, ox + 3, y, 7, 1, P.cream);
     },
   },
   // ---------------------------------------------------------- interiors

@@ -74,14 +74,14 @@ Goal: walk a character around an animated beach town with collisions.
     - `page.tsx`: render `<WorldClient />` through the App Router client entry in `World.tsx`. Include a `<noscript>` fallback with a link to `/shop`, which is implemented in step 3.4.
   - Accept: `npm run dev` shows the town ground, crisp at integer zoom, no console errors, no SSR errors, `npm run build` passes.
 
-- [ ] **1.3b Town layout to match the reference**
-  - Files: `src/game/art/tiles.ts`, `src/game/maps/town.ts`, `src/game/maps/build.ts`, `src/game/maps/build.test.ts`, `src/game/art/props.ts`
+- [x] **1.3b Town layout to match the reference**
+  - Files: `src/game/art/tiles.ts`, `src/game/maps/town.ts`, `src/game/maps/types.ts`, `src/game/maps/build.ts`, `src/game/maps/build.test.ts`, `src/game/art/props.ts`
   - Do: rework the town to [SCENES.md → Beach town](SCENES.md#1-beach-town-town) (reference: `docs/art-references/beach-town.webp`).
     - Legend/tiles: `:` becomes cobblestone street, `#` plaza pavers (both in `stone*`/`grout`). Add `P` raised planter (solid), `S` stone retaining wall (solid), `s` stone stairs, `d` wooden deck. Drop the full-width boardwalk and the pier.
     - Ground: cobblestone town, planted beds instead of open lawn, stone wall with 2 stair openings plus deck stairs, beach below, **diagonal shoreline** in the bottom-right (stair-stepped, with foam corner tiles).
     - Objects: building positions, sizes and roof materials from the SCENES.md table (`goods` is the 12 × 8 terracotta flagship; `beach-club` gets a deck); signpost, notice board, planters, plaza logo inlay, loungers, volleyball net, rock clusters, trash bins. Add any missing `PROPS` as simple placeholders.
     - Extend `BuildingStyle` if needed (e.g. `roof: "thatch" | "terracotta" | "indigo" | "slate"`, `awnings`) and update ARCHITECTURE.md.
-  - Accept: `validateMap` passes; tests updated for the new legend and foam corners; a screenshot of the town is visibly close in composition to `beach-town.webp` (shops, plaza, wall + stairs, beach, diagonal water in the same places).
+  - Accept: `validateMap` passes and tests cover the new legend and foam corners. Compare a screenshot of the terrain and configured shop footprints and props with `beach-town.webp` to verify the composition. Step 1.5 adds the in-game façades and prop layer.
 
 - [ ] **1.3c Characters at 16 × 32**
   - Files: `src/game/art/characters.ts`, `src/game/textures.ts`, ARCHITECTURE.md (hitbox notes)
@@ -217,3 +217,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.2 complete. Added the town map, lazy loader, and tested terrain, collision, and validation builders.
 - 2026-11-26 — Step 1.3 complete. Mounted Phaser on the home page, registered generated textures, and rendered the town ground at 2× zoom.
 - 2026-11-26 — Visual target added: `docs/art-references/`, palette resampled from it, `docs/SCENES.md` scene briefs, new steps 1.3b (town layout) and 1.3c (16 × 32 characters), Phase A (production art).
+- 2026-11-26 — Step 1.3b complete. Reworked the town layout, added coastal autotiles and props, and compared the layout with the beach-town reference.

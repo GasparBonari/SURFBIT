@@ -75,7 +75,7 @@ src/
 │   │   └── buildings.ts      🔲 building facade generator
 │   ├── textures.ts           ✅ generated textures and lazy prop tints
 │   ├── config.ts             ✅ Phaser game config
-│   ├── maps/                 ✅ MapDef types, builders, tests, town and lazy loader
+│   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         🔲 shop interiors
 │   ├── scenes/               ✅ BootScene, MapScene ground layer
 │   ├── systems/              🔲 Player, Npc, collision, interaction, ambient
@@ -154,7 +154,11 @@ export interface MapDef {
 
 export interface Spawn { x: number; y: number; facing: Dir }
 
-export interface BuildingStyle { roof: string; wall: string }
+export interface BuildingStyle {
+  roof: "thatch" | "terracotta" | "indigo" | "slate";
+  wall: string;
+  awnings?: { window: string; door: string };
+}
 
 export type Interaction =
   | { kind: "enter"; target: MapKey; spawn: string }   // doors into buildings
@@ -166,7 +170,7 @@ export type Interaction =
 export type MapObject =
   | { type: "building"; id: string; x: number; y: number; w: number; h: number;
       style: BuildingStyle; label: string; door: { x: number; y: number };
-      interact?: Interaction /* omitted = "coming soon" */ }
+      interact?: Interaction /* omitted for boarded shops and decorative buildings */ }
   | { type: "prop"; prop: keyof typeof PROPS; x: number; y: number;
       tint?: Tint; interact?: Interaction }
   | { type: "display"; prop: "boardDisplay" | "clothesRack" | "mannequin" | "shelf" | "pegboard" | "wetsuitHanger";
@@ -188,6 +192,12 @@ export const MAPS: Partial<Record<MapKey, () => Promise<MapDef>>> = {
 footprints, doors and spawns. `buildGround` and `buildBlocked` expect valid map
 data. Autotiling uses adjacent tiles within the map and picks terrain variants
 deterministically by cell coordinates.
+
+Town streets (`:`) and plaza (`#`) use cobblestone variants. Raised planters
+(`P`) and retaining walls (`S`) are solid. Stairs (`s`) and the deck (`d`)
+are walkable. Stairs directly south of the deck use timber treads. Along the
+diagonal shore, north and west foam edges join through inside and outside
+corner tiles. Wet sand follows the same shoreline on its south and east edges.
 
 ### Coordinates and depth (must be consistent everywhere)
 

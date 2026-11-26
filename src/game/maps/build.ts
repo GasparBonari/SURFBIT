@@ -29,9 +29,23 @@ export function buildGround(def: MapDef): number[][] {
   return def.ground.map((row, y) => Array.from(row, (tile, x) => {
     const below = def.ground[y + 1]?.[x];
     const above = def.ground[y - 1]?.[x];
-    if (tile === "." && below === "~") return T.sandWet;
+    if (tile === ".") {
+      const eastWater = row[x + 1] === "~";
+      if (below === "~") return eastWater ? T.sandWetSouthEast : T.sandWet;
+      if (eastWater) return T.sandWetEast;
+    }
     if (tile === '"' && below !== undefined && below !== '"') return T.grassEdge;
-    if (tile === "~" && above !== undefined && above !== "~") return T.foam0;
+    if (tile === "S" && above === "S") return T.retainingWallFace;
+    if (tile === "s" && above === "d") return T.deckStairs;
+    if (tile === "~") {
+      const west = row[x - 1];
+      const northLand = above !== undefined && above !== "~";
+      const westLand = west !== undefined && west !== "~";
+      if (northLand && westLand) return T.foamCorner0;
+      if (northLand) return T.foam0;
+      if (westLand) return T.foamWest0;
+      if (above === "~" && west === "~" && def.ground[y - 1][x - 1] !== "~") return T.foamInner0;
+    }
     if (tile === "#") return (x + y) % 2 === 0 ? T.plaza0 : T.plaza1;
 
     const { tiles } = LEGEND[tile];

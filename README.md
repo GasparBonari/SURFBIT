@@ -37,4 +37,4 @@ npm run check                # lint + typecheck + tests + build
 
 ## Status
 
-The town ground renders on the home page. The next roadmap step is **1.4 Player movement, collision, camera**.
+The updated town terrain renders on the home page. The next roadmap step is **1.3c Characters at 16 × 32**.
