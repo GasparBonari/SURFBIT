@@ -47,15 +47,16 @@ src/
 │   ├── World.tsx             ✅ App Router client entry for the world
 │   ├── shop/page.tsx         🔲 direct shopping mode (all products)
 │   ├── products/[handle]/    🔲 SEO product pages (generateStaticParams)
-│   ├── checkout/             🔲 checkout review + success pages
-│   └── api/checkout/route.ts 🔲 POST → commerce.createCheckout
+│   ├── checkout/             ✅ checkout review + demo confirmation (with CSS module)
+│   └── api/checkout/route.ts ✅ validates POST lines → commerce.createCheckout
 ├── commerce/                    server-side commerce seam
 │   ├── types.ts              ✅ Product, Variant, Money, CommerceProvider, STORES
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
 │   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
 │   ├── mock/catalog.ts       ✅ 15 demo products across the three shops
-│   ├── mock/provider.ts      ✅ validates + reprices lines, fake checkout
+│   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
+│   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
 │   └── shopify/              🔲 Storefront API provider
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
@@ -138,7 +139,9 @@ configuration passes the loaded Phaser runtime to the scene factories.
    `useCart.getState().add(product, variant, qty)` (persisted).
 6. Checkout: `<CheckoutPage>` POSTs `{ lines: [{variantId, quantity}] }` to
    `/api/checkout` → `commerce.createCheckout(lines)` → redirect URL
-   (mock: `/checkout/success`, Shopify: hosted `checkoutUrl`).
+   (mock: `/checkout/success`, Shopify: hosted `checkoutUrl`). The demo
+   confirmation shows the order number and catalog-priced total. It clears the
+   hydrated cart once when the return URL and submitted items match.
 
 ## Map format (`src/game/maps`)
 

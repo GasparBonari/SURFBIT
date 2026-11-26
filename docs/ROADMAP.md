@@ -147,7 +147,7 @@ Goal: walk a character around an animated beach town with collisions.
     A standalone Cart button opens the drawer until the HUD is built in step 4.1. The checkout page is implemented in step 3.3.
   - Accept: cart survives reload; no hydration warnings.
 
-- [ ] **3.3 Checkout**
+- [x] **3.3 Checkout**
   - Files: `src/app/api/checkout/route.ts`, `src/app/checkout/page.tsx`, `src/app/checkout/success/page.tsx`
   - Do: route handler validates body shape, calls `commerce.createCheckout(lines)`, returns `{ redirectUrl }` or `{ error }` (400). Checkout page: review lines, POST, redirect (`window.location.assign`). Success page: order number, clear the cart, link back to the town. Label the mock clearly: "Demo checkout — no payment is taken."
   - Accept: tampered prices in localStorage don't change the charged total; stock limits are enforced server-side.
@@ -234,3 +234,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 2.3 follow-up. Shop cameras fill the viewport at integer zoom and refit when it resizes.
 - 2026-11-26 — Step 2.2 follow-up. Walking through shop doors and onto exit mats now triggers travel automatically.
 - 2026-11-26 — Step 3.2 complete. Added a cart drawer with stock-aware quantity controls, removal, subtotal and a checkout link. Verified that cart and settings restore after reload without hydration warnings.
+- 2026-11-26 — Step 3.3 complete. Added demo checkout review and confirmation, server-side repricing and combined stock validation, and cart clearing after confirmation.
