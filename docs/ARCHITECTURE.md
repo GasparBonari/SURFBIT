@@ -42,11 +42,14 @@ src/
 ├── app/                         Next.js App Router
 │   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, cart drawer
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
-│   ├── page.tsx              ✅ world page, catalog hydration, and no-JavaScript fallback → 🔲 HUD
+│   ├── page.tsx              ✅ world page, catalog hydration, and shop links → 🔲 HUD
 │   ├── page.module.css       ✅ fullscreen canvas and fallback layout
 │   ├── World.tsx             ✅ App Router client entry for the world
-│   ├── shop/page.tsx         🔲 direct shopping mode (all products)
-│   ├── products/[handle]/    🔲 SEO product pages (generateStaticParams)
+│   ├── shop/                ✅ catalog grouped by store, filter chips and CSS module
+│   ├── products/[handle]/    ✅ prerendered product pages, purchase form and Product JSON-LD
+│   ├── robots.ts            ✅ crawler rules and sitemap link
+│   ├── sitemap.ts           ✅ town, shop and provider-backed product URLs
+│   ├── siteUrl.ts           ✅ shared site origin and product paths
 │   ├── checkout/             ✅ checkout review + demo confirmation (with CSS module)
 │   └── api/checkout/route.ts ✅ validates POST lines → commerce.createCheckout
 ├── commerce/                    server-side commerce seam
@@ -94,6 +97,7 @@ src/
     ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
     ├── StoreHydrator.tsx      ✅ restores cart and settings after the first client render
     ├── CartDrawer.tsx         ✅ cart entry, line editing, subtotal, and checkout link (with CSS module)
+    ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
     └── …                      🔲 HUD
 ```
 

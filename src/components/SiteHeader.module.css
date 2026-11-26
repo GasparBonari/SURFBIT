@@ -1,0 +1,35 @@
+.header {
+  border-bottom: var(--sb-border);
+  background: var(--sb-navy-dark);
+  color: var(--sb-cream);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sb-space-4);
+  max-width: 72rem;
+  min-height: 76px;
+  margin-inline: auto;
+  padding: var(--sb-space-2) 6.5rem var(--sb-space-2) var(--sb-space-4);
+}
+
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+.nav a:focus-visible {
+  outline-color: var(--sb-cream);
+}
+
+.nav .brand {
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+}

@@ -1,0 +1,73 @@
+.page {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: var(--sb-space-4) var(--sb-space-4) var(--sb-space-7);
+}
+
+.store {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: var(--sb-space-2);
+  color: var(--sb-navy-dark);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+.product {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: clamp(var(--sb-space-4), 4vw, var(--sb-space-6));
+  padding: clamp(var(--sb-space-4), 4vw, var(--sb-space-6));
+}
+
+.art {
+  flex: 1 1 17rem;
+  min-width: 0;
+}
+
+.details {
+  display: grid;
+  flex: 1 1 20rem;
+  gap: var(--sb-space-4);
+  min-width: 0;
+}
+
+.details h1,
+.details p {
+  margin: 0;
+}
+
+.details h1 {
+  color: var(--sb-navy-dark);
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.specs {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.specs div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: var(--sb-space-3);
+  padding-block: var(--sb-space-2);
+  border-top: 1px solid var(--sb-parchment);
+}
+
+.specs dt {
+  font-weight: 600;
+}
+
+.specs dd {
+  margin: 0;
+}
+
+.town {
+  min-height: 44px;
+  justify-self: start;
+}

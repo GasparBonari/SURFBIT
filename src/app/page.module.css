@@ -13,6 +13,15 @@
   display: block;
 }
 
+.shop {
+  position: absolute;
+  z-index: var(--sb-z-hud);
+  inset: max(var(--sb-space-4), env(safe-area-inset-top)) auto auto
+    max(var(--sb-space-4), env(safe-area-inset-left));
+  min-height: 44px;
+  font-size: 12px;
+}
+
 .world [role="alert"] {
   position: absolute;
   inset: var(--sb-space-4);

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Press_Start_2P } from "next/font/google";
 import { CartDrawer } from "@/components/CartDrawer";
 import { StoreHydrator } from "@/components/StoreHydrator";
+import { siteUrl } from "./siteUrl";
 import "./globals.css";
 
 const pixel = Press_Start_2P({
@@ -16,6 +17,7 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
   title: {
     default: "SURFBIT — More than a store. A world to explore.",
     template: "%s · SURFBIT",

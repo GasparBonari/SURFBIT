@@ -152,7 +152,7 @@ Goal: walk a character around an animated beach town with collisions.
   - Do: route handler validates body shape, calls `commerce.createCheckout(lines)`, returns `{ redirectUrl }` or `{ error }` (400). Checkout page: review lines, POST, redirect (`window.location.assign`). Success page: order number, clear the cart, link back to the town. Label the mock clearly: "Demo checkout — no payment is taken."
   - Accept: tampered prices in localStorage don't change the charged total; stock limits are enforced server-side.
 
-- [ ] **3.4 Direct shopping mode + SEO**
+- [x] **3.4 Direct shopping mode + SEO**
   - Files: `src/app/shop/page.tsx`, `src/app/products/[handle]/page.tsx`, `src/app/sitemap.ts`, `src/app/robots.ts`, `src/components/SiteHeader.tsx`
   - Do: `/shop` grid grouped by store (`STORES`), filter chips. Product page: `generateStaticParams` from the provider, `generateMetadata`, JSON-LD `Product` schema, `ProductPurchase`, "See it in the town" link. Read `node_modules/next/dist/docs/` for Cache Components rules before writing these.
   - Accept: all product pages prerender at build; Lighthouse SEO ≥ 95 on a product page.
@@ -235,3 +235,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 2.2 follow-up. Walking through shop doors and onto exit mats now triggers travel automatically.
 - 2026-11-26 — Step 3.2 complete. Added a cart drawer with stock-aware quantity controls, removal, subtotal and a checkout link. Verified that cart and settings restore after reload without hydration warnings.
 - 2026-11-26 — Step 3.3 complete. Added demo checkout review and confirmation, server-side repricing and combined stock validation, and cart clearing after confirmation.
+- 2026-11-26 — Step 3.4 complete. Added a filterable storefront, prerendered all 15 product pages, and added canonical metadata, Product structured data, a sitemap and robots.txt. Pixel Fish scored 100 for Lighthouse SEO.

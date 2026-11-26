@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { commerce } from "@/commerce";
 import { CatalogHydrator } from "@/components/CatalogHydrator";
@@ -7,6 +8,8 @@ import { ProductModal } from "@/components/ProductModal";
 import { WorldClient } from "./World";
 import styles from "./page.module.css";
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default async function Home() {
   const products = await commerce.listProducts();
 
@@ -15,6 +18,9 @@ export default async function Home() {
       <h1 className="sr-only">SURFBIT Beach Town</h1>
       <CatalogHydrator products={products} />
       <WorldClient className={styles.world} />
+      <Link href="/shop" className={`sb-btn sb-btn--secondary sb-pixel ${styles.shop}`}>
+        Shop
+      </Link>
       <InteractPrompt />
       <DialogBox />
       <ProductModal />
