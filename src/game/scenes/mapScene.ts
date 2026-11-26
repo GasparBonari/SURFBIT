@@ -1,8 +1,9 @@
 import type Phaser from "phaser";
 import { TILE } from "../art/tiles";
 import { MAPS } from "../maps";
-import { buildGround } from "../maps/build";
+import { buildBlocked, buildGround } from "../maps/build";
 import type { MapKey } from "../maps/types";
+import { Player } from "../systems/Player";
 import { TILESET_KEY } from "../textures";
 
 export const MAP_SCENE_KEY = "MapScene";
@@ -14,6 +15,8 @@ export interface MapSceneData {
 
 export function createMapScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
   return class MapScene extends phaser.Scene {
+    private player?: Player;
+
     constructor() {
       super(MAP_SCENE_KEY);
     }
@@ -23,11 +26,12 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
       const { DESTROY, SHUTDOWN } = phaser.Scenes.Events;
       const { RESIZE } = phaser.Scale.Events;
       let active = true;
-      let frameGround: (() => void) | undefined;
+      let updateZoom: (() => void) | undefined;
 
       const cleanup = () => {
         active = false;
-        if (frameGround) scale.off(RESIZE, frameGround);
+        this.player = undefined;
+        if (updateZoom) scale.off(RESIZE, updateZoom);
         events.off(SHUTDOWN, cleanup);
         events.off(DESTROY, cleanup);
       };
@@ -53,21 +57,23 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         if (!tileset) throw new Error(`Missing texture "${TILESET_KEY}"`);
         tilemap.createLayer(0, tileset);
 
+        const player = new Player(this, start, buildBlocked(def));
         const camera = this.cameras.main;
-        camera.setZoom(2).setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
-        frameGround = () => {
-          // Leave more room below the plaza for the beach and shoreline.
-          const plazaX = (start.x + 0.5) * TILE;
-          const plazaY = (start.y + 0.5) * TILE;
-          camera.centerOn(plazaX, plazaY + camera.height / (4 * camera.zoom));
-        };
-        frameGround();
-        scale.on(RESIZE, frameGround);
+        updateZoom = () => camera.setZoom(Math.max(2, Math.floor(scale.height / 240)));
+        updateZoom();
+        camera.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
+        camera.startFollow(player.sprite, true);
+        scale.on(RESIZE, updateZoom);
+        this.player = player;
       } catch (error) {
         if (!active) return;
         cleanup();
         reportError(error);
       }
+    }
+
+    update(_time: number, delta: number) {
+      this.player?.update(delta);
     }
   };
 }

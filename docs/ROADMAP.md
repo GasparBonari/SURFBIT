@@ -88,7 +88,7 @@ Goal: walk a character around an animated beach town with collisions.
   - Do: `CHAR_H = 32`, chibi proportions per ART_DIRECTION.md. Support caps (forward/backward), straw and bucket hats, a backpack, beards, curly hair and ponytails in `Look`. `PLAYER_LOOK` = the player in [SCENES.md → Characters](SCENES.md#5-characters). Export the three shopkeeper looks.
   - Accept: sheet is 48 × 128; all 4 directions × 3 frames read clearly at 3× zoom; feet stay on the bottom row so the hitbox and shadow need no changes.
 
-- [ ] **1.4 Player movement, collision, camera**
+- [x] **1.4 Player movement, collision, camera**
   - Files: `src/game/systems/Player.ts`, `src/game/systems/collision.ts`, `src/game/systems/collision.test.ts`, `src/game/scenes/mapScene.ts`
   - Do: implement per [ARCHITECTURE.md → Player & collision](ARCHITECTURE.md#player--collision). Keys: WASD + arrows, Shift to run; register keys with `enableCapture = false` so form inputs keep working. Read `virtualStick` too. Walk animations at 8 fps; idle = stand frame of last facing. Shadow sprite follows the feet. Camera follows with integer zoom, recomputed on resize. Pause movement (and `resetKeys()`) while `isOverlayOpen(useUI.getState())`.
   - Accept: smooth movement; cannot walk through water, buildings or solid props; slides along walls; camera clamped to map; collision helper unit-tested.
@@ -219,3 +219,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Visual target added: `docs/art-references/`, palette resampled from it, `docs/SCENES.md` scene briefs, new steps 1.3b (town layout) and 1.3c (16 × 32 characters), Phase A (production art).
 - 2026-11-26 — Step 1.3b complete. Reworked the town layout, added coastal autotiles and props, and compared the layout with the beach-town reference.
 - 2026-11-26 — Step 1.3c complete. Added 16 × 32 player and shopkeeper sprites, verified bottom-row foot alignment, and checked all poses at 3× against the visual references.
+- 2026-11-26 — Step 1.4 complete. Added walking and running, tile collision with wall sliding, and a bounded camera that follows the player at integer zoom.

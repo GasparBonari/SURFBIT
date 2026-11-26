@@ -77,8 +77,9 @@ src/
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         🔲 shop interiors
-│   ├── scenes/               ✅ BootScene, MapScene ground layer
-│   ├── systems/              🔲 Player, Npc, collision, interaction, ambient
+│   ├── scenes/               ✅ BootScene, MapScene ground and player camera
+│   ├── systems/              ✅ Player, collision and its unit tests
+│   │                         🔲 Npc, interaction, ambient
 │   ├── audio.ts              🔲 WebAudio ambience + music
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  🔲 React UI (HUD, ProductModal, CartDrawer, …)
@@ -110,8 +111,7 @@ src/
 
 The home page uses `app/World.tsx` as its client entry. Its `WorldClient`
 component imports Phaser and the game configuration inside an effect. The
-configuration passes the loaded Phaser runtime to the scene factories. The
-ground preview uses 2× zoom until the player camera in step 1.4.
+configuration passes the loaded Phaser runtime to the scene factories.
 
 ## Data flow: buying a board
 
@@ -225,8 +225,8 @@ corner tiles. Wet sand follows the same shoreline on its south and east edges.
   bottom row in every pose. Use a bottom-center sprite origin `(0.5, 1)`.
   The 10×6 px hitbox and 14×5 px shadow are anchored to that same point.
 - Collision: Move X then Y, test the four hitbox corners
-  against the blocked-tile grid; cancel the axis that collides. This gives
-  wall-sliding for free. No Arcade physics.
+  against the blocked-tile grid; cancel the axis that collides. Split long
+  moves into substeps to prevent skipping solid tiles. No Arcade physics.
 - Speed 80 px/s walking, ×1.6 with Shift. Diagonal input is normalised.
 - Facing = dominant axis of the input vector; animations are 4-directional.
 - Camera: `startFollow(player, true)`, bounded to the map, integer zoom
