@@ -83,7 +83,7 @@ Goal: walk a character around an animated beach town with collisions.
     - Extend `BuildingStyle` if needed (e.g. `roof: "thatch" | "terracotta" | "indigo" | "slate"`, `awnings`) and update ARCHITECTURE.md.
   - Accept: `validateMap` passes and tests cover the new legend and foam corners. Compare a screenshot of the terrain and configured shop footprints and props with `beach-town.webp` to verify the composition. Step 1.5 adds the in-game façades and prop layer.
 
-- [ ] **1.3c Characters at 16 × 32**
+- [x] **1.3c Characters at 16 × 32**
   - Files: `src/game/art/characters.ts`, `src/game/textures.ts`, ARCHITECTURE.md (hitbox notes)
   - Do: `CHAR_H = 32`, chibi proportions per ART_DIRECTION.md. Support caps (forward/backward), straw and bucket hats, a backpack, beards, curly hair and ponytails in `Look`. `PLAYER_LOOK` = the player in [SCENES.md → Characters](SCENES.md#5-characters). Export the three shopkeeper looks.
   - Accept: sheet is 48 × 128; all 4 directions × 3 frames read clearly at 3× zoom; feet stay on the bottom row so the hitbox and shadow need no changes.
@@ -218,3 +218,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.3 complete. Mounted Phaser on the home page, registered generated textures, and rendered the town ground at 2× zoom.
 - 2026-11-26 — Visual target added: `docs/art-references/`, palette resampled from it, `docs/SCENES.md` scene briefs, new steps 1.3b (town layout) and 1.3c (16 × 32 characters), Phase A (production art).
 - 2026-11-26 — Step 1.3b complete. Reworked the town layout, added coastal autotiles and props, and compared the layout with the beach-town reference.
+- 2026-11-26 — Step 1.3c complete. Added 16 × 32 player and shopkeeper sprites, verified bottom-row foot alignment, and checked all poses at 3× against the visual references.

@@ -221,7 +221,10 @@ corner tiles. Wet sand follows the same shoreline on its south and east edges.
 
 ## Player & collision
 
-- Hitbox: 10×6 px at the feet. Move X then Y, test the four hitbox corners
+- Character frames are 16×32 px with the planted foot's outline on the
+  bottom row in every pose. Use a bottom-center sprite origin `(0.5, 1)`.
+  The 10×6 px hitbox and 14×5 px shadow are anchored to that same point.
+- Collision: Move X then Y, test the four hitbox corners
   against the blocked-tile grid; cancel the axis that collides. This gives
   wall-sliding for free. No Arcade physics.
 - Speed 80 px/s walking, ×1.6 with Shift. Diagonal input is normalised.

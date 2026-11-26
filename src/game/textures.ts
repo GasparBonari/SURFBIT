@@ -1,6 +1,9 @@
 import type Phaser from "phaser";
 import { makeCanvas, type Ctx } from "./art/canvas";
-import { autoOutline, buildCharacterSheet, buildShadow, CHAR_H, CHAR_W, PLAYER_LOOK } from "./art/characters";
+import {
+  autoOutline, BOARDS_SHOPKEEPER_LOOK, buildCharacterSheet, buildShadow,
+  CHAR_H, CHAR_W, GEAR_SHOPKEEPER_LOOK, PLAYER_LOOK, WEAR_SHOPKEEPER_LOOK,
+} from "./art/characters";
 import { P } from "./art/palette";
 import {
   drawFootprint, drawGull, drawMarker, drawSurfer, drawWave, PROPS,
@@ -46,7 +49,15 @@ function addProp(textures: TextureManager, key: string, prop: PropSpec, tint: Ti
 
 export function registerTextures({ textures }: Phaser.Scene) {
   textures.addCanvas(TILESET_KEY, buildTileset());
-  addSheet(textures, "player", buildCharacterSheet(PLAYER_LOOK), CHAR_W, CHAR_H);
+  const characters = {
+    player: PLAYER_LOOK,
+    "shopkeeper-boards": BOARDS_SHOPKEEPER_LOOK,
+    "shopkeeper-wear": WEAR_SHOPKEEPER_LOOK,
+    "shopkeeper-gear": GEAR_SHOPKEEPER_LOOK,
+  };
+  for (const [key, look] of Object.entries(characters)) {
+    addSheet(textures, key, buildCharacterSheet(look), CHAR_W, CHAR_H);
+  }
   textures.addCanvas("shadow", buildShadow());
 
   const tint = { color: P.teal, accent: P.cream };
