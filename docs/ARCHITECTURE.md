@@ -73,7 +73,8 @@ src/
 │   │   └── buildings.ts      🔲 building facade generator
 │   ├── textures.ts           🔲 registers all generated art with Phaser
 │   ├── config.ts             🔲 Phaser game config
-│   ├── maps/                 🔲 MapDef type, town + interiors, lazy loaders
+│   ├── maps/                 ✅ MapDef types, builders, tests, town and lazy loader
+│   │                         🔲 shop interiors
 │   ├── scenes/               🔲 BootScene, MapScene
 │   ├── systems/              🔲 Player, Npc, collision, interaction, ambient
 │   ├── audio.ts              🔲 WebAudio ambience + music
@@ -128,7 +129,10 @@ per 16×16 tile, legend in `src/game/art/tiles.ts → LEGEND`); everything else
 is a typed object list.
 
 ```ts
-// src/game/maps/types.ts (to be created in roadmap step 1.2)
+// src/game/maps/types.ts
+import type { Dir, Look } from "../art/characters";
+import type { PROPS, Tint } from "../art/props";
+
 export type MapKey = "town" | "boards" | "wear" | "gear";
 
 export interface MapDef {
@@ -141,7 +145,9 @@ export interface MapDef {
   spawns: Record<string, Spawn>;      // "default", "from-boards", "door", …
 }
 
-export interface Spawn { x: number; y: number; facing: "up" | "down" | "left" | "right" }
+export interface Spawn { x: number; y: number; facing: Dir }
+
+export interface BuildingStyle { roof: string; wall: string }
 
 export type Interaction =
   | { kind: "enter"; target: MapKey; spawn: string }   // doors into buildings
@@ -155,22 +161,26 @@ export type MapObject =
       style: BuildingStyle; label: string; door: { x: number; y: number };
       interact?: Interaction /* omitted = "coming soon" */ }
   | { type: "prop"; prop: keyof typeof PROPS; x: number; y: number;
-      tint?: { color: string; accent: string }; interact?: Interaction }
+      tint?: Tint; interact?: Interaction }
   | { type: "display"; prop: "boardDisplay" | "clothesRack" | "mannequin" | "shelf" | "pegboard" | "wetsuitHanger";
-      x: number; y: number; productId: string; tint: { color: string; accent: string } }
+      x: number; y: number; productId: string; tint: Tint }
   | { type: "npc"; id: string; x: number; y: number; look: Look;
       behavior: "idle" | "wander"; name: string; lines: string[] };
 ```
 
-Loaders are lazy so interiors don't ship in the initial bundle:
+Loaders are lazy so interiors can ship in separate chunks. The registry starts
+with `town`. Step 2.3 adds the shop loaders under their reserved `MapKey`s.
 
 ```ts
-export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
-  town:   () => import("./town").then((m) => m.default),
-  boards: () => import("./boards").then((m) => m.default),
-  // …
+export const MAPS: Partial<Record<MapKey, () => Promise<MapDef>>> = {
+  town: () => import("./town").then((module) => module.default),
 };
 ```
+
+`validateMap` checks the rectangular ground grid, tile characters, object
+footprints, doors and spawns. `buildGround` and `buildBlocked` expect valid map
+data. Autotiling uses adjacent tiles within the map and picks terrain variants
+deterministically by cell coordinates.
 
 ### Coordinates and depth (must be consistent everywhere)
 
@@ -179,6 +189,9 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   (`PropSpec.foot`, default `ceil(w/16) × 1`). The sprite uses origin
   `(0.5, 1)` placed at the footprint's bottom-center:
   `px = (x + foot.w / 2) * 16`, `py = (y + 1) * 16`.
+- **Building placement:** `(x, y)` is the top-left tile of the `w × h` rect.
+  `door` uses absolute map coordinates inside that rect. Town doors are on
+  the bottom row of the building footprint.
 - **Collision:** solid props block every tile of their footprint. Buildings
   block their full `w × h` rect except the door tile. Tiles marked
   `solid: true` in `LEGEND` (water, walls, void) block.

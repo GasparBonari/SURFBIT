@@ -48,7 +48,7 @@ Goal: walk a character around an animated beach town with collisions.
     and removal via `setQuantity(0)`.
   - Accept: `npm test` passes; `npm run check` runs tests.
 
-- [ ] **1.2 Map types, builder and the town map**
+- [x] **1.2 Map types, builder and the town map**
   - Files: `src/game/maps/types.ts`, `src/game/maps/build.ts`, `src/game/maps/town.ts`, `src/game/maps/index.ts`, `src/game/maps/build.test.ts`
   - Do:
     - Create `MapDef`, `MapObject`, `Interaction`, `Spawn`, `MapKey` exactly as in [ARCHITECTURE.md → Map format](ARCHITECTURE.md#map-format-srcgamemaps).
@@ -180,3 +180,4 @@ multiplayer · Supabase accounts & saved preferences.
 
 - 2026-11-26 — Phase 0 complete: scaffold, tokens, commerce seam, stores, art foundation, docs.
 - 2026-11-26 — Step 1.1 complete. Added Vitest to `npm run check` and covered commerce helpers and cart actions.
+- 2026-11-26 — Step 1.2 complete. Added the town map, lazy loader, and tested terrain, collision, and validation builders.

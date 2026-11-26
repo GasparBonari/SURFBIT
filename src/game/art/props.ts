@@ -105,7 +105,7 @@ function shirt(ctx: Ctx, x: number, y: number, color: string, accent: string, lo
   px(ctx, x + 5, y, shade(color, -0.25));
 }
 
-export const PROPS: Record<string, PropSpec> = {
+export const PROPS = {
   palm: { w: 48, h: 64, frames: 3, foot: { w: 1, h: 1 }, solid: true, draw: (c, ox, f) => palm(c, ox, f) },
   bush: {
     w: 16, h: 15, solid: true,
@@ -332,7 +332,7 @@ export const PROPS: Record<string, PropSpec> = {
       rect(c, ox + 3, 33, 10, 2, P.ink);
     },
   },
-};
+} satisfies Record<string, PropSpec>;
 
 // ------------------------------------------------------------- effects
 

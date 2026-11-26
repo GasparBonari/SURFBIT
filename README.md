@@ -35,4 +35,4 @@ npm run check                # lint + typecheck + tests + build
 
 ## Status
 
-The foundation and test setup are complete. The next roadmap step is **1.2 map types, builder and the town map**.
+The town map and its builder are complete. The next roadmap step is **1.3 Mount Phaser in Next.js**.
