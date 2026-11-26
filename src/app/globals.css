@@ -1,0 +1,187 @@
+/*
+ * SURFBIT design tokens.
+ * Source of truth for UI colors. Keep in sync with src/game/art/palette.ts
+ * (same hex values, same names where they overlap). See docs/ART_DIRECTION.md.
+ */
+:root {
+  /* Brand */
+  --sb-coral: #e8734a;
+  --sb-coral-dark: #c4553a;
+  --sb-teal: #3fa7a0;
+  --sb-teal-dark: #2c7f7c;
+  --sb-sun: #f2b632;
+  --sb-sun-dark: #d18f1d;
+  --sb-sky: #7bc6e8;
+  --sb-deep-blue: #2f6f8f;
+  --sb-cream: #fff3d6;
+
+  /* World */
+  --sb-sand: #f3d9a4;
+  --sb-sand-light: #fbe9c3;
+  --sb-sand-dark: #e2bf7f;
+  --sb-water: #2fb3c6;
+  --sb-water-deep: #1e8ea8;
+  --sb-foam: #f4fbff;
+  --sb-grass: #7cc46a;
+  --sb-wood: #b97a4b;
+  --sb-wood-dark: #8a5534;
+
+  /* Neutrals */
+  --sb-outline: #2b2433;
+  --sb-ink: #3d3346;
+  --sb-muted: #7a6e80;
+  --sb-white: #ffffff;
+
+  /* Semantic */
+  --sb-bg: var(--sb-cream);
+  --sb-surface: var(--sb-white);
+  --sb-text: var(--sb-ink);
+  --sb-text-muted: var(--sb-muted);
+  --sb-accent: var(--sb-coral);
+  --sb-accent-hover: var(--sb-coral-dark);
+  --sb-success: var(--sb-teal);
+  --sb-warning: var(--sb-sun);
+  --sb-danger: var(--sb-coral-dark);
+  --sb-focus: var(--sb-deep-blue);
+
+  /* Retro UI frame (dialogs, HUD buttons) */
+  --sb-border: 3px solid var(--sb-outline);
+  --sb-shadow: 4px 4px 0 var(--sb-outline);
+  --sb-shadow-sm: 2px 2px 0 var(--sb-outline);
+  --sb-radius: 6px;
+
+  /* Spacing scale (4px base) */
+  --sb-space-1: 4px;
+  --sb-space-2: 8px;
+  --sb-space-3: 12px;
+  --sb-space-4: 16px;
+  --sb-space-5: 24px;
+  --sb-space-6: 32px;
+  --sb-space-7: 48px;
+
+  /* Type: pixel font for HUD/headings only, readable sans for everything else */
+  --sb-font-pixel: var(--font-pixel), ui-monospace, monospace;
+  --sb-font-body: var(--font-body), system-ui, sans-serif;
+
+  /* Layers */
+  --sb-z-game: 0;
+  --sb-z-hud: 10;
+  --sb-z-overlay: 20;
+  --sb-z-modal: 30;
+  --sb-z-toast: 40;
+
+  --sb-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --sb-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sb-duration: 0ms;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  font-family: var(--sb-font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Never smooth pixel art (canvas or <img>). */
+canvas,
+img.pixel {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.sb-pixel {
+  font-family: var(--sb-font-pixel);
+  letter-spacing: 0.02em;
+}
+
+/* Retro button: chunky outline + hard shadow */
+.sb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sb-space-2);
+  padding: var(--sb-space-2) var(--sb-space-4);
+  border: var(--sb-border);
+  border-radius: var(--sb-radius);
+  background: var(--sb-accent);
+  color: var(--sb-white);
+  box-shadow: var(--sb-shadow-sm);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--sb-duration) var(--sb-ease),
+    box-shadow var(--sb-duration) var(--sb-ease);
+}
+
+.sb-btn:hover {
+  background: var(--sb-accent-hover);
+}
+
+.sb-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.sb-btn:disabled {
+  background: var(--sb-muted);
+  cursor: not-allowed;
+}
+
+.sb-btn--secondary {
+  background: var(--sb-surface);
+  color: var(--sb-text);
+}
+
+.sb-btn--secondary:hover {
+  background: var(--sb-sand-light);
+}
+
+/* Retro panel: dialogs, modals, HUD chips */
+.sb-panel {
+  background: var(--sb-surface);
+  border: var(--sb-border);
+  border-radius: var(--sb-radius);
+  box-shadow: var(--sb-shadow);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

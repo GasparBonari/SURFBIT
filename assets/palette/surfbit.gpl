@@ -1,0 +1,49 @@
+GIMP Palette
+Name: SURFBIT
+Columns: 8
+#
+ 43  36  51	outline
+ 61  51  70	ink
+243 217 164	sand
+251 233 195	sandLight
+226 191 127	sandDark
+216 181 122	sandWet
+199 160 102	sandWetDark
+124 196 106	grass
+164 220 124	grassLight
+ 84 154  79	grassDark
+ 61 122  69	grassDeep
+ 47 179 198	water
+ 95 211 220	waterLight
+ 30 142 168	waterDeep
+ 24 115 143	waterDeeper
+244 251 255	foam
+191 233 240	foamShade
+185 122  75	wood
+212 154  98	woodLight
+138  85  52	woodDark
+102  60  37	woodDeep
+217 201 173	stone
+235 223 200	stoneLight
+182 163 133	stoneDark
+232 115  74	coral
+196  85  58	coralDark
+ 63 167 160	teal
+ 44 127 124	tealDark
+242 182  50	sun
+209 143  29	sunDark
+123 198 232	sky
+ 47 111 143	deepBlue
+255 243 214	cream
+255 255 255	white
+ 79 174  91	leaf
+127 211 107	leafLight
+ 47 127  72	leafDark
+168 117  74	trunk
+124  81  50	trunkDark
+242 155 176	pink
+169 155 224	lilac
+245 207 166	skin1
+217 161 115	skin2
+168 111  72	skin3
+110  68  48	skin4
