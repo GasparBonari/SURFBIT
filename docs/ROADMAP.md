@@ -39,9 +39,13 @@ Legend: **Files** = files to create/edit · **Accept** = done when all true.
 
 Goal: walk a character around an animated beach town with collisions.
 
-- [ ] **1.1 Tests setup**
-  - Files: `package.json`, `vitest.config.ts`, `src/commerce/format.test.ts`, `src/state/cart.test.ts`
-  - Do: add Vitest (`npm i -D vitest`), script `"test": "vitest run"`, add `test` to `check`. Test `formatMoney`, `findVariant`, `defaultSelection`, cart `add` (merging, max qty clamp), `setQuantity(0)` removes.
+- [x] **1.1 Tests setup**
+  - Files: `package.json`, `package-lock.json`, `vitest.config.mts`,
+    `src/commerce/format.test.ts`, `src/state/cart.test.ts`
+  - Do: use Vitest 4 for compatibility with `@types/node` 20. Add the
+    `"test": "vitest run"` script and run it in `check`. Test `formatMoney`,
+    `findVariant`, `defaultSelection`, cart `add` (merging and clamping to stock),
+    and removal via `setQuantity(0)`.
   - Accept: `npm test` passes; `npm run check` runs tests.
 
 - [ ] **1.2 Map types, builder and the town map**
@@ -175,3 +179,4 @@ multiplayer · Supabase accounts & saved preferences.
 ## Changelog
 
 - 2026-11-26 — Phase 0 complete: scaffold, tokens, commerce seam, stores, art foundation, docs.
+- 2026-11-26 — Step 1.1 complete. Added Vitest to `npm run check` and covered commerce helpers and cart actions.

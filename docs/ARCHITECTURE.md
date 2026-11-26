@@ -50,12 +50,14 @@ src/
 ├── commerce/                    server-side commerce seam
 │   ├── types.ts              ✅ Product, Variant, Money, CommerceProvider, STORES
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
+│   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
 │   ├── mock/catalog.ts       ✅ 15 demo products (5 per shop)
 │   ├── mock/provider.ts      ✅ validates + reprices lines, fake checkout
 │   └── shopify/              🔲 Storefront API provider
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
+│   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
 │   ├── settings.ts           ✅ audio + reduced motion, persisted
 │   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
@@ -78,6 +80,8 @@ src/
 │   └── WorldClient.tsx       🔲 React component that mounts Phaser
 └── components/                  🔲 React UI (HUD, ProductModal, CartDrawer, …)
 ```
+
+✅ `vitest.config.mts` at the repo root configures the Node test environment.
 
 ## Key rules of the architecture
 

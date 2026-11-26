@@ -23,7 +23,7 @@ them through a normal cart + checkout (React + commerce provider).
 1. Take the **first unchecked step** in `docs/ROADMAP.md` whose dependencies
    are done. One roadmap step per change set. Don't build ahead.
 2. Build it, meeting every **Accept** criterion.
-3. Run `npm run check` (lint + typecheck + build; + tests once step 1.1 lands).
+3. Run `npm run check` (lint + typecheck + tests + build).
    It must pass before you hand the work back.
 4. Tick the step in `ROADMAP.md`, add a Changelog line, update the ✅/🔲
    status in `ARCHITECTURE.md → Folder layout` if you added files.
@@ -52,8 +52,9 @@ building on top of them.
 npm run dev         # http://localhost:3000
 npm run lint        # ESLint
 npm run typecheck   # next typegen + tsc --noEmit
+npm test            # Vitest unit tests
 npm run build       # production build (prerender check)
-npm run check       # all of the above — must pass before handing work back
+npm run check       # lint + typecheck + tests + build
 ```
 
 ## Hard rules (architecture)

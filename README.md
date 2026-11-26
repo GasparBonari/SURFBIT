@@ -13,11 +13,14 @@ mock commerce provider (Shopify Storefront planned) · Vercel.
 
 ## Getting started
 
+Local checks require Node.js `^20.19.0`, `^22.12.0`, or `>=24.0.0`.
+
 ```bash
 npm install
 cp .env.example .env.local   # optional until Shopify is connected
 npm run dev                  # http://localhost:3000
-npm run check                # lint + typecheck + build
+npm test                     # Vitest unit tests
+npm run check                # lint + typecheck + tests + build
 ```
 
 ## Docs
@@ -32,4 +35,4 @@ npm run check                # lint + typecheck + build
 
 ## Status
 
-Phase 0 (foundation) is done. Next step: **1.1 tests setup** in the roadmap.
+The foundation and test setup are complete. The next roadmap step is **1.2 map types, builder and the town map**.
