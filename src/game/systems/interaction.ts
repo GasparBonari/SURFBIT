@@ -97,6 +97,12 @@ export class Interactions {
     }
   }
 
+  clearTarget() {
+    this.current = undefined;
+    this.marker.setVisible(false);
+    useUI.getState().setPrompt(null);
+  }
+
   destroy() {
     this.keyboard?.off("keydown", this.onKeyDown);
     this.unsubscribeInteract();

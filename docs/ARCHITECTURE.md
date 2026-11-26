@@ -247,9 +247,15 @@ stationary.
 
 E, Space, Enter and the touch button share one activation path. Activation
 emits `WORLD_INTERACTION` on the Phaser scene with the selected map
-`Interaction` as its payload. Door transitions, dialogs and product overlays
-consume this event in their respective roadmap steps. Open overlays and a
-250 ms cooldown after closing an overlay block activation.
+`Interaction` as its payload. `MapScene` handles door actions. Dialogs and
+product overlays subscribe in their respective roadmap steps. Open overlays
+and a 250 ms cooldown after closing an overlay block activation.
+
+Door actions and `gameEvents` travel resolve through the same lazy map
+registry. The camera fades out, the target map loads, and `MapScene` restarts
+at the named spawn and publishes the map name and key to `useUI`. The camera
+then fades in. Reduced motion skips both fades. Travel to an unregistered map
+leaves the current map active. Movement and prompts pause during travel.
 
 ## Decisions
 
@@ -261,7 +267,7 @@ if you change your mind.
 | D1 | **Mock commerce provider first**, Shopify behind `CommerceProvider` | The world and UI can be built and tested without a store; Shopify is a drop-in (roadmap phase 5). |
 | D2 | **Procedural placeholder art** in `src/game/art` until production pixel art exists (roadmap Phase A) | Lets the game be built and tested now with the right grid, palette and layout. It can't reach the detail of the references; real assets replace generators **with the same texture keys and frame sizes**. |
 | D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the MVP | Type-checked, diff-able, easy for AI agents to edit. A Tiled importer that outputs the same `MapDef` can be added later (phase 6) without touching systems. |
-| D4 | **One `MapScene` class** started with a map key, instead of one Phaser class per shop | Each interior is still an independent scene instance (own map, objects, audio); no duplicated logic. Map data is lazy-loaded. |
+| D4 | **One `MapScene` class** restarted with a map key, instead of one Phaser class per shop | Each restart builds the destination's own map, objects and camera state. Map data is lazy-loaded. |
 | D5 | **Free (8-way) movement with 4-directional animation** | Feels smoother than grid-locked 4-way (Stardew-like). To get strict 4-way, zero the minor axis in `Player`. |
 | D6 | **Custom tile-grid collision** instead of Arcade physics | Simpler, deterministic, enough for walking. |
 | D7 | **Server re-prices at checkout**; client cart holds display snapshots only | Prevents tampering; same flow for mock and Shopify. |

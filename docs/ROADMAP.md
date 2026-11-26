@@ -114,10 +114,10 @@ Goal: walk a character around an animated beach town with collisions.
     Emit the selected action on the scene for the transition and overlay handlers added in later steps.
   - Accept: correct prompt for each object type; no double-trigger when closing a dialog with E.
 
-- [ ] **2.2 Doors and scene transitions**
-  - Files: `src/game/scenes/mapScene.ts`
+- [x] **2.2 Doors and scene transitions**
+  - Files: `src/game/scenes/mapScene.ts`, `src/game/systems/interaction.ts`
   - Do: `enter`/`exit` interactions → camera fade out (skip if reduced motion) → load target map → `scene.restart({ map, spawn })` → fade in. `useUI.getState().setLocation(key, name)`. Handle `gameEvents.on("travel")`. Unsubscribe bridge listeners on scene shutdown.
-  - Accept: entering a shop and exiting returns the player in front of that shop's door, facing down.
+  - Accept: entering a shop and exiting returns the player in front of that shop's door, facing down. Verify with temporary map fixtures before the shop interiors land in step 2.3.
 
 - [ ] **2.3 Three shop interiors**
   - Files: `src/game/maps/{boards,wear,gear}.ts`, `src/game/maps/index.ts`
@@ -225,3 +225,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.5 complete. Added the town façades and prop layer, verified player depth sorting in the browser, and compared the town with the visual reference.
 - 2026-11-26 — Step 1.6 complete. Animated the shoreline, palms, flags, gulls, surfers, and sand footprints. Verified reduced motion in the browser.
 - 2026-11-26 — Step 2.1 complete. Added proximity prompts and a target marker, with shared keyboard and touch activation and a dialog-close cooldown.
+- 2026-11-26 — Step 2.2 complete. Added door and bridge travel with lazy loading and reduced-motion-aware camera fades. Verified all three return spawns with browser fixtures.

@@ -1,40 +1,64 @@
 import type Phaser from "phaser";
+import { prefersReducedMotion } from "@/state/settings";
+import { useUI } from "@/state/ui";
+import { P } from "../art/palette";
 import { TILE } from "../art/tiles";
+import { gameEvents } from "../bridge";
 import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
-import type { MapKey } from "../maps/types";
+import type { Interaction, MapDef, MapKey } from "../maps/types";
 import { Ambient } from "../systems/ambient";
-import { Interactions } from "../systems/interaction";
+import { Interactions, WORLD_INTERACTION } from "../systems/interaction";
 import { Player } from "../systems/Player";
 import { spawnObjects } from "../systems/objects";
 import { TILESET_KEY } from "../textures";
 
 export const MAP_SCENE_KEY = "MapScene";
+const FADE_MS = 180;
 
 export interface MapSceneData {
   map: MapKey;
   spawn: string;
+  destination?: { def: MapDef; fadeIn: boolean };
+}
+
+function getMapLoader(map: string) {
+  return Object.hasOwn(MAPS, map) ? MAPS[map as MapKey] : undefined;
+}
+
+function getSpawn(def: MapDef, spawn: string) {
+  if (!Object.hasOwn(def.spawns, spawn)) {
+    throw new Error(`Map "${def.key}" has no spawn "${spawn}"`);
+  }
+  return def.spawns[spawn];
 }
 
 export function createMapScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
+  const { red, green, blue } = phaser.Display.Color.HexStringToColor(P.outline);
+  const { FADE_IN_COMPLETE, FADE_OUT_COMPLETE } = phaser.Cameras.Scene2D.Events;
+
   return class MapScene extends phaser.Scene {
     private player?: Player;
     private ambient?: Ambient;
     private interactions?: Interactions;
+    private transitioning = false;
 
     constructor() {
       super(MAP_SCENE_KEY);
     }
 
-    async create({ map, spawn }: MapSceneData) {
+    async create({ map, spawn, destination }: MapSceneData) {
       const { events, scale } = this;
       const { DESTROY, SHUTDOWN } = phaser.Scenes.Events;
       const { RESIZE } = phaser.Scale.Events;
       let active = true;
       let updateZoom: (() => void) | undefined;
+      let stopTravel: (() => void) | undefined;
 
       const cleanup = () => {
         active = false;
+        stopTravel?.();
+        this.transitioning = false;
         this.ambient?.destroy();
         this.ambient = undefined;
         this.interactions?.destroy();
@@ -49,13 +73,13 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
       events.once(DESTROY, cleanup);
 
       try {
-        const loadMap = MAPS[map];
+        const loadMap = getMapLoader(map);
         if (!loadMap) throw new Error(`No map loader for "${map}"`);
 
-        const def = await loadMap();
+        // The destination is already loaded on restart so the camera can fade in on its first frame.
+        const def = destination?.def ?? await loadMap();
         if (!active) return;
-        const start = def.spawns[spawn];
-        if (!start) throw new Error(`Map "${map}" has no spawn "${spawn}"`);
+        const start = getSpawn(def, spawn);
 
         const tilemap = this.make.tilemap({
           data: buildGround(def),
@@ -80,6 +104,65 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         camera.startFollow(player.sprite, true);
         scale.on(RESIZE, updateZoom);
         this.player = player;
+
+        const reveal = () => {
+          if (prefersReducedMotion()) {
+            camera.fadeEffect.reset();
+            this.transitioning = false;
+            return;
+          }
+          this.transitioning = true;
+          camera.once(FADE_IN_COMPLETE, () => {
+            this.transitioning = false;
+          });
+          camera.fadeIn(FADE_MS, red, green, blue);
+        };
+
+        const travel = ({ map, spawn }: { map: string; spawn: string }) => {
+          const loadMap = getMapLoader(map);
+          if (this.transitioning || !loadMap) return;
+
+          this.transitioning = true;
+          this.interactions?.clearTarget();
+          const fade = !prefersReducedMotion();
+
+          const loadDestination = async () => {
+            try {
+              const def = await loadMap();
+              if (!active) return;
+              getSpawn(def, spawn);
+              const data: MapSceneData = { map: def.key, spawn, destination: { def, fadeIn: fade } };
+              this.scene.restart(data);
+            } catch (error) {
+              if (!active) return;
+              console.error(`Could not travel to "${map}"`, error);
+              if (fade) reveal();
+              else this.transitioning = false;
+            }
+          };
+
+          if (fade) {
+            camera.once(FADE_OUT_COMPLETE, () => void loadDestination());
+            camera.fadeOut(FADE_MS, red, green, blue);
+          } else {
+            void loadDestination();
+          }
+        };
+
+        const onInteraction = (action: Interaction) => {
+          if (action.kind === "enter" || action.kind === "exit") {
+            travel({ map: action.target, spawn: action.spawn });
+          }
+        };
+        events.on(WORLD_INTERACTION, onInteraction);
+        const unsubscribeTravel = gameEvents.on("travel", travel);
+        stopTravel = () => {
+          unsubscribeTravel();
+          events.off(WORLD_INTERACTION, onInteraction);
+        };
+
+        if (destination?.fadeIn) reveal();
+        useUI.getState().setLocation(def.key, def.name);
       } catch (error) {
         if (!active) return;
         cleanup();
@@ -89,8 +172,10 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
 
     update(time: number, delta: number) {
       if (!this.player) return;
-      this.player.update(delta);
-      this.interactions?.update(time, this.player.sprite, this.player.direction);
+      if (!this.transitioning) {
+        this.player.update(delta);
+        this.interactions?.update(time, this.player.sprite, this.player.direction);
+      }
       this.ambient?.update(delta, this.player.sprite);
     }
   };
