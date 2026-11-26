@@ -1,9 +1,20 @@
 "use client";
 
+import type { PointerEvent } from "react";
 import { gameEvents } from "@/game/bridge";
 import { useCatalog } from "@/state/catalog";
 import { isOverlayOpen, useUI } from "@/state/ui";
 import styles from "./InteractPrompt.module.css";
+
+function activateSecondaryTouch(event: PointerEvent<HTMLButtonElement>) {
+  // Browsers can omit the click when another finger is holding the joystick.
+  if (event.pointerType !== "touch" || event.isPrimary) return;
+
+  const { currentTarget, clientX, clientY } = event;
+  if (currentTarget.contains(document.elementFromPoint(clientX, clientY))) {
+    gameEvents.emit("interact");
+  }
+}
 
 export function InteractPrompt() {
   const prompt = useUI((state) => state.prompt);
@@ -22,6 +33,7 @@ export function InteractPrompt() {
         className={`sb-btn sb-btn--secondary ${styles.action}`}
         aria-label={[prompt.verb, label].filter(Boolean).join(" ")}
         onClick={() => gameEvents.emit("interact")}
+        onPointerUp={activateSecondaryTouch}
       >
         A
       </button>

@@ -5,6 +5,7 @@ import { CatalogHydrator } from "@/components/CatalogHydrator";
 import { DialogBox } from "@/components/DialogBox";
 import { Hud } from "@/components/Hud";
 import { InteractPrompt } from "@/components/InteractPrompt";
+import { Joystick } from "@/components/Joystick";
 import { ProductModal } from "@/components/ProductModal";
 import { StoreDirectory } from "@/components/StoreDirectory";
 import { WorldClient } from "./World";
@@ -22,7 +23,10 @@ export default async function Home() {
       <WorldClient className={styles.world} />
       <Hud />
       <StoreDirectory />
-      <InteractPrompt />
+      <div className={styles.worldControls}>
+        <Joystick />
+        <InteractPrompt />
+      </div>
       <DialogBox />
       <ProductModal />
       <noscript>

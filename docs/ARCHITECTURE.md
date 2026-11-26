@@ -90,6 +90,7 @@ src/
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  React UI
     ├── InteractPrompt.tsx     ✅ prompt pill and touch action button (with CSS module)
+    ├── Joystick.tsx           ✅ coarse-pointer movement via virtualStick (with CSS module)
     ├── DialogBox.tsx          ✅ NPC and sign dialog (with CSS module)
     ├── CatalogHydrator.tsx    ✅ loads server products into the client catalog
     ├── ProductModal.tsx       ✅ in-world product details and modal controls (with CSS module)
@@ -100,7 +101,7 @@ src/
     ├── Hud.tsx                ✅ world location, cart count, directory shortcut, mute, and fullscreen (with CSS module)
     ├── StoreDirectory.tsx     ✅ town shops, travel shortcuts, and storefront links (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── …                      🔲 settings and joystick
+    └── …                      🔲 settings
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -266,6 +267,9 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
   Cancel the axis that collides. Split long moves into substeps to keep
   characters from skipping solids or one another. No Arcade physics.
 - Speed 80 px/s walking, ×1.6 with Shift. Diagonal input is normalised.
+  On coarse pointers the joystick writes an analogue vector with a radial
+  0.15 dead zone to `virtualStick`. It releases movement when the gesture ends,
+  an overlay opens, or travel starts.
 - Facing = dominant axis of the input vector; animations are 4-directional.
 - Camera: `startFollow(player, true)`, bounded to the map with `roundPixels: true`.
   Town zoom is `max(2, floor(viewportHeight / 240))`. Interiors use the

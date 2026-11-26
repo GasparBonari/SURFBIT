@@ -1,10 +1,5 @@
-.pill {
-  position: absolute;
-  z-index: var(--sb-z-hud);
-  bottom: max(var(--sb-space-5), env(safe-area-inset-bottom));
-  inset-inline: 0;
-  width: max-content;
-  max-width: calc(100% - 2 * var(--sb-space-4));
+.pill:global(.sb-panel) {
+  min-width: 0;
   margin-inline: auto;
   display: flex;
   align-items: center;
@@ -25,20 +20,27 @@
   font: inherit;
 }
 
-.action {
+.pill .action {
   display: none;
   flex: none;
   width: 44px;
   height: 44px;
   padding: 0;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
-@media (any-pointer: coarse) {
+@media (pointer: coarse) {
+  .pill:global(.sb-panel) {
+    margin-inline: auto 0;
+  }
+
   .key {
     display: none;
   }
 
-  .action {
+  .pill .action {
     display: inline-flex;
+    order: 1;
   }
 }

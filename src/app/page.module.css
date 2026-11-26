@@ -11,6 +11,19 @@
 
 .world canvas {
   display: block;
+  touch-action: none;
+}
+
+.worldControls {
+  position: absolute;
+  z-index: var(--sb-z-hud);
+  inset: auto max(var(--sb-space-4), env(safe-area-inset-right))
+    max(var(--sb-space-5), env(safe-area-inset-bottom))
+    max(var(--sb-space-4), env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: var(--sb-space-3);
+  pointer-events: none;
 }
 
 .world [role="alert"] {

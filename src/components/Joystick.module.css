@@ -1,0 +1,34 @@
+.base {
+  display: none;
+  position: relative;
+  flex: none;
+  width: 104px;
+  aspect-ratio: 1;
+  border: var(--sb-border);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--sb-navy-dark) 80%, transparent);
+  box-shadow: var(--sb-shadow);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: var(--sb-border);
+  border-radius: 50%;
+  background: var(--sb-cream);
+  box-shadow: var(--sb-shadow-sm);
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .base {
+    display: block;
+  }
+}

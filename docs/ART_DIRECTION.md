@@ -265,7 +265,8 @@ Never set paragraphs, prices or form labels in the pixel font.
 |---|---|
 | Button | `.sb-btn` — coral fill, white text, 3px outline, 2px hard shadow, press = translate(2px,2px) + no shadow. Secondary = `.sb-btn--secondary` |
 | Panel | `.sb-panel` — white, 3px outline, 6px radius, 4px hard shadow |
-| Prompt pill | Bottom-center, `[E] Inspect · Pixel Fish`; key shown as a keycap; on touch shows a tappable **A** |
+| Joystick | Navy base with a cream thumb at bottom left on coarse pointers |
+| Prompt pill | Bottom-center with the **E** keycap on desktop. Bottom-right with a tappable **A** on coarse pointers. |
 | Dialog box | Bottom of screen, name tag in pixel font, text in Inter, ▼ indicator to advance |
 | Product modal | Centered panel (full-screen sheet on mobile): image left / details right on desktop, stacked on mobile |
 | Cart | Right drawer (bottom sheet on mobile) |
