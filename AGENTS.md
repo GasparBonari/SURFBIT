@@ -50,7 +50,7 @@ building on top of them.
 ## Commands
 
 ```bash
-npm run dev         # http://localhost:3000
+npm run dev         # http://localhost:3005
 npm run lint        # ESLint
 npm run typecheck   # next typegen + tsc --noEmit
 npm test            # Vitest unit tests

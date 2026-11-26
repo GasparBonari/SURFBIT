@@ -18,7 +18,7 @@ Local checks require Node.js `^20.19.0`, `^22.12.0`, or `>=24.0.0`.
 ```bash
 npm install
 cp .env.example .env.local   # optional until Shopify is connected
-npm run dev                  # http://localhost:3000
+npm run dev                  # http://localhost:3005
 npm test                     # Vitest unit tests
 npm run check                # lint + typecheck + tests + build
 ```
