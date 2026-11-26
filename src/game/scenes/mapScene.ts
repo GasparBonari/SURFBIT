@@ -4,6 +4,7 @@ import { MAPS } from "../maps";
 import { buildBlocked, buildGround } from "../maps/build";
 import type { MapKey } from "../maps/types";
 import { Player } from "../systems/Player";
+import { spawnObjects } from "../systems/objects";
 import { TILESET_KEY } from "../textures";
 
 export const MAP_SCENE_KEY = "MapScene";
@@ -57,6 +58,7 @@ export function createMapScene(phaser: typeof Phaser, reportError: (error: unkno
         if (!tileset) throw new Error(`Missing texture "${TILESET_KEY}"`);
         tilemap.createLayer(0, tileset);
 
+        spawnObjects(this, def);
         const player = new Player(this, start, buildBlocked(def));
         const camera = this.cameras.main;
         updateZoom = () => camera.setZoom(Math.max(2, Math.floor(scale.height / 240)));

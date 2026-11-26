@@ -80,7 +80,7 @@ function umbrella(ctx: Ctx, a: string, b: string) {
   rect(ctx, 15, 0, 2, 2, P.cream);
 }
 
-function board(ctx: Ctx, x: number, y: number, w: number, h: number, color: string, accent: string) {
+export function drawBoard(ctx: Ctx, x: number, y: number, w: number, h: number, color: string, accent: string) {
   // vertical surfboard: pointed nose top, rounded tail bottom
   for (let i = 0; i < h; i++) {
     const t = i / (h - 1);
@@ -93,7 +93,7 @@ function board(ctx: Ctx, x: number, y: number, w: number, h: number, color: stri
   rect(ctx, x + 1, y + Math.floor(h * 0.45), w - 2, 2, accent); // stripe
 }
 
-function shirt(ctx: Ctx, x: number, y: number, color: string, accent: string, long = false) {
+export function drawShirt(ctx: Ctx, x: number, y: number, color: string, accent: string, long = false) {
   rect(ctx, x + 2, y, 6, 1, color);
   rect(ctx, x, y + 1, 10, 3, color);
   rect(ctx, x + 2, y + 4, 6, 6, color);
@@ -106,7 +106,7 @@ function shirt(ctx: Ctx, x: number, y: number, color: string, accent: string, lo
   px(ctx, x + 5, y, shade(color, -0.25));
 }
 
-function waveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
+export function drawWaveMark(ctx: Ctx, x: number, y: number, color: string, scale = 1) {
   const rows = [
     [[8, 5]], [[6, 9]], [[5, 7], [13, 3]], [[4, 6]],
     [[3, 6], [11, 2]], [[2, 6], [10, 5]], [[0, 7], [9, 10]],
@@ -198,9 +198,9 @@ export const PROPS = {
   surfRack: {
     w: 32, h: 34, foot: { w: 2, h: 1 }, solid: true,
     draw: (c, ox) => {
-      board(c, ox + 3, 2, 7, 28, P.coral, P.cream);
-      board(c, ox + 12, 0, 7, 30, P.sky, P.coral);
-      board(c, ox + 21, 4, 7, 26, P.sun, P.woodDark);
+      drawBoard(c, ox + 3, 2, 7, 28, P.coral, P.cream);
+      drawBoard(c, ox + 12, 0, 7, 30, P.sky, P.coral);
+      drawBoard(c, ox + 21, 4, 7, 26, P.sun, P.woodDark);
       rect(c, ox + 1, 22, 30, 3, P.woodDark);
       rect(c, ox + 1, 22, 30, 1, P.woodLight);
       rect(c, ox + 2, 25, 2, 9, P.woodDark); rect(c, ox + 28, 25, 2, 9, P.woodDark);
@@ -209,8 +209,8 @@ export const PROPS = {
   boardsInSand: {
     w: 24, h: 35, solid: true,
     draw: (c, ox) => {
-      board(c, ox + 1, 0, 10, 34, P.sun, P.cream);
-      board(c, ox + 12, 4, 11, 30, P.flagBlue, P.cream);
+      drawBoard(c, ox + 1, 0, 10, 34, P.sun, P.cream);
+      drawBoard(c, ox + 12, 4, 11, 30, P.flagBlue, P.cream);
       rect(c, ox, 33, 24, 2, P.sandDark);
     },
   },
@@ -235,7 +235,7 @@ export const PROPS = {
     draw: (c, ox) => {
       box(c, ox + 2, 42, 24, 14, P.stoneLight, P.stoneDark);
       rect(c, ox + 3, 48, 22, 1, P.stoneDark);
-      board(c, ox + 8, 0, 12, 46, P.coral, P.sun);
+      drawBoard(c, ox + 8, 0, 12, 46, P.coral, P.sun);
     },
   },
   crate: {
@@ -266,7 +266,7 @@ export const PROPS = {
   plazaLogo: {
     w: 96, h: 40, foot: { w: 6, h: 3 }, flat: true,
     draw: (c, ox) => {
-      waveMark(c, ox + 26, 2, P.navy, 2);
+      drawWaveMark(c, ox + 26, 2, P.navy, 2);
       c.save();
       c.translate(ox + 48 - textWidth("SURFBIT"), 23);
       c.scale(2, 2);
@@ -447,7 +447,7 @@ export const PROPS = {
   // product displays (tinted per product color)
   boardDisplay: {
     w: 14, h: 48, foot: { w: 1, h: 1 }, solid: true,
-    draw: (c, ox, _f, t) => { board(c, ox + 2, 0, 10, 44, t.color, t.accent); rect(c, ox + 1, 44, 12, 4, P.woodDark); },
+    draw: (c, ox, _f, t) => { drawBoard(c, ox + 2, 0, 10, 44, t.color, t.accent); rect(c, ox + 1, 44, 12, 4, P.woodDark); },
   },
   clothesRack: {
     w: 32, h: 30, foot: { w: 2, h: 1 }, solid: true,
@@ -455,14 +455,14 @@ export const PROPS = {
       rect(c, ox + 2, 2, 28, 2, P.ink);
       rect(c, ox + 2, 2, 2, 26, P.ink); rect(c, ox + 28, 2, 2, 26, P.ink);
       rect(c, ox, 27, 8, 2, P.ink); rect(c, ox + 24, 27, 8, 2, P.ink);
-      for (let i = 0; i < 3; i++) shirt(c, ox + 4 + i * 8, 5, i === 1 ? shade(t.color, -0.12) : t.color, t.accent, false);
+      for (let i = 0; i < 3; i++) drawShirt(c, ox + 4 + i * 8, 5, i === 1 ? shade(t.color, -0.12) : t.color, t.accent, false);
     },
   },
   mannequin: {
     w: 16, h: 34, foot: { w: 1, h: 1 }, solid: true,
     draw: (c, ox, _f, t) => {
       ellipse(c, ox + 8, 3, 3, 3, P.stoneLight);
-      shirt(c, ox + 3, 7, t.color, t.accent, true);
+      drawShirt(c, ox + 3, 7, t.color, t.accent, true);
       rect(c, ox + 5, 17, 6, 6, shade(t.color, -0.3));
       rect(c, ox + 7, 23, 2, 8, P.ink);
       rect(c, ox + 3, 31, 10, 2, P.ink);
@@ -497,7 +497,7 @@ export const PROPS = {
     draw: (c, ox, _f, t) => {
       rect(c, ox + 7, 0, 2, 3, P.ink);
       rect(c, ox + 2, 3, 12, 2, P.ink);
-      shirt(c, ox + 3, 4, t.color, t.accent, false);
+      drawShirt(c, ox + 3, 4, t.color, t.accent, false);
       rect(c, ox + 5, 14, 6, 7, t.color);
       rect(c, ox + 5, 18, 2, 3, t.accent);
       rect(c, ox + 7, 21, 2, 12, P.ink);

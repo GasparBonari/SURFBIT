@@ -93,7 +93,7 @@ Goal: walk a character around an animated beach town with collisions.
   - Do: implement per [ARCHITECTURE.md → Player & collision](ARCHITECTURE.md#player--collision). Keys: WASD + arrows, Shift to run; register keys with `enableCapture = false` so form inputs keep working. Read `virtualStick` too. Walk animations at 8 fps; idle = stand frame of last facing. Shadow sprite follows the feet. Camera follows with integer zoom, recomputed on resize. Pause movement (and `resetKeys()`) while `isOverlayOpen(useUI.getState())`.
   - Accept: smooth movement; cannot walk through water, buildings or solid props; slides along walls; camera clamped to map; collision helper unit-tested.
 
-- [ ] **1.5 Buildings and props with y-sorting**
+- [x] **1.5 Buildings and props with y-sorting**
   - Files: `src/game/art/buildings.ts`, `src/game/systems/objects.ts`, `src/game/scenes/mapScene.ts`
   - Do: `buildBuilding(w, h, style, label)` → canvas: roof ≈ top 45% in the building's roof material (thatch, terracotta gable, indigo tiles, slate), plank walls, centered door, windows, a **navy sign board with the wave mark** and the label in cream; per-shop signature details from the [SCENES.md buildings table](SCENES.md#buildings) (awnings, boards leaning outside, window displays, open garage, deck). "Coming soon" buildings get boards across the door + a `SOON` tag. Use selective outlines (ART_DIRECTION.md). Spawn all objects per the coordinate/depth rules in ARCHITECTURE.md.
   - Accept: player passes behind palms/buildings when north of their base and in front when south; flat props are always under the player; each shop is recognisable from its silhouette and sign, as in `beach-town.webp`.
@@ -220,3 +220,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 1.3b complete. Reworked the town layout, added coastal autotiles and props, and compared the layout with the beach-town reference.
 - 2026-11-26 — Step 1.3c complete. Added 16 × 32 player and shopkeeper sprites, verified bottom-row foot alignment, and checked all poses at 3× against the visual references.
 - 2026-11-26 — Step 1.4 complete. Added walking and running, tile collision with wall sliding, and a bounded camera that follows the player at integer zoom.
+- 2026-11-26 — Step 1.5 complete. Added the town façades and prop layer, verified player depth sorting in the browser, and compared the town with the visual reference.

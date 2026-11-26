@@ -10,7 +10,7 @@ interface Footprint {
   h: number;
 }
 
-function getFootprint(object: MapObject): Footprint {
+export function getFootprint(object: MapObject): Footprint {
   if (object.type === "building") return object;
   if (object.type === "npc") return { x: object.x, y: object.y, w: 1, h: 1 };
 

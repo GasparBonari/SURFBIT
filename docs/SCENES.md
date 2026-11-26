@@ -66,8 +66,8 @@ enterable door, facing down.
 ### Buildings
 
 All footprints include the roof. Doors are on the bottom row, centered unless
-noted. "Coming soon" = no `interact` (boarded door + SOON tag), or a `read`
-interaction with a teaser.
+noted. Coming-soon shops have a boarded door and a SOON tag. A configured
+`read` interaction can add a teaser.
 
 | id | Label on sign | Enterable (MVP) | Size | Roof | Walls | Signature details |
 |---|---|---|---|---|---|---|

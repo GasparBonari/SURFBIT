@@ -72,13 +72,13 @@ src/
 │   │   ├── tiles.ts          ✅ tileset generator, TILE_NAMES, LEGEND
 │   │   ├── characters.ts     ✅ character spritesheets, autoOutline, shadow
 │   │   ├── props.ts          ✅ PROPS registry + effects (gull, wave, surfer…)
-│   │   └── buildings.ts      🔲 building facade generator
+│   │   └── buildings.ts      ✅ procedural shop façades and signage
 │   ├── textures.ts           ✅ generated textures and lazy prop tints
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         🔲 shop interiors
-│   ├── scenes/               ✅ BootScene, MapScene ground and player camera
-│   ├── systems/              ✅ Player, collision and its unit tests
+│   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
+│   ├── systems/              ✅ Player, collision and its unit tests, object placement
 │   │                         🔲 Npc, interaction, ambient
 │   ├── audio.ts              🔲 WebAudio ambience + music
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
@@ -157,6 +157,7 @@ export interface Spawn { x: number; y: number; facing: Dir }
 export interface BuildingStyle {
   roof: "thatch" | "terracotta" | "indigo" | "slate";
   wall: string;
+  front?: "surfboards" | "flagship" | "gear" | "shaping" | "apparel" | "cafe";
   awnings?: { window: string; door: string };
 }
 
@@ -208,11 +209,12 @@ corner tiles. Wet sand follows the same shoreline on its south and east edges.
   `px = (x + foot.w / 2) * 16`, `py = (y + 1) * 16`.
 - **Building placement:** `(x, y)` is the top-left tile of the `w × h` rect.
   `door` uses absolute map coordinates inside that rect. Town doors are on
-  the bottom row of the building footprint.
+  the bottom row of the building footprint. The façade follows the configured
+  door column and uses the texture key `building:<map>:<id>`.
 - **Collision:** solid props block every tile of their footprint. Buildings
   block their full `w × h` rect except the door tile. Tiles marked
   `solid: true` in `LEGEND` (water, walls, void) block.
-- **Depth (y-sorting):** dynamic things and standing props use
+- **Depth (y-sorting):** buildings, dynamic things and standing props use
   `depth = bottom pixel y`. `flat` props (rugs, towels, flowers) use
   `depth = 1`. `wall` props use `depth = 2`. Footprints `3`, wave foam `4`,
   gulls and in-world markers `100000`.
