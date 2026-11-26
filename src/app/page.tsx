@@ -7,6 +7,7 @@ import { Hud } from "@/components/Hud";
 import { InteractPrompt } from "@/components/InteractPrompt";
 import { Joystick } from "@/components/Joystick";
 import { ProductModal } from "@/components/ProductModal";
+import { SettingsPanel } from "@/components/SettingsPanel";
 import { StoreDirectory } from "@/components/StoreDirectory";
 import { WorldClient } from "./World";
 import styles from "./page.module.css";
@@ -23,6 +24,7 @@ export default async function Home() {
       <WorldClient className={styles.world} />
       <Hud />
       <StoreDirectory />
+      <SettingsPanel />
       <div className={styles.worldControls}>
         <Joystick />
         <InteractPrompt />

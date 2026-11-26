@@ -98,10 +98,10 @@ src/
     ├── ProductPurchase.tsx    ✅ variant selection, quantity, and add-to-cart (with CSS module)
     ├── StoreHydrator.tsx      ✅ restores cart and settings after the first client render
     ├── CartDrawer.tsx         ✅ shared cart button, line editing, subtotal, and checkout link (with CSS module)
-    ├── Hud.tsx                ✅ world location, cart count, directory shortcut, mute, and fullscreen (with CSS module)
+    ├── Hud.tsx                ✅ world location, cart count, directory, settings, mute, and fullscreen (with CSS module)
     ├── StoreDirectory.tsx     ✅ town shops, travel shortcuts, and storefront links (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── …                      🔲 settings
+    └── SettingsPanel.tsx      ✅ persisted audio and reduced-motion controls (with CSS module)
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.

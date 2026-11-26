@@ -1,0 +1,81 @@
+.panel {
+  width: min(25rem, calc(100% - 2 * var(--sb-space-4)));
+  max-height: calc(100dvh - 2 * var(--sb-space-4));
+  padding: 0;
+  color: var(--sb-text);
+  overscroll-behavior: contain;
+}
+
+.panel::backdrop {
+  background: color-mix(in srgb, var(--sb-outline) 55%, transparent);
+}
+
+.header,
+.row,
+.volumeLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sb-space-2);
+}
+
+.header {
+  padding: var(--sb-space-3) var(--sb-space-4);
+  border-bottom: var(--sb-border);
+  background: var(--sb-cream);
+  color: var(--sb-navy-dark);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.header button {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.controls {
+  display: grid;
+  gap: var(--sb-space-2);
+  padding: var(--sb-space-3) var(--sb-space-4);
+}
+
+.row,
+.volume input {
+  min-height: 44px;
+}
+
+.row:has(input) {
+  cursor: pointer;
+}
+
+.controls input {
+  margin: 0;
+  accent-color: var(--sb-navy);
+}
+
+.row input {
+  width: 20px;
+  height: 20px;
+}
+
+.row select {
+  min-height: 44px;
+  padding-inline: var(--sb-space-2);
+  border: 2px solid var(--sb-outline);
+  border-radius: var(--sb-radius);
+  background: var(--sb-surface);
+  color: var(--sb-text);
+  font: inherit;
+}
+
+.volume input {
+  display: block;
+  width: 100%;
+}
+
+.percent {
+  font-variant-numeric: tabular-nums;
+}

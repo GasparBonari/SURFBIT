@@ -77,8 +77,8 @@ export function Hud() {
           type="button"
           className={controlClass}
           aria-label="Settings"
-          title="Settings are coming soon"
-          disabled
+          aria-haspopup="dialog"
+          onClick={() => useUI.getState().openPanel("settings")}
         >
           <span className={styles.label}>Settings</span>
           <span className={styles.icon} aria-hidden="true">⚙︎</span>
