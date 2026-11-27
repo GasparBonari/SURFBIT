@@ -28,7 +28,7 @@ const def: MapDef = {
   ],
   objects: [
     { type: "prop", prop: "wearSign", x: 7, y: 1 },
-    { type: "prop", prop: "surfPoster", x: 4, y: 2, tint: { color: P.coral, accent: P.sun } },
+    { type: "prop", prop: "sunsetPoster", x: 4, y: 2 },
     { type: "prop", prop: "fittingSign", x: 14, y: 1 },
     { type: "prop", prop: "vines", x: 2, y: 1 },
     { type: "prop", prop: "vines", x: 6, y: 1 },
@@ -37,7 +37,7 @@ const def: MapDef = {
     { type: "prop", prop: "pendant", x: 6, y: 1 },
     { type: "prop", prop: "pendant", x: 13, y: 1 },
     { type: "prop", prop: "sideWindow", x: 0, y: 4 },
-    { type: "prop", prop: "surfRack", x: 2, y: 4 },
+    { type: "prop", prop: "wallBoardRack", x: 2, y: 4, tint: { color: P.productTeal, accent: P.cream } },
     { type: "prop", prop: "plant", x: 4, y: 4 },
     { type: "prop", prop: "capShelf", x: 5, y: 4 },
     { type: "prop", prop: "counter", x: 8, y: 5 },

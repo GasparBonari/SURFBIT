@@ -23,14 +23,14 @@ export function textWidth(text: string, spacing = 1): number {
   return text.length * (3 + spacing) - spacing;
 }
 
-export function drawText(ctx: Ctx, text: string, x: number, y: number, color: string, spacing = 1) {
+export function drawText(ctx: Ctx, text: string, x: number, y: number, color: string, spacing = 1, scale = 1) {
   ctx.fillStyle = color;
   let cx = Math.round(x);
   for (const ch of text.toUpperCase()) {
     const g = GLYPHS[ch] ?? GLYPHS[" "];
     for (let i = 0; i < 15; i++) {
-      if (g[i] === "1") ctx.fillRect(cx + (i % 3), Math.round(y) + Math.floor(i / 3), 1, 1);
+      if (g[i] === "1") ctx.fillRect(cx + (i % 3) * scale, Math.round(y) + Math.floor(i / 3) * scale, scale, scale);
     }
-    cx += 3 + spacing;
+    cx += (3 + spacing) * scale;
   }
 }

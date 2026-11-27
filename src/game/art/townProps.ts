@@ -28,7 +28,7 @@ const FRONDS: Frond[] = [
 ];
 
 /** A feathery frond: lit upper half, shaded lower half, serrated leaflet tips along the bottom edge. */
-function frond(ctx: Ctx, cx: number, cy: number, f: Frond, sway: number) {
+export function drawPalmFrond(ctx: Ctx, cx: number, cy: number, f: Frond, sway = 0) {
   const a = (f.angle * Math.PI) / 180;
   const steps = f.length * 3;
   const [top, mid, low, tip] = f.back
@@ -74,7 +74,7 @@ function palm(ctx: Ctx, ox: number, frame: number, height: number) {
     }
   }
   const cx = topX + sway, cy = topY;
-  for (const f of FRONDS.filter((f) => f.back)) frond(ctx, cx, cy, f, sway * 2);
+  for (const f of FRONDS.filter((f) => f.back)) drawPalmFrond(ctx, cx, cy, f, sway * 2);
   // coconut cluster under the crown
   for (const [dx, dy, color] of [[-2, 3, P.trunkDark], [2, 3, P.woodDeep], [0, 5, P.trunkDark]] as const) {
     ellipse(ctx, cx + dx, cy + dy, 2, 2, color);
@@ -84,7 +84,7 @@ function palm(ctx: Ctx, ox: number, frame: number, height: number) {
     const leaf = short
       ? { ...f, length: f.length - 3, width: f.width + 1, angle: f.angle + 8 }
       : f;
-    frond(ctx, cx, cy, leaf, sway * 2);
+    drawPalmFrond(ctx, cx, cy, leaf, sway * 2);
   }
   ellipse(ctx, cx, cy - 1, 2, 1, P.leaf);
   ctx.restore();

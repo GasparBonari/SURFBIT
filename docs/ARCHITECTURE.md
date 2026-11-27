@@ -79,7 +79,8 @@ src/
 │   │   ├── props.ts          ✅ PROPS registry, shared props and interaction marker
 │   │   ├── townProps.ts      ✅ town foliage, fixtures, beach props, gull and footprints
 │   │   ├── shore.ts          ✅ smooth coastline overlay (wet sand, swash, surf lines)
-│   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
+│   │   ├── interiorProps.ts  ✅ shop signs, lighting, plants and fixtures
+│   │   ├── shopDisplays.ts   ✅ shop racks, shelves, mannequins and display tables
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
 │   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage

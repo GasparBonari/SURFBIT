@@ -192,7 +192,7 @@ group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 - [x] **A.5 Characters** — player, 3 shopkeepers, townsfolk, beach surfer NPC (16 × 32 sheets).
 - [x] **A.6 Buildings** — all town buildings and cottages.
 - [x] **A.7 Town props** — everything in the SCENES.md town props table.
-- [ ] **A.8 Interior props** — Boards, Wear, Gear sets.
+- [x] **A.8 Interior props** — Boards, Wear, Gear sets.
 - [ ] **A.9 Integration** — load the PNG/JSON assets in `BootScene` under the same texture keys (ART_DIRECTION.md → Replacing placeholder art), pack atlases, compare every scene with its reference.
 
 ---
@@ -258,3 +258,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — A.5 follow-up. Removed the ambient surfers from the town ocean (D16). Verified the animated shoreline in Chromium.
 - 2026-11-27 — Step A.6 complete. Finished the six shop façades and two cottages with distinct roof silhouettes, shop displays, and shuttered windows. Compared the town with its reference and verified shop travel in Chromium.
 - 2026-11-27 — Step A.7 complete. Finished the town foliage, street and beach props, and Beach Club deck fixtures. Compared the town with its reference and verified prop collision, sign interactions, and reduced motion in Chromium.
+- 2026-11-27 — Step A.8 complete. Finished the generated Boards, Wear, and Gear props, including product displays, shop signs, woven rugs, and pendant lights. Compared Boards and Wear with their references, checked Gear against its scene brief, and verified shop travel, product inspection, and reduced motion in Chromium.
