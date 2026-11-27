@@ -65,12 +65,12 @@ const def: MapDef = {
     {
       type: "building", id: "cottage-west", label: "",
       x: 1, y: 0, w: 7, h: 6, door: { x: 4, y: 5 },
-      style: { roof: "terracotta", wall: P.cream },
+      style: { roof: "terracotta", wall: P.cream, front: "cottage", shutters: P.teal },
     },
     {
       type: "building", id: "cottage-east", label: "",
       x: 17, y: 0, w: 7, h: 6, door: { x: 20, y: 5 },
-      style: { roof: "terracotta", wall: P.cream },
+      style: { roof: "terracotta", wall: P.cream, front: "cottage", shutters: P.coral },
     },
     {
       type: "building", id: "boards", label: "Boards",

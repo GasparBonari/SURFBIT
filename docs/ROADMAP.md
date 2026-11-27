@@ -190,7 +190,7 @@ group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 - [x] **A.3 Style test slice** — *(made by upgrading the generators, see ARCHITECTURE.md → D14; approved by the owner)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
 - [x] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
 - [x] **A.5 Characters** — player, 3 shopkeepers, townsfolk, beach surfer NPC (16 × 32 sheets).
-- [ ] **A.6 Buildings** — all town buildings and cottages.
+- [x] **A.6 Buildings** — all town buildings and cottages.
 - [ ] **A.7 Town props** — everything in the SCENES.md town props table.
 - [ ] **A.8 Interior props** — Boards, Wear, Gear sets.
 - [ ] **A.9 Integration** — load the PNG/JSON assets in `BootScene` under the same texture keys (ART_DIRECTION.md → Replacing placeholder art), pack atlases, compare every scene with its reference.
@@ -256,3 +256,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step A.5 complete. Finished all character sheets: shaded faces and hair, eye glints on every skin tone, rounded jaws and collars. Added wetsuit and carried-board options with a surfer NPC on the beach, shoppers near Gear and Wear, and a redrawn surfer in the water. Checked every direction and pose up close and in the town.
 - 2026-11-26 — A.4 follow-up (owner feedback on the shoreline). Replaced the stepped foam and wet-sand tiles on the town coast with a generated shore overlay: smooth diagonal coast, wet-sand band, swash foam, shallows and two surf lines rolling in (D15). Removed the separate wave sprites it replaces.
 - 2026-11-27 — A.5 follow-up. Removed the ambient surfers from the town ocean (D16). Verified the animated shoreline in Chromium.
+- 2026-11-27 — Step A.6 complete. Finished the six shop façades and two cottages with distinct roof silhouettes, shop displays, and shuttered windows. Compared the town with its reference and verified shop travel in Chromium.

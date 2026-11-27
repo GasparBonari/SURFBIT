@@ -22,7 +22,8 @@ export interface Spawn {
 export interface BuildingStyle {
   roof: "thatch" | "terracotta" | "indigo" | "slate";
   wall: string;
-  front?: "surfboards" | "flagship" | "gear" | "shaping" | "apparel" | "cafe";
+  front?: "surfboards" | "flagship" | "gear" | "shaping" | "apparel" | "cafe" | "cottage";
+  shutters?: string;
   awnings?: { window: string; door: string };
 }
 

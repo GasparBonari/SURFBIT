@@ -1,97 +1,28 @@
 import type { BuildingStyle } from "../maps/types";
-import { box, ellipse, makeCanvas, px, rect, rng, shade, type Ctx } from "./canvas";
+import { drawRoof } from "./buildingRoofs";
+import { box, ellipse, makeCanvas, px, rect, shade, type Ctx } from "./canvas";
 import { drawText, textWidth } from "./font";
 import { P } from "./palette";
 import { drawBoard, drawShirt, drawWaveMark } from "./motifs";
 import { PROPS } from "./props";
 
-const ROOFS = {
-  thatch: { base: P.thatch, light: P.thatchLight, dark: P.thatchDark, edge: P.thatchDeep },
-  terracotta: { base: P.terracotta, light: P.terracottaLight, dark: P.terracottaDark, edge: P.woodDeep },
-  indigo: { base: P.roofIndigo, light: P.roofSlate, dark: P.roofIndigoDark, edge: P.roofIndigoDeep },
-  slate: { base: P.roofSlate, light: P.foamShade, dark: P.roofSlateDark, edge: P.roofIndigoDeep },
-};
-
-function drawRoof(ctx: Ctx, w: number, h: number, style: BuildingStyle) {
-  const { base, light, dark, edge } = ROOFS[style.roof];
-  const thatch = style.roof === "thatch";
-  const hip = style.roof === "slate" || style.front === "cafe";
-  const ridge = w / 2;
-  const random = rng(w * h);
-  const course = thatch ? 8 : 7;
-  const tile = style.roof === "slate" ? 16 : 9;
-  for (let y = 0; y < h; y++) {
-    const slope = 1 - y / (h - 1);
-    const pitch = thatch ? (style.front === "gear" ? 2.4 : 1.55) : 1;
-    const inset = Math.round((ridge - (hip ? 25 : 4)) * slope ** pitch);
-    const width = w - inset * 2;
-    const eave = h - y <= 3;
-    rect(ctx, inset, y, width, 1, eave ? edge : base);
-    if (eave) continue;
-    rect(ctx, inset, y, 2, 1, edge);
-    rect(ctx, w - inset - 3, y, 3, 1, edge);
-    rect(ctx, inset + 2, y, Math.min(3, width - 5), 1, light);
-    const rightSlope = ridge + Math.floor(y / 3);
-    if (rightSlope < w - inset - 3) {
-      rect(ctx, rightSlope, y, w - inset - 3 - rightSlope, 1, dark);
-    }
-    if (thatch) {
-      thatchRow(ctx, y, inset + 2, w - inset - 3, rightSlope, course, ROOFS.thatch);
-    } else {
-      const stagger = Math.floor(y / course) % 2 * Math.floor(tile / 2);
-      for (let x = inset + 5; x < w - inset - 3; x++) {
-        if (y % course === 0 || (x + stagger) % tile === 0) px(ctx, x, y, dark);
-        if (y % course === 1 || (x + stagger) % tile === 1) px(ctx, x, y, x < rightSlope ? light : base);
-      }
-    }
-  }
-  if (hip) rect(ctx, ridge - 24, 1, 48, 2, light);
-  else rect(ctx, ridge - 1, 2, 2, 7, light);
-  if (thatch) thatchFringe(ctx, 2, w - 2, h - 3, random);
-}
-
-const hash = (x: number, y: number) => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 97;
-
-/** Straw laid in courses: vertical strands, a ragged dark lip at the bottom of each course, shade on the right slope. */
-function thatchRow(
-  ctx: Ctx, y: number, from: number, to: number, rightSlope: number, course: number,
-  { base, light, dark, edge }: (typeof ROOFS)["thatch"],
-) {
-  for (let x = from; x < to; x++) {
-    // Bundles of straw are staggered so course lines don't read as stripes.
-    const lift = hash(Math.floor(x / 5), 3) % 4;
-    const tier = Math.floor((y + lift) / course);
-    const row = (y + lift) % course;
-    const strand = hash(x, tier) % 5;
-    const lip = row === course - 1 || (row === course - 2 && strand === 0);
-    let color: string = strand < 2 ? light : strand < 4 ? base : dark;
-    if (lip) color = strand % 2 ? dark : edge;
-    else if (row === 0 && strand > 2) color = dark;
-    if (x >= rightSlope && !lip) color = color === light ? base : dark;
-    px(ctx, x, y, color);
-  }
-}
-
-/** Shaggy straw hanging past the eave. */
-function thatchFringe(ctx: Ctx, from: number, to: number, y: number, random: () => number) {
-  const { base, dark, edge } = ROOFS.thatch;
-  for (let x = from; x < to; x++) {
-    const hang = 2 + Math.floor(random() * 3);
-    rect(ctx, x, y, 1, hang, x % 3 === 0 ? dark : base);
-    px(ctx, x, y + hang, edge);
-  }
-}
-
-function drawGable(ctx: Ctx, center: number, eave: number, halfWidth: number, rise: number) {
+function drawGable(ctx: Ctx, w: number, eave: number, roof: BuildingStyle["roof"]) {
+  const center = Math.floor(w / 2);
+  const halfWidth = Math.floor(w * 0.43);
+  const rise = Math.round(eave * 0.85);
+  const bottom = eave + 12;
+  const trim = roof === "thatch" ? P.thatchDark : P.woodLight;
+  const shadow = roof === "thatch" ? P.thatchDeep : P.woodDark;
   for (let row = 0; row <= rise; row++) {
     const half = Math.round(halfWidth * row / rise);
-    const y = eave - rise + row;
+    const y = bottom - rise + row;
     rect(ctx, center - half, y, half * 2 + 1, 1, P.woodDeep);
-    if (half <= 3) continue;
-    rect(ctx, center - half + 2, y, half * 2 - 4, 1, y % 5 === 0 ? P.woodDark : P.wood);
-    rect(ctx, center - half + 1, y, 2, 1, P.woodLight);
-    rect(ctx, center + half - 2, y, 2, 1, P.woodDark);
+    if (half < 5) continue;
+    rect(ctx, center - half + 4, y, half * 2 - 7, 1, row % 6 === 0 ? P.woodDark : P.wood);
+    rect(ctx, center - half + 1, y, 3, 1, trim);
+    rect(ctx, center + half - 3, y, 3, 1, shadow);
   }
+  rect(ctx, center - halfWidth, bottom + 1, 2 * halfWidth + 1, 2, P.woodDeep);
 }
 
 function drawWall(ctx: Ctx, w: number, h: number, top: number, style: BuildingStyle) {
@@ -99,32 +30,49 @@ function drawWall(ctx: Ctx, w: number, h: number, top: number, style: BuildingSt
   const creamTrim = style.front === "apparel" || paint === P.cream;
   rect(ctx, 6, top, w - 12, h - top, P.woodDeep);
   rect(ctx, 10, top, w - 20, h - top - 5, paint);
+  const seam = creamTrim ? P.sandDark : P.woodDark;
+  const sunlit = creamTrim ? P.cream : P.woodLight;
   for (let y = top + 4; y < h - 6; y += 6) {
-    rect(ctx, 10, y, w - 20, 1, shade(paint, -0.22));
-    rect(ctx, 10, y + 1, w - 20, 1, shade(paint, 0.17));
+    rect(ctx, 10, y, w - 20, 1, seam);
+    rect(ctx, 10, y + 1, w - 20, 1, sunlit);
     const joint = 18 + ((y * 37) % (w - 36));
-    rect(ctx, joint, y + 2, 1, 4, shade(paint, -0.18));
+    rect(ctx, joint, y + 2, 1, 4, seam);
+    rect(ctx, joint + 4, y + 3, 6, 1, sunlit);
   }
+  rect(ctx, 10, top, w - 20, 7, seam);
+  rect(ctx, w - 15, top + 4, 5, h - top - 9, seam);
   const trim = creamTrim ? P.sandLight : P.woodLight;
-  rect(ctx, 7, top, 3, h - top - 5, trim);
-  rect(ctx, w - 10, top, 3, h - top - 5, trim);
-  rect(ctx, 5, h - 5, w - 10, 2, P.woodDark);
-  rect(ctx, 5, h - 3, w - 10, 2, P.woodDeep);
+  for (const x of [7, w - 11]) {
+    rect(ctx, x, top, 4, h - top - 6, P.woodDark);
+    rect(ctx, x, top + 5, 2, h - top - 11, trim);
+    rect(ctx, x - 1, h - 15, 6, 8, P.wallStone);
+    rect(ctx, x - 1, h - 15, 6, 1, P.wallStoneLight);
+  }
+  rect(ctx, 5, h - 7, w - 10, 5, P.wallStoneDark);
+  for (let x = 6; x < w - 9; x += 10) {
+    rect(ctx, x, h - 7, Math.min(9, w - 5 - x), 1, P.wallStoneLight);
+    rect(ctx, x, h - 6, Math.min(9, w - 5 - x), 2, P.wallStone);
+  }
 }
 
 function drawSign(ctx: Ctx, w: number, eave: number, label: string, front: BuildingStyle["front"]) {
-  const scale = front === "flagship" ? 3 : 2;
+  const flagship = front === "flagship";
+  const scale = flagship ? 3 : 2;
   const labelWidth = textWidth(label) * scale;
-  const hasIcon = front === "apparel" || front === "shaping" || front === "cafe";
-  const width = Math.max(56, labelWidth + (hasIcon ? 32 : 16));
+  const width = Math.max(68, labelWidth + (front === "apparel" ? 34 : 20));
   const x = Math.floor((w - width) / 2);
-  const y = eave - (front === "flagship" ? 23 : 16);
-  box(ctx, x - 2, y - 2, width + 4, 34, P.woodLight, P.woodDeep);
-  box(ctx, x, y, width, 30, P.navy, P.navyDark);
+  const y = eave - (flagship ? 22 : 14);
+  const height = flagship ? 36 : 27;
+  const center = Math.floor(w / 2);
+  box(ctx, x - 2, y - 2, width + 4, height + 5, P.woodLight, P.woodDeep);
+  box(ctx, x, y, width, height, P.navy, P.navyDark);
   rect(ctx, x + 2, y + 1, width - 4, 1, P.deepBlue);
-  drawWaveMark(ctx, w / 2 - 8, y - 1, P.cream);
+  rect(ctx, x + 2, y + height - 3, width - 4, 1, P.signTealDark);
+  for (const screw of [x + 3, x + width - 4]) px(ctx, screw, y + height - 5, P.sandDark);
+  if (flagship) drawWaveMark(ctx, center - 16, y - 6, P.cream, 2);
+  else if (front !== "shaping" && front !== "cafe") drawWaveMark(ctx, center - 8, y - 1, P.cream);
   ctx.save();
-  ctx.translate(Math.floor((w - labelWidth) / 2), y + 13);
+  ctx.translate(Math.floor((w - labelWidth) / 2), y + (flagship ? 17 : 13));
   ctx.scale(scale, scale);
   drawText(ctx, label, 0, 0, P.cream);
   ctx.restore();
@@ -133,16 +81,19 @@ function drawSign(ctx: Ctx, w: number, eave: number, label: string, front: Build
     drawShirt(ctx, x + 4, y + 13, P.coral, P.cream);
     drawShirt(ctx, x + width - 14, y + 13, P.sky, P.cream);
   } else if (front === "shaping") {
+    drawWaveMark(ctx, x + 5, y - 1, P.sky);
     for (let i = 0; i < 7; i++) {
-      px(ctx, x + 5 + i, y + 14 + i, P.cream);
-      px(ctx, x + 11 - i, y + 14 + i, P.sandDark);
+      px(ctx, center - 3 + i, y + 3 + i, P.cream);
+      px(ctx, center + 3 - i, y + 3 + i, P.sandDark);
     }
-    rect(ctx, x + 4, y + 13, 3, 2, P.cream);
-    rect(ctx, x + 10, y + 13, 3, 2, P.sandDark);
+    rect(ctx, center - 4, y + 2, 3, 2, P.cream);
+    rect(ctx, center + 2, y + 2, 3, 2, P.sandDark);
   } else if (front === "cafe") {
-    box(ctx, x + 5, y + 13, 5, 4, P.navy, P.cream);
-    rect(ctx, x + 4, y + 13, 4, 5, P.cream);
-    rect(ctx, x + 3, y + 19, 8, 1, P.cream);
+    drawWaveMark(ctx, x + 5, y - 1, P.sky);
+    box(ctx, center + 2, y + 5, 4, 4, P.navy, P.cream);
+    rect(ctx, center - 4, y + 5, 7, 5, P.cream);
+    rect(ctx, center - 5, y + 11, 10, 1, P.sandDark);
+    px(ctx, center - 1, y + 3, P.cream);
   }
 }
 
@@ -164,8 +115,9 @@ function drawDoor(ctx: Ctx, center: number, bottom: number, boarded: boolean, op
     rect(ctx, x + 3, y + 20, 16, 1, P.woodLight);
     return;
   }
-  box(ctx, x + 4, y + 3, 12, 13, P.deepBlue, P.woodDeep);
+  box(ctx, x + 4, y + 3, 12, 13, P.navy, P.woodDeep);
   rect(ctx, x + 5, y + 4, 3, 5, P.sky);
+  rect(ctx, x + 11, y + 4, 4, 4, P.deepBlue);
   rect(ctx, x + 9, y + 4, 1, 11, P.woodDeep);
   rect(ctx, x + 5, y + 9, 10, 1, P.woodDeep);
   box(ctx, x + 5, y + 18, 10, 9, P.wood, P.woodDeep);
@@ -183,12 +135,14 @@ function drawDoor(ctx: Ctx, center: number, bottom: number, boarded: boolean, op
 }
 
 function drawAwning(ctx: Ctx, x: number, y: number, w: number, color: string) {
-  for (let row = 0; row < 10; row++) {
-    const overhang = Math.floor(row / 3);
-    for (let column = -overhang; column < w + overhang; column++) {
-      const stripe = Math.floor((column + 3) / 6) % 2 ? P.cream : color;
-      px(ctx, x + column, y + row, row >= 7 ? shade(stripe, -0.24) : stripe);
-    }
+  const dark = shade(color, -0.24);
+  const light = shade(color, 0.25);
+  for (let column = -2; column < w + 2; column++) {
+    const stripe = (column + 2) % 7;
+    const cream = Math.floor((column + 2) / 7) % 2 === 1;
+    const inset = column < 0 || column >= w ? 2 : 0;
+    rect(ctx, x + column, y + inset, 1, 7 - inset, cream ? P.cream : stripe < 2 ? light : color);
+    rect(ctx, x + column, y + 7, 1, stripe === 0 || stripe === 6 ? 3 : 4, cream ? P.sandDark : dark);
   }
   rect(ctx, x, y - 1, w, 1, P.woodDeep);
 }
@@ -230,27 +184,25 @@ function drawDisplay(
 ) {
   if (w < 18) return;
   box(ctx, x, y, w, 31, P.woodDark, P.woodDeep);
-  rect(ctx, x + 2, y + 2, w - 4, 24, P.navyDark);
+  rect(ctx, x + 2, y + 2, w - 4, 25, P.navyDark);
   rect(ctx, x + 2, y + 2, w - 4, 2, P.woodDeep);
+  rect(ctx, x + 1, y + 4, 1, 23, P.woodLight);
+  rect(ctx, x + w - 2, y + 4, 1, 23, P.wood);
   const center = x + Math.floor(w / 2);
 
   switch (front) {
-    case "surfboards":
-      for (const [i, color] of [P.cream, P.flagBlue, P.sun].entries()) {
-        drawBoard(ctx, center - 17 + i * 12, y + 4 + i, 8, 22 - i, color, P.coral);
-      }
-      break;
     case "flagship":
     case "apparel": {
-      const scale = w >= 74 ? 2 : 1;
-      const colors = w >= 40 ? [P.cream, P.flagBlue, P.teal] : [P.cream];
+      const scale = front === "flagship" && w >= 74 ? 2 : 1;
+      const colors = w >= 40 ? [P.cream, P.flagBlue, front === "apparel" ? P.coral : P.teal] : [P.cream];
       const rowWidth = (colors.length * 12 - 2) * scale;
-      rect(ctx, x + 3, y + 6, w - 6, 1, P.woodLight);
+      const shirtTop = y + (scale === 2 ? 8 : 13);
+      rect(ctx, x + 3, shirtTop - 3, w - 6, 1, P.woodLight);
       for (const [i, color] of colors.entries()) {
         const shirtX = center - Math.floor(rowWidth / 2) + i * 12 * scale;
-        px(ctx, shirtX + 5 * scale, y + 8, P.sandDark);
+        rect(ctx, shirtX + 4 * scale, shirtTop - 2, 1, 2, P.sandDark);
         ctx.save();
-        ctx.translate(shirtX, y + 9);
+        ctx.translate(shirtX, shirtTop);
         ctx.scale(scale, scale);
         drawShirt(ctx, 0, 0, color, i === 0 ? P.navy : P.cream);
         ctx.restore();
@@ -258,22 +210,35 @@ function drawDisplay(
       break;
     }
     case "gear":
-      for (const [i, color] of [P.flagBlue, P.teal, P.ink].entries()) {
-        const suitX = center - 17 + i * 12;
-        px(ctx, suitX + 5, y + 5, P.cream);
-        rect(ctx, suitX + 1, y + 6, 8, 1, P.stoneDark);
-        drawShirt(ctx, suitX, y + 7, color, P.sun, true);
-        rect(ctx, suitX + 2, y + 17, 2, 8, color);
-        rect(ctx, suitX + 6, y + 17, 2, 8, color);
+      rect(ctx, x + 4, y + 5, w - 8, 1, P.woodLight);
+      for (const [i, color] of [P.flagBlue, P.teal].entries()) {
+        const suitX = center - 12 + i * 15;
+        px(ctx, suitX + 5, y + 6, P.cream);
+        rect(ctx, suitX + 1, y + 8, 8, 1, P.stoneDark);
+        rect(ctx, suitX + 2, y + 9, 6, 11, P.ink);
+        rect(ctx, suitX, y + 10, 2, 8, color);
+        rect(ctx, suitX + 8, y + 10, 2, 8, P.deepBlue);
+        rect(ctx, suitX + 2, y + 10, 1, 10, color);
+        rect(ctx, suitX + 2, y + 20, 2, 6, color);
+        rect(ctx, suitX + 6, y + 20, 2, 5, P.deepBlue);
+        px(ctx, suitX + 5, y + 12, P.sun);
       }
       break;
     case "cafe":
+      rect(ctx, x + 3, y + 4, w - 6, 20, P.woodDeep);
+      rect(ctx, x + 4, y + 5, w - 8, 1, P.woodLight);
       rect(ctx, x + 4, y + 15, w - 8, 2, P.wood);
-      for (let i = x + 6; i < x + w - 7; i += 10) {
-        box(ctx, i, y + 9, 5, 6, P.cream, P.wood);
-        px(ctx, i + 5, y + 11, P.cream);
+      for (const lampX of [x + 8, x + w - 9]) {
+        rect(ctx, lampX, y + 5, 1, 3, P.iron);
+        rect(ctx, lampX - 1, y + 8, 3, 2, P.glowWarm);
+        px(ctx, lampX, y + 10, P.glow);
       }
-      rect(ctx, x + 2, y + 23, w - 4, 4, P.wood);
+      for (let i = x + 6; i < x + w - 7; i += 10) {
+        box(ctx, i, y + 17, 5, 6, P.cream, P.woodDark);
+        px(ctx, i + 5, y + 19, P.cream);
+      }
+      rect(ctx, x + 2, y + 23, w - 4, 4, P.woodDark);
+      rect(ctx, x + 2, y + 23, w - 4, 1, P.woodLight);
       break;
     case "bottles":
       for (const shelf of [y + 14, y + 25]) {
@@ -292,6 +257,7 @@ function drawDisplay(
       rect(ctx, x + 3, y + 14, w - 6, 2, P.woodLight);
       break;
   }
+  rect(ctx, x - 1, y + 27, w + 2, 4, P.woodDeep);
   rect(ctx, x - 1, y + 28, w + 2, 2, P.woodLight);
 }
 
@@ -305,33 +271,70 @@ function drawBoardRack(ctx: Ctx, x: number, bottom: number) {
 }
 
 function drawVine(ctx: Ctx, x: number, y: number, bottom: number) {
+  rect(ctx, x, y + 1, 2, bottom - y - 6, P.leafDeep);
   for (let dy = 0; y + dy < bottom - 6; dy += 4) {
-    const leafX = x + Math.round(Math.sin(dy / 4) * 3);
-    ellipse(ctx, leafX, y + dy, 4, 3, P.leafDeep);
-    ellipse(ctx, leafX - 1, y + dy - 1, 3, 2, P.leaf);
+    const leafX = x + Math.round(Math.sin(dy / 4) * 4);
+    ellipse(ctx, leafX, y + dy, 5, 3, P.leafDark);
+    ellipse(ctx, leafX - 1, y + dy - 1, 4, 2, P.leaf);
+    px(ctx, leafX - 3, y + dy - 1, P.leafLight);
     if (dy % 12 === 4) {
-      ellipse(ctx, leafX + 2, y + dy, 2, 2, P.hibiscus);
-      px(ctx, leafX + 2, y + dy - 1, P.pink);
+      ellipse(ctx, leafX + 2, y + dy, 3, 2, P.hibiscus);
+      rect(ctx, leafX, y + dy - 1, 3, 1, P.pink);
       px(ctx, leafX + 2, y + dy, P.sun);
     }
   }
 }
 
 function drawWorkshop(ctx: Ctx, w: number, top: number, bottom: number) {
-  box(ctx, 12, top, w - 24, bottom - top, P.woodDeep, P.woodDark);
-  rect(ctx, 16, top + 4, w - 32, 2, P.wood);
-  rect(ctx, 18, bottom - 9, w - 36, 8, P.woodDark);
-  const workbench = Math.floor(w / 3);
-  rect(ctx, workbench, top + 4, 1, 6, P.ironDark);
-  box(ctx, workbench - 5, top + 10, 11, 6, P.glow, P.glowWarm);
+  box(ctx, 10, top, w - 20, bottom - top, P.woodDeep, P.woodDark);
+  rect(ctx, 15, top + 3, w - 30, 2, P.woodLight);
+  const workbench = Math.floor(w * 0.29);
+  rect(ctx, workbench - 25, top + 5, 50, bottom - top - 10, P.woodDark);
+  for (let x = workbench - 21; x < workbench + 24; x += 6) {
+    rect(ctx, x, top + 6, 1, bottom - top - 14, P.woodDeep);
+  }
+  rect(ctx, workbench - 16, top + 14, 32, 12, P.wood);
+  rect(ctx, workbench - 10, top + 14, 20, 9, P.woodLight);
+  rect(ctx, workbench, top + 5, 1, 5, P.ironDark);
+  rect(ctx, workbench - 5, top + 10, 11, 4, P.glowWarm);
+  rect(ctx, workbench - 3, top + 14, 7, 1, P.glow);
+  rect(ctx, 14, bottom - 8, w - 28, 7, P.woodDark);
+  rect(ctx, 15, bottom - 3, w - 30, 2, P.wallStone);
 
   rect(ctx, workbench - 14, bottom - 19, 3, 16, P.woodLight);
   rect(ctx, workbench + 13, bottom - 19, 3, 16, P.woodLight);
   rect(ctx, workbench - 12, bottom - 8, 26, 2, P.wood);
-  ellipse(ctx, workbench, bottom - 20, 23, 4, P.woodDark);
-  ellipse(ctx, workbench, bottom - 21, 23, 3, P.cream);
+  ellipse(ctx, workbench, bottom - 20, 23, 4, P.sandWetDark);
+  ellipse(ctx, workbench, bottom - 22, 23, 3, P.cream);
   rect(ctx, workbench - 17, bottom - 21, 33, 1, P.sandDark);
-  for (const x of [13, w - 17]) rect(ctx, x, top, 4, bottom - top, P.woodLight);
+  rect(ctx, w - 53, bottom - 15, 36, 4, P.woodLight);
+  for (const dx of [21, 26, 34, 40, 47]) rect(ctx, w - dx, bottom - 25, 2, 8, P.iron);
+  for (const x of [11, w - 16]) {
+    rect(ctx, x, top, 5, bottom - top, P.wood);
+    rect(ctx, x, top + 3, 2, bottom - top - 4, P.woodLight);
+  }
+}
+
+function drawCottage(ctx: Ctx, w: number, eave: number, bottom: number, doorX: number, shutters: string) {
+  const y = bottom - 29;
+  for (const x of [18, w - 39]) {
+    box(ctx, x, y, 21, 19, P.navy, P.woodDeep);
+    rect(ctx, x + 2, y + 2, 17, 4, P.sky);
+    rect(ctx, x + 2, y + 7, 17, 8, P.deepBlue);
+    rect(ctx, x + 10, y + 1, 1, 16, P.woodLight);
+    rect(ctx, x + 1, y + 7, 19, 1, P.woodLight);
+    for (const shutterX of [x - 5, x + 20]) {
+      box(ctx, shutterX, y + 1, 6, 17, shutters, P.woodDark);
+      for (let slat = y + 4; slat < y + 15; slat += 3) rect(ctx, shutterX + 1, slat, 4, 1, P.woodDark);
+    }
+    rect(ctx, x - 1, y + 18, 23, 2, P.woodLight);
+  }
+  drawDoor(ctx, doorX, bottom, false, false);
+  const lintelY = Math.min(eave + 8, bottom - 33);
+  rect(ctx, doorX - 12, lintelY, 24, 4, P.woodDark);
+  rect(ctx, doorX - 12, lintelY, 24, 1, P.woodLight);
+  rect(ctx, doorX - 12, bottom - 2, 24, 4, P.wallStoneDark);
+  rect(ctx, doorX - 11, bottom - 2, 22, 1, P.wallStoneLight);
 }
 
 interface Entrance {
@@ -342,52 +345,56 @@ interface Entrance {
 /** Dimensions and the entrance's horizontal offset are in pixels. */
 export function buildBuilding(w: number, h: number, style: BuildingStyle, label: string, entrance?: Entrance) {
   const [canvas, ctx] = makeCanvas(w, h);
-  const eave = Math.round(h * 0.45);
+  const { front } = style;
+  const eave = Math.round(h * (front === "cottage" ? 0.52 : 0.45));
   const bottom = h - 3;
   const doorX = entrance?.x ?? Math.floor(w / 2);
-  const front = style.front;
   drawWall(ctx, w, h, eave - 2, style);
   drawRoof(ctx, w, eave, style);
-  if (front) drawGable(ctx, w / 2, eave, Math.floor(w * 0.35), Math.floor(eave * 0.7));
+  if (front === "cottage") {
+    drawCottage(ctx, w, eave, bottom, doorX, style.shutters ?? P.teal);
+    return canvas;
+  }
+  if (front && front !== "gear") drawGable(ctx, w, eave, style.roof);
 
   const displayY = bottom - 32;
   const leftWidth = doorX - 32;
   const rightWidth = w - doorX - 32;
   if (front === "shaping") {
-    drawWorkshop(ctx, w, eave + 13, bottom);
+    drawWorkshop(ctx, w, eave + 11, bottom);
+  } else if (front === "surfboards") {
+    box(ctx, 12, displayY - 4, w - 24, 35, P.woodDark, P.woodDeep);
+    if (leftWidth >= 18) drawShopInterior(ctx, 16, displayY, leftWidth, false);
+    if (rightWidth >= 18) drawShopInterior(ctx, doorX + 16, displayY, rightWidth, true);
   } else {
-    if (front === "surfboards") box(ctx, 12, displayY - 4, w - 24, 35, P.woodDark, P.woodDeep);
-    if (front === "surfboards") {
-      if (leftWidth >= 18) drawShopInterior(ctx, 16, displayY, leftWidth, false);
-      if (rightWidth >= 18) drawShopInterior(ctx, doorX + 16, displayY, rightWidth, true);
-    } else {
-      drawDisplay(ctx, 16, displayY, leftWidth, front);
-      drawDisplay(ctx, doorX + 16, displayY, rightWidth, front === "gear" ? "bottles" : front);
-    }
+    drawDisplay(ctx, 16, displayY, leftWidth, front);
+    const rightDisplay = front === "gear" || front === "flagship" ? "bottles" : front;
+    drawDisplay(ctx, doorX + 16, displayY, rightWidth, rightDisplay);
   }
   const boarded = entrance?.boarded ?? false;
-  drawDoor(ctx, doorX, bottom, boarded, front === "surfboards" && !boarded);
+  drawDoor(ctx, doorX, bottom, boarded, (front === "surfboards" || front === "gear") && !boarded);
 
   if (style.awnings) {
-    if (leftWidth >= 18) drawAwning(ctx, 15, displayY - 4, leftWidth + 2, style.awnings.window);
-    drawAwning(ctx, doorX - 13, displayY - 4, 26, style.awnings.door);
+    const awningY = displayY - 8;
+    if (leftWidth >= 18) drawAwning(ctx, 15, awningY, leftWidth + 2, style.awnings.window);
+    drawAwning(ctx, doorX - 13, awningY, 26, style.awnings.door);
     if (front === "apparel" && rightWidth >= 18) {
-      drawAwning(ctx, doorX + 15, displayY - 4, rightWidth + 2, style.awnings.door);
+      drawAwning(ctx, doorX + 15, awningY, rightWidth + 2, style.awnings.door);
     }
   }
   if (label) drawSign(ctx, w, eave, label, front);
 
   if (front === "surfboards") {
     drawBoardRack(ctx, 5, bottom + 1);
-    ctx.save();
-    ctx.translate(w - 19, h - PROPS.plant.h);
-    PROPS.plant.draw(ctx, 0);
-    ctx.restore();
+    drawPot(ctx, w - 21, h);
+    drawPot(ctx, 33, h);
   } else if (front === "gear") {
     drawBoard(ctx, w - 18, bottom - 34, 10, 34, P.coral, P.cream);
   } else if (front === "flagship") {
     drawVine(ctx, 9, eave - 11, bottom);
     drawVine(ctx, w - 10, eave - 4, bottom);
+    drawPot(ctx, 6, h);
+    drawPot(ctx, w - 22, h);
     const signX = doorX - 29;
     box(ctx, signX, bottom - 15, 13, 14, P.navyDark, P.woodLight);
     rect(ctx, signX + 2, bottom - 11, 9, 1, P.cream);
@@ -395,4 +402,11 @@ export function buildBuilding(w: number, h: number, style: BuildingStyle, label:
     for (const leg of [signX + 1, signX + 11]) rect(ctx, leg, bottom - 2, 1, 4, P.woodDeep);
   }
   return canvas;
+}
+
+function drawPot(ctx: Ctx, x: number, bottom: number) {
+  ctx.save();
+  ctx.translate(x, bottom - PROPS.plant.h);
+  PROPS.plant.draw(ctx, 0);
+  ctx.restore();
 }

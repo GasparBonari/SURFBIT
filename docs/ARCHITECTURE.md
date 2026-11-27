@@ -70,7 +70,7 @@ src/
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
 ├── game/                        Phaser world — never imported by server code
 │   ├── bridge.ts             ✅ world controls and audio events + virtualStick (Phaser-free)
-│   ├── art/                     procedural placeholder pixel art
+│   ├── art/                     procedural pixel art
 │   │   ├── palette.ts        ✅ the palette (mirror of CSS tokens)
 │   │   ├── canvas.ts         ✅ makeCanvas, rect, px, ellipse, box, rng, shade
 │   │   ├── font.ts           ✅ 3×5 pixel font for in-world signs
@@ -80,7 +80,8 @@ src/
 │   │   ├── shore.ts          ✅ smooth coastline overlay (wet sand, swash, surf lines)
 │   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
-│   │   └── buildings.ts      ✅ procedural shop façades and signage
+│   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
+│   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage
 │   ├── textures.ts           ✅ generated textures, lazy NPC sheets and prop tints
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
@@ -203,7 +204,8 @@ export interface Spawn { x: number; y: number; facing: Dir }
 export interface BuildingStyle {
   roof: "thatch" | "terracotta" | "indigo" | "slate";
   wall: string;
-  front?: "surfboards" | "flagship" | "gear" | "shaping" | "apparel" | "cafe";
+  front?: "surfboards" | "flagship" | "gear" | "shaping" | "apparel" | "cafe" | "cottage";
+  shutters?: string;                 // cottage shutter color from the palette
   awnings?: { window: string; door: string };
 }
 
@@ -282,7 +284,8 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
 - **Building placement:** `(x, y)` is the top-left tile of the `w × h` rect.
   `door` uses absolute map coordinates inside that rect. Town doors are on
   the bottom row of the building footprint. The façade follows the configured
-  door column and uses the texture key `building:<map>:<id>`.
+  door column. Roof, wall and door details are drawn into one texture
+  (`building:<map>:<id>`) so the whole building sorts at its base.
 - **Collision:** solid props block every tile of their footprint. Buildings
   block their full `w × h` rect except the door tile. Tiles marked
   `solid: true` in `LEGEND` (water, walls, void) block.

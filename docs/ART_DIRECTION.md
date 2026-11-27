@@ -191,7 +191,9 @@ should use a mix.
 | Palm | 48 × 64 | 1 × 1 (trunk) |
 | Umbrella | 32 × 44 | non-solid |
 | Shop (Boards, Gear, Wear) | 144 × 112 (9 × 7 tiles, roof included) | full rect except door |
-| Flagship / Beach Club | 192 × 128 (12 × 8 tiles) | full rect except door |
+| Flagship | 192 × 128 (12 × 8 tiles) | full rect except door |
+| Beach Club | 192 × 112 (12 × 7 tiles) | full rect except door, plus a walkable deck |
+| Cottage | 112 × 96 (7 × 6 tiles) | full rect except door |
 | Interior room | ~20 × 14 tiles, back wall 3 tiles tall | — |
 | Surfboard display | 14 × 48 | 1 × 1 |
 | Counter | 48 × 28 | 3 × 1 |
@@ -218,15 +220,11 @@ animation stays (it is feedback, not decoration).
 
 ## Production art
 
-The procedural sprites in `src/game/art/*` are **placeholders**. They get the
-grid, palette, layout and mood right, which is enough to build and test the
-game. They can't reach the hand-made detail of the references. Reaching that
-needs production pixel art; see ROADMAP.md → Phase A. The full list of
-needed assets is in [SCENES.md → Asset checklist](SCENES.md#7-asset-checklist-production-art).
-
-The production art is the generators themselves, upgraded step by step in
-Phase A (ARCHITECTURE.md → D14). Aim for a bolder pixel look than the
-references: fewer colors per sprite, cleaner shapes, less tiny detail. The
+The generators in `src/game/art/*` started as placeholders and become
+production art as each asset group is finished in Phase A (ARCHITECTURE.md →
+D14). The full list is in [SCENES.md → Asset checklist](SCENES.md#7-asset-checklist-production-art).
+Aim for a bolder pixel look than the references with fewer colors per sprite,
+cleaner shapes and less tiny detail. The
 A.3 slice set the standard: rounded cobbles with grout and a top-left bevel,
 water with ripple bands and lacy two-line foam, palms with layered fronds
 and a ringed trunk, thatch laid in staggered courses with a shaggy eave, open
