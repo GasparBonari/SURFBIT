@@ -3,8 +3,8 @@
 **More than a store. A world to explore.**
 
 A pixel-art e-commerce site for a surf & lifestyle brand. Walk around a beach
-town, step into the Boards, Wear and Gear shops, inspect products placed in the
-world and check out with a normal, secure cart.
+town, step into Boards, Wear, Gear, Goods, the Workshop or the Beach Club,
+inspect products in the world and place a demo order.
 
 ## Stack
 
@@ -37,4 +37,5 @@ npm run check                # lint + typecheck + tests + build
 
 ## Status
 
-The updated town terrain renders on the home page. The next roadmap step is **1.3c Characters at 16 × 32**.
+All six shops are open in town. The in-game directory can take you to each
+entrance or open its section of the online catalog at `/shop`.

@@ -81,8 +81,8 @@ const def: MapDef = {
     {
       type: "prop", prop: "dropCrate", x: 17, y: 11,
       interact: {
-        kind: "read", title: "Next drop",
-        text: ["Something's under the tarp. The next SURFBIT collection lands with the summer swell."],
+        kind: "read", title: "Beach day kit",
+        text: ["Packing for the beach? Goods has towels and bottles, and Gear has wax and leashes."],
       },
     },
     { type: "prop", prop: "pottedPalm", x: 1, y: 3 },

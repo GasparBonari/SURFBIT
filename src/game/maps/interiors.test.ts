@@ -58,7 +58,7 @@ describe("shop interiors", () => {
     }
   });
 
-  it("gives the workshop its five numbered stations, materials wall and custom-boards teaser", async () => {
+  it("gives the workshop its five numbered stations and boards on materials and custom shapes", async () => {
     const def = await MAPS.workshop();
     const titles = def.objects.flatMap((object) =>
       object.type === "prop" && object.interact?.kind === "read" && object.interact.text.length > 0
@@ -80,7 +80,7 @@ describe("shop interiors", () => {
         ? [object.interact.title]
         : [],
     );
-    expect(titles.sort()).toEqual(["Next drop", "Our story", "Surf guide", "Tides and events"]);
+    expect(titles.sort()).toEqual(["Beach day kit", "Our story", "Surf guide", "Tides and events"]);
   });
 
   it("covers the whole catalog with matching display tints", async () => {

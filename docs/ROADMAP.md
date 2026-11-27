@@ -256,7 +256,7 @@ traditional shop", so record this as a decision.
   - Do: as B.2, following SCENES.md §10. Lessons, rentals and the pass are ordinary catalog products (options such as session or duration; stock = available spots) and go through the same checkout. The club content is `read` props. The door opens from the deck; the `from-beach-club` spawn stands on the deck facing down.
   - Accept: as B.2 for `beach-club`, plus every read station works with keyboard and touch.
 
-- [ ] **B.5 Opening pass**
+- [x] **B.5 Opening pass**
   - Files: `src/game/maps/town.ts`, `docs/SCENES.md`, `README.md`, maps as needed
   - Do: remove every "coming soon" and "opening soon" line (notice board, Beach Club teaser, NPC dialog) and let a couple of townsfolk mention the new shops. Keep the `upcomingStoreName` mechanism for future places, but with no entries; the directory then shows no coming-soon section. Check that indoor ambience, analytics events and screen-reader location announcements cover the new rooms. Update SCENES.md §1 and §7 to match.
   - Accept: all six shops open from the town and from the directory; a keyboard-only and a touch purchase each work in Goods, Workshop and Beach Club; town and room screenshots attached.
@@ -321,3 +321,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Wear follow-up. Added a two-tile `narrowRug` so the tee rack sits centered on its jute rug.
 - 2026-11-27 — Step B.3 complete. Opened the SURFBIT Workshop with five products, five numbered shaping stations, a materials wall and a custom-boards teaser on a new concrete floor, and verified the directory, keyboard and touch reads, and a keyboard purchase in Chromium.
 - 2026-11-27 — Step B.4 complete. Opened the SURFBIT Beach Club from the deck with four catalog products and four read stations. Exported the room atlas and verified the directory, keyboard and touch reads, and a lesson purchase in Chromium.
+- 2026-11-27 — Step B.5 complete. Updated town and shop signs and townsfolk dialogue. Verified all six doors and directory links, indoor audio and location live regions in the three new rooms, and six keyboard and touch demo orders with analytics in Chromium.

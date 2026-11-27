@@ -97,7 +97,7 @@ const def: MapDef = {
       type: "prop", prop: "chalkboard", x: 6, y: 11,
       interact: {
         kind: "read", title: "Custom boards",
-        text: ["Design your own shape, size and colors here in a later version of the shop."],
+        text: ["A custom board starts with your usual waves. More width helps on soft waves, while a narrower outline feels at home in steeper surf."],
       },
     },
     { type: "display", prop: "classBoard", x: 15, y: 11, productId: "shaping-class", tint: { color: P.deepBlue, accent: P.cream } },

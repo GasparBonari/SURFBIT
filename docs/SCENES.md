@@ -60,16 +60,17 @@ y36  │ sand ........................................~~~~~~~~~~~~ │
 y43  └──────────────────────~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~┘
 ```
 
-Spawns: `default` on the plaza facing down; `from-<shop>` one tile below each
-enterable door, facing down.
+Spawns: `default` on the plaza facing down and `from-<shop>` one tile below
+each shop door, facing down. The store directory uses these spawns for **Walk
+there** and links to each shop's catalog section with **Browse online**.
 
 ### Buildings
 
-All footprints include the roof. Doors are on the bottom row, centered unless
-noted. Coming-soon shops have a boarded door and a SOON tag. A configured
-`read` interaction can add a teaser.
+All footprints include the roof. Doors are on the bottom row and usually
+centered. All six shops are enterable. The optional `upcomingStoreName` field
+is available for future storefronts. No buildings currently set it.
 
-| id | Label on sign | Enterable (MVP) | Size | Roof | Walls | Signature details |
+| id | Label on sign | Enterable | Size | Roof | Walls | Signature details |
 |---|---|---|---|---|---|---|
 | `boards` | BOARDS | ✅ | 9 × 7 | Thatch (`thatch*`) | Wood planks | Open shopfront showing boards inside; 4 boards leaning against the left wall outside; navy sign with wave mark; potted plants |
 | `goods` | SURFBIT | ✅ (flagship, interior §8) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the open door; hibiscus vines on both corners; A-frame sign |
@@ -90,7 +91,7 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 | Street lamps (black iron) | Flanking plaza and street | Solid base; warm glow at night later |
 | Benches | Top of stone wall, plaza | Solid |
 | Signpost `Surf/Shop/Beach` | Central stairs | `read` interaction |
-| Notice board | Next to Wear | `read` interaction with Beach Club news |
+| Notice board | Next to Wear | `read` interaction announcing all six shops and highlighting Goods, Workshop and Beach Club |
 | Trash bins | Near benches | Solid |
 | Umbrellas (red/white, blue/white) + wooden loungers + towels | Beach | Umbrellas non-solid canopy; loungers solid |
 | Boards stuck in sand (pair) | Foot of central stairs | Solid |
@@ -104,12 +105,13 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 
 | NPC | Behavior | Look |
 |---|---|---|
-| Kid in straw hat | wander, west street | Red tee, straw hat |
+| Tali | wander, northwest plaza | Red tee, straw hat. Points to Boards and Goods. |
+| Rui | wander, south plaza | Yellow tee, backward cap. Points to the beach stairs. |
+| Bea | wander along the beach | Teal tee, bucket hat. Gives a tide tip. |
+| Imani | idle on the beach by the Beach Club | Lilac tee, hair in a bun. Mentions Beach Club coffee and the Workshop. |
 | Surfer carrying a board | wander along the beach | Wetsuit or tee, board under arm |
 | Shopper | wander near Gear | Blue tee |
 | Shopper | wander near Wear | Light-blue tee |
-| Café guests ×2 *(optional, needs sitting frames)* | idle on the deck | Varied |
-| Sunbather *(optional, needs lying frames)* | idle on a lounger | Sunglasses |
 
 ---
 
@@ -298,11 +300,12 @@ texture keys and frame sizes stable (ART_DIRECTION.md → Production art).
 cobblestone street (3), plaza pavers (2), grass/garden bed, raised planter
 rim, stone retaining wall (face + top + ends), stone stairs, wooden deck,
 water (4 frames), foam edges incl. **diagonal corners** (4 frames), interior
-wood floor, wood wall, sage wall, cream plaster wall, wall trim, railing.
+wood floor, wood wall, sage wall, cream plaster wall, concrete floor, wall
+trim, railing.
 
 **Buildings:** Boards, SURFBIT Goods, Gear, Workshop, Wear, Beach Club (+
-deck), 2 cottages. Each split into roof/wall layers if possible, plus a
-"coming soon" door overlay.
+deck), 2 cottages. The six shop entrances lead into their rooms. The generator
+supports a boarded entrance for future storefronts.
 
 **Town props:** palm ×2, shrub ×3, hibiscus bush, planter, street lamp,
 bench, signpost, notice board, trash bin, umbrella ×2, lounger, towel ×2,
@@ -320,12 +323,10 @@ variants), mannequin (tint variants), display table, fitting room, mirrors ×2,
 pegboard, wetsuit hanger, board-bag rack, shop sign boards (BOARDS, WEAR, GEAR,
 GOODS, WORKSHOP).
 
-**Characters (16 × 32, 3 × 4 sheets):** player, 5 shopkeepers, 4–6
-townsfolk, surfer with board. Optional: sitting and lying frames.
+**Characters (16 × 32, 3 × 4 sheets):** player, seven shop staff and seven
+townsfolk, including the surfer carrying a board.
 
-**Phase B rooms (§8–10):**
-- Tiles: cream plaster wall `wallCream` (`W`, with skirting trim), concrete
-  floor `floorConcrete` (`o`, 3 variants with foam dust).
+**Goods, Workshop and Beach Club props (§8–10):**
 - Goods: `goodsSign`, `shadesStand`, `bottleFridge`, `packHooks`,
   `towelLadder`, `stickerRack`.
 - Workshop: `workshopSign`, `toolWall`, `blankRack`, `templateRack`,
@@ -333,10 +334,10 @@ townsfolk, surfer with board. Optional: sitting and lying frames.
   `materialsBoard`, `classBoard`, `workbench`, `stationPlacard1`,
   `stationPlacard5`.
 - Beach Club: `clubSign`, `seaWindow`, `barCounter`, `beanShelf`,
-  `lessonBoard`, `memberBoard`, `guideRack`, `storyFrame`, `dropCrate`.
+  `lessonBoard`, `memberBoard`, `guideRack`, `storyFrame`, `dropCrate`
+  (beach kit sign).
 - Product art kinds: `cap`, `shades`, `backpack`, `towel`, `bottle`,
   `stickers`, `kit`, `ticket`, `blank`, `sock`, `plugs`, `beans`.
-- Characters: Lani, Rafa, Malia, Ben.
 
 ---
 
@@ -486,7 +487,7 @@ tag. Titles in the map are prefixed with the number (`1 · The blank`):
 | 4 | Glassing | Fiberglass cloth and resin seal the foam: two layers on the deck, one on the bottom for a standard layup. | `glassingRack` (new) at (12, 4) |
 | 5 | Sanding and fins | Sanding fairs the glass, then the fin boxes go in. The board cures for a week before its first surf. | (17, 9), beside the 3-tile sanding table |
 | — | Foam and resin | PU foam with polyester resin: the classic feel, flexible and lively. EPS foam with epoxy: lighter, floatier and tougher against dings. | `materialsBoard` (new) at (18, 6) |
-| — | Custom boards | Design your own shape, size and colors here in a later version of the shop. | `chalkboard` (town prop) at (6, 11) |
+| — | Custom boards | A custom board starts with your usual waves. More width helps on soft waves, while a narrower outline feels at home in steeper surf. | `chalkboard` (town prop) at (6, 11) |
 
 **Other dressing:** navy `WORKSHOP` sign board with the crossed-tools icon
 (`workshopSign`, matching the storefront), a tool wall (planer, sander,
@@ -537,7 +538,7 @@ Row 14 is deck (`d`).
  │ rack   │ wicker  │ coffee table          rack (rental) │
  │        └ pouf ───┘                        member board │
  │                                                        │
- │ story easel                         events   next-drop │ row 11
+ │ story easel                         events   beach kit │ row 11
  │                                      board    crate    │
  │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
  └──────────────────────────────────────────────────┘
@@ -569,7 +570,7 @@ rentals); the season pass covers unlimited rentals and member events.
 | Surf guide | Lineup etiquette: the surfer closest to the peak has the wave. Don't drop in, and paddle wide of anyone riding. / Watch a few sets before you paddle out, and use the channel where waves don't break to get back out. | `guideRack` (new, magazine rack) at (1, 8) |
 | Tides and events | Dawn patrol meets here every Saturday at 6:30. / Beach clean-up on the first Sunday of the month. / Tides are posted on this board every morning. | `noticeBoard` (town prop) at (14, 11) |
 | Our story | SURFBIT started as a board rack behind a beach shack. Every board, tee and fin we sell is tested in these waves first. | `storyFrame` (new, photo easel) at (2, 11) |
-| Next drop | Something's under the tarp. The next SURFBIT collection lands with the summer swell. | `dropCrate` (new, tarp-covered crate with a NEXT DROP tag) at (17, 11) |
+| Beach day kit | Packing for the beach? Goods has towels and bottles, and Gear has wax and leashes. | `dropCrate` (tarp-covered crate with a SURF KIT tag) at (17, 11) |
 
 **Other dressing:** navy `BEACH CLUB` sign board with the coffee-cup icon
 (`clubSign`, matching the storefront), a 4-tile sea window with sky, horizon

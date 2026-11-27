@@ -192,8 +192,8 @@ export const BEACH_CLUB_PROPS = {
       rect(c, x + 2, 7, 3, 6, P.sky);
       rect(c, x + 26, 7, 3, 7, P.tealDark);
       box(c, x + 6, 8, 20, 15, P.cream, P.woodDeep);
-      drawText(c, "NEXT", x + 8, 10, P.navy);
-      drawText(c, "DROP", x + 8, 16, P.navy);
+      drawText(c, "SURF", x + 8, 10, P.navy);
+      drawText(c, "KIT", x + 10, 16, P.navy);
     },
   },
 } satisfies Record<string, PropSpec>;

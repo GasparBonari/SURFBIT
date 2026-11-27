@@ -120,7 +120,10 @@ const def: MapDef = {
       type: "prop", prop: "noticeBoard", x: 16, y: 21,
       interact: {
         kind: "read", title: "Town notice board",
-        text: ["The Beach Club is opening soon. Visit the deck for a look at the coast."],
+        text: [
+          "All six shops are open. Find beach essentials at Goods and see how boards are made at the Workshop.",
+          "Head across the deck to the Beach Club for coffee, surf lessons and board rentals.",
+        ],
       },
     },
     { type: "prop", prop: "surfRack", x: 6, y: 11 },
@@ -136,7 +139,10 @@ const def: MapDef = {
     {
       type: "npc", id: "tali", x: 23, y: 15, behavior: "wander", name: "Tali",
       look: { skin: P.skin3, hair: P.woodDeep, hairStyle: "long", shirt: P.hibiscus, shorts: P.navy, hat: { style: "straw", color: P.thatchLight, brim: P.woodDark } },
-      lines: ["Morning! Boards is just across the plaza to the northwest.", "I like to get there before the morning surf crowd."],
+      lines: [
+        "Morning! Boards is just across the plaza to the northwest.",
+        "Goods has beach towels and caps. Look for the terracotta roof north of the plaza.",
+      ],
     },
     {
       type: "npc", id: "rui", x: 31, y: 23, behavior: "wander", name: "Rui",
@@ -151,7 +157,10 @@ const def: MapDef = {
     {
       type: "npc", id: "imani", x: 43, y: 30, behavior: "idle", name: "Imani",
       look: { skin: P.skin4, hair: P.ink, hairStyle: "bun", shirt: P.lilac, shorts: P.navyDark },
-      lines: ["I come here to watch for sets. The waves look smaller from the deck."],
+      lines: [
+        "I grab a coffee at the Beach Club before I come down here to watch for sets.",
+        "If you want to see how a board gets its shape, follow the street up to the Workshop.",
+      ],
     },
     {
       type: "npc", id: "leo", x: 34, y: 33, behavior: "wander", name: "Leo",
