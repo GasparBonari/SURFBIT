@@ -260,6 +260,8 @@ board where the floor (`_`, `D`) is directly below. A run of doormat tiles
 Shop floorboards (`_`) use deterministic variants. Interior wood walls
 (`M`), sage walls (`G`) and railings (`R`) are solid. Each two-tile
 opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
+Use `M` or `G` for walls and `_` for floors when adapting a draft map that
+used the retired placeholder tiles `W`, `V`, `K`, `+` or `o`.
 
 ### Coordinates and depth (must be consistent everywhere)
 
@@ -376,4 +378,4 @@ if you change your mind.
 | D15 | **The town coast is a generated overlay, not foam tiles** | A tile grid can only step the shore one tile at a time, which read as a staircase with mismatched wet-sand bands. A per-pixel distance from a line through the step corners gives the reference's smooth diagonal and parallel surf lines. Collision and the map format stay tile-based; maps whose water doesn't form one east-reaching run fall back to the foam tiles. |
 | D16 | **No Shopify: the mock provider is the store** (2026-11-27) | SURFBIT is a portfolio site. A free Shopify development store is always password-protected and takes test orders only, and no public mock commerce API has surf products. The mock catalog keeps every product browsable and the demo checkout open to every visitor. The Phase 5 Shopify provider was removed; it's in git history (step 5.1) if a real store is ever needed. |
 | D16 | **The town ocean has no ambient surfer sprites** | The owner asked to remove the bobbing riders from the water. |
-| D17 | **Export static production art from the generators as a tileset and a packed PNG/JSON atlas** | BootScene registers each sheet under its existing texture key and frame numbers. The tilemap uses a standalone tileset PNG to preserve tile indices. The shoreline stays generated from the map per D15. |
+| D17 | **Export static production art from the generators as a tileset and a packed PNG/JSON atlas** | BootScene registers each sheet under its existing texture key and frame numbers. The standalone tileset PNG follows `TILE_NAMES`. Regenerate it when that list changes so the exported tiles and map indices stay in sync. The shoreline stays generated from the map per D15. |

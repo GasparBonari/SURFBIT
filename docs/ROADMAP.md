@@ -207,7 +207,7 @@ be built.
 
 ## Phase 6 — Production polish
 
-- [ ] **6.1 Real art** — finish Phase A, then remove placeholder generators that are no longer used.
+- [x] **6.1 Real art** — finish Phase A, then remove placeholder generators that are no longer used.
 - [ ] **6.2 Tiled importer (optional)** — `scripts/tiled-to-mapdef.ts` converting Tiled JSON to `MapDef`.
 - [ ] **6.3 Performance** — texture atlases, preload only the town, measure LCP/INP, keep initial JS for `/` < 400 KB gz (Phaser chunk loaded after first paint).
 - [ ] **6.4 Analytics & error tracking** — page views, product inspects, add-to-cart, checkout starts.
@@ -263,3 +263,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step A.8 complete. Finished the generated Boards, Wear, and Gear props, including product displays, shop signs, woven rugs, and pendant lights. Compared Boards and Wear with their references, checked Gear against its scene brief, and verified shop travel, product inspection, and reduced motion in Chromium.
 - 2026-11-27 — Step A.9 complete. Packed the static generator art into a tileset and sprite atlas, preserved texture keys and frame numbers in BootScene, and verified all four scenes in Chromium against their previous renders and their references or scene briefs.
 - 2026-11-27 — Phase 5 dropped (D16). Removed the Shopify provider, its env vars and docs; the mock catalog and demo checkout are the store for this portfolio build.
+- 2026-11-27 — Step 6.1 complete. Removed five unused town props and five placeholder interior tiles, regenerated the world assets, and verified that the retained art is pixel-identical and all four scenes render in Chromium.

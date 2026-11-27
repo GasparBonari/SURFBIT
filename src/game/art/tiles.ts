@@ -25,8 +25,7 @@ export const TILE_NAMES = [
   "foamCorner0", "foamCorner1", "foamCorner2", "foamCorner3",
   "foamInner0", "foamInner1", "foamInner2", "foamInner3",
   "void",
-  "wallCream", "wallTeal", "wallCoral",
-  "floorWood", "floorTile", "floorConcrete",
+  "floorWood",
   "mat", "matW", "matE", "matWE",
   "wallWood", "wallSage", "wallWoodTrim", "wallSageTrim", "railing", "floorWood1", "floorWood2",
 ] as const;
@@ -375,14 +374,6 @@ function planks(ctx: Ctx, ox: number, variant: number) {
   }
 }
 
-function wall(ctx: Ctx, ox: number, base: string) {
-  rect(ctx, ox, 0, TILE, TILE, base);
-  for (let x = 0; x < TILE; x += 4) rect(ctx, ox + x, 0, 1, 11, shade(base, -0.12));
-  rect(ctx, ox, 11, TILE, 1, shade(base, -0.35));
-  rect(ctx, ox, 12, TILE, 4, P.woodDark);
-  rect(ctx, ox, 12, TILE, 1, P.woodLight);
-}
-
 /** Vertical board-and-batten wall; `trim` adds the skirting board where it meets the floor. */
 function shopWall(ctx: Ctx, ox: number, color: string, seam: string, trim: boolean) {
   rect(ctx, ox, 0, TILE, TILE, color);
@@ -521,15 +512,6 @@ export function buildTileset(): HTMLCanvasElement {
       case "void":
         rect(ctx, ox, 0, TILE, TILE, P.outline);
         break;
-      case "wallCream":
-        wall(ctx, ox, P.cream);
-        break;
-      case "wallTeal":
-        wall(ctx, ox, P.teal);
-        break;
-      case "wallCoral":
-        wall(ctx, ox, "#f0a07a");
-        break;
       case "wallWood": case "wallWoodTrim":
         shopWall(ctx, ox, P.woodDark, P.woodDeep, name === "wallWoodTrim");
         break;
@@ -548,18 +530,6 @@ export function buildTileset(): HTMLCanvasElement {
       case "floorWood1": case "floorWood2":
         shopFloor(ctx, ox, i - T.floorWood1 + 1);
         break;
-      case "floorTile": {
-        const a = P.cream, b = "#9fd8d2";
-        for (let y = 0; y < 2; y++)
-          for (let x = 0; x < 2; x++) rect(ctx, ox + x * 8, y * 8, 8, 8, (x + y) % 2 ? b : a);
-        break;
-      }
-      case "floorConcrete":
-        rect(ctx, ox, 0, TILE, TILE, "#c9c3b8");
-        speckle(ctx, ox, 31, ["#b5aea2", "#d8d3ca"], 16);
-        rect(ctx, ox, 15, TILE, 1, "#b5aea2");
-        rect(ctx, ox + 15, 0, 1, TILE, "#b5aea2");
-        break;
     }
   });
   return canvas;
@@ -577,14 +547,9 @@ export const LEGEND: Record<string, { tiles: TileName[]; solid?: boolean }> = {
   d: { tiles: ["deck"] },
   "~": { tiles: ["water0"], solid: true },
   X: { tiles: ["void"], solid: true },
-  W: { tiles: ["wallCream"], solid: true },
-  V: { tiles: ["wallTeal"], solid: true },
-  K: { tiles: ["wallCoral"], solid: true },
   M: { tiles: ["wallWood"], solid: true },
   G: { tiles: ["wallSage"], solid: true },
   R: { tiles: ["railing"], solid: true },
   _: { tiles: ["floorWood", "floorWood1", "floorWood2"] },
-  "+": { tiles: ["floorTile"] },
-  o: { tiles: ["floorConcrete"] },
   D: { tiles: ["mat"] },
 };

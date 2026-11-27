@@ -259,7 +259,6 @@ export const TOWN_PROPS = {
     },
   },
   umbrellaCoral: { w: 32, h: 44, foot: { w: 2, h: 1 }, outline: false, draw: (c, x) => umbrella(c, x, P.coral, P.coralDark) },
-  umbrellaTeal: { w: 32, h: 44, foot: { w: 2, h: 1 }, outline: false, draw: (c, x) => umbrella(c, x, P.teal, P.tealDark) },
   umbrellaBlue: { w: 32, h: 44, foot: { w: 2, h: 1 }, outline: false, draw: (c, x) => umbrella(c, x, P.sky, P.deepBlue) },
   towelCoral: {
     w: 14, h: 26, flat: true,
@@ -286,18 +285,6 @@ export const TOWN_PROPS = {
       rect(c, x + 2, 2, 6, 2, P.iron);
       rect(c, x + 4, 0, 2, 2, P.ironDark);
     },
-  },
-  sign: {
-    w: 18, h: 22, foot: { w: 1, h: 1 }, solid: true,
-    draw: (c, ox) => {
-      rect(c, ox + 8, 10, 2, 12, P.woodDark);
-      box(c, ox + 1, 1, 16, 11, P.woodLight, P.woodDeep);
-      rect(c, ox + 4, 4, 10, 1, P.woodDeep); rect(c, ox + 4, 7, 7, 1, P.woodDeep);
-    },
-  },
-  rock: {
-    w: 16, h: 12, solid: true,
-    draw: (c, ox) => { ellipse(c, ox + 8, 7, 7, 4, P.stoneDark); ellipse(c, ox + 7, 6, 5, 3, P.stone); px(c, ox + 5, 4, P.stoneLight); },
   },
   boardsInSand: {
     w: 24, h: 35, solid: true, outline: false,
@@ -348,25 +335,6 @@ export const TOWN_PROPS = {
       }
       rect(c, x + 1, 16, 32, 2, P.woodDark);
       rect(c, x + 1, 16, 31, 1, P.woodLight);
-    },
-  },
-  statue: {
-    w: 28, h: 56, foot: { w: 2, h: 1 }, solid: true,
-    draw: (c, ox) => {
-      box(c, ox + 2, 42, 24, 14, P.stoneLight, P.stoneDark);
-      rect(c, ox + 3, 48, 22, 1, P.stoneDark);
-      drawBoard(c, ox + 8, 0, 12, 46, P.coral, P.sun);
-    },
-  },
-  flag: {
-    w: 16, h: 38, frames: 3, animation: flagWave, foot: { w: 1, h: 1 }, solid: true,
-    draw: (c, ox, f) => {
-      rect(c, ox + 3, 0, 2, 38, P.ink);
-      for (let x = 0; x < 10; x++) {
-        const dy = Math.round(Math.sin(x * 0.7 + f * 2) * 1);
-        rect(c, ox + 5 + x, 2 + dy, 1, 7, x < 5 ? P.coral : P.cream);
-        if (x === 4) rect(c, ox + 5 + x, 4 + dy, 1, 3, P.sun);
-      }
     },
   },
   beachFlag: {

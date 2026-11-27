@@ -108,12 +108,12 @@ describe("buildBlocked", () => {
 
   it("combines solid terrain, props, displays and buildings while leaving doors open", () => {
     const map = makeMap({
-      ground: ["~W.....", ".......", ".......", "......."],
+      ground: ["~M.....", ".......", ".......", "......."],
       objects: [
         shop,
         { ...shop, id: "shed", x: 0, y: 0, w: 2, h: 1, door: { x: 0, y: 0 } },
         { type: "prop", prop: "bench", x: 0, y: 2 },
-        { type: "prop", prop: "rock", x: 2, y: 3 },
+        { type: "prop", prop: "lamp", x: 2, y: 3 },
         { type: "prop", prop: "umbrellaCoral", x: 2, y: 2 },
         { type: "prop", prop: "rug", x: 4, y: 3 },
         { type: "display", prop: "boardDisplay", x: 6, y: 0, productId: "sample", tint: { color: P.teal, accent: P.cream } },
