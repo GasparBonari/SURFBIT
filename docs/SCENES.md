@@ -305,7 +305,8 @@ deck), 2 cottages. Each split into roof/wall layers if possible, plus a
 bench, signpost, notice board, trash bin, umbrella ×2, lounger, towel ×2,
 volleyball net, rock cluster ×2, lifeguard tower, flagpole + flag (3 frames),
 boards in sand, café table + chairs, string lights, chalkboard, plaza logo
-inlay, fence, gull (2 frames), wave foam, footprints.
+inlay, fence, gull (2 frames), footprints. Planter masonry comes from the
+terrain tiles. The shore overlay supplies the town's wave foam.
 
 **Interior props:** wall board rack, freestanding board rack, product placard,
 counter + register, shelves (tees, wax, caps), wicker chair, pouf, round and

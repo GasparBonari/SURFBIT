@@ -2,11 +2,9 @@ import type Phaser from "phaser";
 import { makeCanvas, type Ctx } from "./art/canvas";
 import { autoOutline, buildCharacterSheet, buildShadow, CHAR_H, CHAR_W, PLAYER_LOOK, type Look } from "./art/characters";
 import { P } from "./art/palette";
-import {
-  drawFootprint, drawGull, drawMarker, PROPS,
-  type PropSpec, type Tint,
-} from "./art/props";
+import { drawMarker, PROPS, type PropSpec, type Tint } from "./art/props";
 import { buildTileset } from "./art/tiles";
+import { drawFootprint, drawGull } from "./art/townProps";
 
 export const TILESET_KEY = "tiles";
 

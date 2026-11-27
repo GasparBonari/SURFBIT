@@ -76,7 +76,8 @@ src/
 │   │   ├── font.ts           ✅ 3×5 pixel font for in-world signs
 │   │   ├── tiles.ts          ✅ tileset generator, TILE_NAMES, LEGEND
 │   │   ├── characters.ts     ✅ character spritesheets, autoOutline, shadow
-│   │   ├── props.ts          ✅ PROPS registry + effects (gull, footprint, marker)
+│   │   ├── props.ts          ✅ PROPS registry, shared props and interaction marker
+│   │   ├── townProps.ts      ✅ town foliage, fixtures, beach props, gull and footprints
 │   │   ├── shore.ts          ✅ smooth coastline overlay (wet sand, swash, surf lines)
 │   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
