@@ -203,7 +203,6 @@ Environmental animations may include:
 - Palm trees moving in the wind.
 - Seagulls flying overhead.
 - Flags and shop signs moving.
-- Surfers in the ocean.
 - NPCs walking along paths.
 - Flickering lights inside buildings.
 - Footprints appearing temporarily in the sand.

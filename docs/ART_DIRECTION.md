@@ -204,14 +204,16 @@ Full scene layouts: [SCENES.md](SCENES.md).
 |---|---|---|
 | Walk | stand, A, stand, B | 8 fps (×1.5 when running) |
 | Water / foam tiles | 4 | 300 ms per frame |
+| Shore overlay (swash, surf lines) | 4 | 300 ms, in step with the water |
 | Palm sway | 3 (ping-pong) | ~450 ms per frame, randomised start |
 | Flags | 3 | 160 ms per frame |
 | Gulls | 2 | 200 ms per frame |
 | Lamp flicker | alpha tween | 0.75–1.0, irregular |
 | Footprints | — | fade over 2.5 s |
 
-**Reduced motion** (OS setting or in-game toggle): no gulls, waves, sway,
-flicker or camera fades. Water tiles still animate at ¼ speed. Walking
+**Reduced motion** (OS setting or in-game toggle): no gulls, sway,
+flicker or camera fades. Water tiles and the shore overlay still animate at
+¼ speed. Walking
 animation stays (it is feedback, not decoration).
 
 ## Production art

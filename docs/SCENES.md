@@ -257,7 +257,13 @@ ART_DIRECTION.md).
 | Boards shopkeeper | Beard, white cap with wave, white SURFBIT tee |
 | Wear shopkeeper | Curly brown hair, white cap, cream tee |
 | Gear shopkeeper | Ponytail, sun-yellow tee |
+| Surfer (`SURFER_LOOK`) | Navy wetsuit (`wetsuit: true`), barefoot, cream board under the arm (`board`): upright at the side from front/back, level across the hips in profile |
 | Townsfolk | Mix of skin tones (`skin1..4`), hats (straw, cap, bucket), tees in palette colors |
+
+Every character gets the same finish: shaded far edge of shirt and face, a
+collar line, a rounded jaw, two-tone hair with a lit crown, and a cream glint
+in each eye so faces read on every skin tone. Dark hair uses `ink`, never
+`outline`, so it doesn't merge with the outline.
 
 ---
 

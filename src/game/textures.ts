@@ -3,7 +3,7 @@ import { makeCanvas, type Ctx } from "./art/canvas";
 import { autoOutline, buildCharacterSheet, buildShadow, CHAR_H, CHAR_W, PLAYER_LOOK, type Look } from "./art/characters";
 import { P } from "./art/palette";
 import {
-  drawFootprint, drawGull, drawMarker, drawSurfer, drawWave, PROPS,
+  drawFootprint, drawGull, drawMarker, PROPS,
   type PropSpec, type Tint,
 } from "./art/props";
 import { buildTileset } from "./art/tiles";
@@ -59,8 +59,6 @@ export function registerTextures(scene: Phaser.Scene) {
   for (const [key, prop] of Object.entries(PROPS)) addProp(textures, key, prop, tint);
 
   addStrip(textures, "gull", { w: 13, h: 8, frames: 2 }, drawGull);
-  addStrip(textures, "wave", { w: 28, h: 14 }, drawWave);
-  addStrip(textures, "surfer", { w: 16, h: 13, frames: 2 }, drawSurfer);
   addStrip(textures, "footprint", { w: 5, h: 4 }, drawFootprint);
   addStrip(textures, "marker", { w: 7, h: 7 }, drawMarker);
 }

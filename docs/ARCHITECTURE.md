@@ -76,7 +76,8 @@ src/
 │   │   ├── font.ts           ✅ 3×5 pixel font for in-world signs
 │   │   ├── tiles.ts          ✅ tileset generator, TILE_NAMES, LEGEND
 │   │   ├── characters.ts     ✅ character spritesheets, autoOutline, shadow
-│   │   ├── props.ts          ✅ PROPS registry + effects (gull, wave, surfer…)
+│   │   ├── props.ts          ✅ PROPS registry + effects (gull, footprint, marker)
+│   │   ├── shore.ts          ✅ smooth coastline overlay (wet sand, swash, surf lines)
 │   │   ├── interiorProps.ts  ✅ procedural signs, furniture and shop displays
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   └── buildings.ts      ✅ procedural shop façades and signage
@@ -253,6 +254,13 @@ corner tiles; corners are drawn diagonally so one-tile steps read as a slope.
 Wet sand follows the same shoreline on its south and east edges, with a
 diagonal corner tile beside each step.
 
+When every row's water is one run reaching the east edge (the town), the
+coast is drawn by the **shore overlay** instead (`art/shore.ts`, shown by
+`Ambient`): a smooth line through the bottom-left corner of each row's first
+water tile, with a wet-sand band, swash foam, shallows and two broken surf
+lines rolling in. It animates in step with the water tiles. Sand under it
+stays dry in `buildGround`; collision is still the tile grid.
+
 Neighbour-aware tiles: a planter picks one of 16 rim tiles from which sides
 face non-planter ground (`planterTile(mask)`, 1 = north, 2 = east, 4 = south,
 8 = west). A retaining wall gets a squared end pillar where it meets anything
@@ -280,7 +288,7 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
   `solid: true` in `LEGEND` (water, walls, void) block.
 - **Depth (y-sorting):** buildings, dynamic things and standing props use
   `depth = bottom pixel y`. `flat` props (rugs, towels, flowers) use
-  `depth = 1`. `wall` props use `depth = 2`. Footprints `3`, wave foam `4`,
+  `depth = 1`. `wall` props use `depth = 2`. Shore overlay `0.5`, footprints `3`,
   gulls and in-world markers `100000`.
 - **Interaction point:** center of the first tile row below the footprint,
   aligned with its horizontal center. Building signs use their configured
@@ -375,3 +383,5 @@ if you change your mind.
 | D12 | **Characters 16 × 32 px** (chibi, Stardew density) on the 16 px tile grid | The references' characters (cap, backpack, readable face) don't fit in 16 × 24. Feet stay at the bottom, so hitboxes are unchanged. |
 | D13 | **Town and interiors follow the reference layouts** (cobblestone town, stone wall + stairs, diagonal shoreline, ~20 × 14 interiors) instead of the earlier grass town and boardwalk | Matches the approved look; see roadmap 1.3b and 2.3. |
 | D14 | **Production art = the procedural generators in `src/game/art`, upgraded to final quality** (roadmap A.1, revised at A.3). Rounded cobbles, layered water and foam, full palm fronds, coursed thatch, lit shop interiors and shaded characters, all from the palette in code. Hand-drawn PNGs can still replace any texture key later (ART_DIRECTION.md → Replacing placeholder art). Aim for a **bolder pixel look than the references**: fewer colors, cleaner shapes, less tiny detail. | No budget for a commission. The free pack chosen at A.1 (Coastal Village Lite) turned out flatter than the existing generators (3–4 colors per tile, no cobblestone, Mediterranean houses) and is itself made by scripts, so it was kept only as a reference and nothing from it ships. Generators already sit on the grid and palette, keep texture keys stable, and can be iterated by agents. Any third-party art added later must be CC0 or commercial-use and listed in `assets/LICENSES.md`. |
+| D15 | **The town coast is a generated overlay, not foam tiles** | A tile grid can only step the shore one tile at a time, which read as a staircase with mismatched wet-sand bands. A per-pixel distance from a line through the step corners gives the reference's smooth diagonal and parallel surf lines. Collision and the map format stay tile-based; maps whose water doesn't form one east-reaching run fall back to the foam tiles. |
+| D16 | **The town ocean has no ambient surfer sprites** | The owner asked to remove the bobbing riders from the water. |

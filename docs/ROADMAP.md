@@ -68,7 +68,7 @@ Goal: walk a character around an animated beach town with collisions.
   - Do:
     - `WorldClient.tsx` (`"use client"`): full-viewport `<div>`; in `useEffect`, `const Phaser = await import("phaser")`, create the game, destroy it on unmount (guard against React strict-mode double mount).
     - Config: `type: AUTO`, `pixelArt: true`, `roundPixels: true`, `backgroundColor: P.water`, `scale.mode: RESIZE`, no physics.
-    - `textures.ts`: `registerTextures(scene)` adds the tileset (`buildTileset`), player sheet (`buildCharacterSheet(PLAYER_LOOK)`), shadow, every `PROPS` entry (frames added with `texture.add(i, 0, x, 0, w, h)`), gull/wave/surfer/footprint/marker. Export `ensureTinted(scene, propKey, tint)` that lazily generates `"${prop}:${color}:${accent}"`.
+    - `textures.ts`: `registerTextures(scene)` adds the tileset (`buildTileset`), player sheet (`buildCharacterSheet(PLAYER_LOOK)`), shadow, every `PROPS` entry (frames added with `texture.add(i, 0, x, 0, w, h)`), gull/wave/footprint/marker. Export `ensureTinted(scene, propKey, tint)` that lazily generates `"${prop}:${color}:${accent}"`.
     - `BootScene` calls `registerTextures`, then starts `MapScene` with `{ map: "town", spawn: "default" }`.
     - `MapScene` stub: loads the `MapDef` and renders the ground at 2× zoom with `this.make.tilemap({ data, tileWidth: 16, tileHeight: 16 })` + `addTilesetImage`.
     - `page.tsx`: render `<WorldClient />` through the App Router client entry in `World.tsx`. Include a `<noscript>` fallback with a link to `/shop`, which is implemented in step 3.4.
@@ -101,7 +101,7 @@ Goal: walk a character around an animated beach town with collisions.
 - [x] **1.6 Environmental animation**
   - Files: `src/game/systems/{ambient,objects}.ts`, `src/game/scenes/mapScene.ts`,
     `src/game/art/props.ts`, `src/game/textures.ts`, `src/state/settings.ts` (read only)
-  - Do: water/foam tile frame cycling (300 ms); palm sway frames (randomised phase); flags; gulls crossing the sky; wave foam arcs travelling toward the shore and fading; 1–2 surfers bobbing in the water; temporary footprints when walking on sand. All respect `prefersReducedMotion()` per ART_DIRECTION.md.
+  - Do: water/foam tile frame cycling (300 ms); palm sway frames (randomised phase); flags; gulls crossing the sky; wave foam arcs travelling toward the shore and fading; temporary footprints when walking on sand. All respect `prefersReducedMotion()` per ART_DIRECTION.md.
   - Accept: the town feels alive while idle; with reduced motion on, only water (slowed) and walking animate.
 
 ---
@@ -189,7 +189,7 @@ group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 - [x] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
 - [x] **A.3 Style test slice** — *(made by upgrading the generators, see ARCHITECTURE.md → D14; approved by the owner)* one shop exterior (Boards), a strip of cobblestone + sand + water tiles, the player sheet and one palm, made to the final standard. Screenshot it beside `beach-town.webp`; the owner approves before A.4.
 - [x] **A.4 Terrain tileset** — all terrain tiles from SCENES.md §7, including autotile edges and diagonal foam.
-- [ ] **A.5 Characters** — player, 3 shopkeepers, townsfolk, surfer (16 × 32 sheets).
+- [x] **A.5 Characters** — player, 3 shopkeepers, townsfolk, beach surfer NPC (16 × 32 sheets).
 - [ ] **A.6 Buildings** — all town buildings and cottages.
 - [ ] **A.7 Town props** — everything in the SCENES.md town props table.
 - [ ] **A.8 Interior props** — Boards, Wear, Gear sets.
@@ -253,3 +253,5 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step 5.1 complete. Added paginated Shopify catalog reads, product metafield and photo mapping, and hosted checkout. Verified the provider with mocked Storefront API responses.
 - 2026-11-26 — Step A.3 complete. Upgraded the generators for cobbles, sand, water and foam, the palm, the Boards thatch and open front, and character shading. Compared with the beach-town reference and approved by the owner. Revised D14: generators are the production art; Coastal Village Lite is kept as a reference only.
 - 2026-11-26 — Step A.4 complete. Brought the terrain to the A.3 standard: block-laid retaining wall with end pillars, 16 planter rim tiles with lush beds, diagonal shoreline corners and wet sand, stone and timber stairs, deck planks, tufted grass edges, interior floorboards, plank walls with skirting, a railing, and a two-tile wave doormat. Compared the town and Boards interior with their references.
+- 2026-11-26 — Step A.5 complete. Finished all character sheets: shaded faces and hair, eye glints on every skin tone, rounded jaws and collars. Added wetsuit and carried-board options with a surfer NPC on the beach, shoppers near Gear and Wear, and a redrawn surfer in the water. Checked every direction and pose up close and in the town.
+- 2026-11-26 — A.4 follow-up (owner feedback on the shoreline). Replaced the stepped foam and wet-sand tiles on the town coast with a generated shore overlay: smooth diagonal coast, wet-sand band, swash foam, shallows and two surf lines rolling in (D15). Removed the separate wave sprites it replaces.

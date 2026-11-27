@@ -30,6 +30,10 @@ export interface Look {
   beard?: boolean;
   shirtMark?: string;
   shoes?: string;
+  /** Full-length wetsuit in the `shirt` color (legs and sleeves covered). */
+  wetsuit?: boolean;
+  /** Surfboard carried under the arm, in this color. */
+  board?: string;
 }
 
 /** Adds a 1px outline around every opaque pixel in a region. */
@@ -59,7 +63,8 @@ function drawLegs(ctx: Ctx, look: Look, side: boolean, pose: Pose) {
   function drawFoot(x: number, sole: number, near: boolean) {
     const shoeTop = sole - 1;
     const shoeColor = look.shoes ?? P.navy;
-    rect(ctx, x, 24, 2, shoeTop - 24, look.skin);
+    rect(ctx, x, 24, 2, shoeTop - 24, look.wetsuit ? look.shirt : look.skin);
+    if (look.wetsuit) px(ctx, x + 1, 24, shade(look.shirt, -0.16));
     rect(ctx, x, shoeTop, 2, 1, near ? shoeColor : P.ink);
     rect(ctx, x, sole, side ? 3 : 2, 1, near ? P.cream : P.wallStoneLight);
   }
@@ -77,9 +82,10 @@ function drawLegs(ctx: Ctx, look: Look, side: boolean, pose: Pose) {
     drawFoot(5, 30, true);
     drawFoot(9, 30, true);
   }
-  rect(ctx, 4, 21, 8, 4, look.shorts);
-  rect(ctx, 5, 24, 6, 1, shade(look.shorts, -0.25));
-  if (!side) px(ctx, 8, 23, shade(look.shorts, -0.25));
+  const shorts = look.wetsuit ? look.shirt : look.shorts;
+  rect(ctx, 4, 21, 8, 4, shorts);
+  rect(ctx, 5, 24, 6, 1, shade(shorts, -0.25));
+  if (!side) px(ctx, 8, 23, shade(shorts, -0.25));
 }
 
 function drawBackpack(ctx: Ctx, color: string, dir: DrawDir, y: number) {
@@ -109,21 +115,51 @@ function drawTorso(ctx: Ctx, look: Look, dir: DrawDir, pose: Pose, bob: number) 
   rect(ctx, dir === "right" ? 4 : 11, y + 2, 1, 20 - y - 2, shirtShade);
   rect(ctx, 5, 21, 6, 1, shirtShade);
   px(ctx, 5, y, shade(look.shirt, 0.3));
+  if (dir === "down") rect(ctx, 7, y, 2, 1, shirtShade); // collar
 
   if (dir === "down" && look.shirtMark) drawWaveMark(ctx, 6, y + 3, look.shirtMark);
   if (look.backpack) drawBackpack(ctx, look.backpack, dir, y + 1);
 
+  // Wetsuits have long sleeves; only the hands show.
+  const sleeve = look.wetsuit ? 5 : 3;
   const swing = pose === "stepA" ? -1 : pose === "stepB" ? 1 : 0;
   if (dir === "right") {
-    const x = 9 + swing;
-    rect(ctx, x, y + 2, 3, 3, look.shirt);
-    rect(ctx, x + 1, y + 5, 2, 3, look.skin);
+    const x = look.board ? 9 : 9 + swing;
+    rect(ctx, x, y + 2, 3, sleeve, look.shirt);
+    rect(ctx, x + 1, y + 2 + sleeve, 2, 6 - sleeve, look.skin);
   } else {
-    rect(ctx, 3, y + 2, 2, 3, look.shirt);
+    rect(ctx, 3, y + 2, 2, sleeve, look.shirt);
     rect(ctx, 2, y + 4, 2, 3 + swing, look.skin);
-    rect(ctx, 11, y + 2, 2, 3, look.shirt);
+    if (look.wetsuit) rect(ctx, 2, y + 4, 2, 2 + swing, look.shirt);
+    rect(ctx, 11, y + 2, 2, sleeve, look.shirt);
     rect(ctx, 12, y + 4, 2, 3 - swing, look.skin);
+    if (look.wetsuit) rect(ctx, 12, y + 4, 2, 2 - swing, look.shirt);
   }
+}
+
+/** Board under the arm: upright at the side when seen front or back, level across the body in profile. */
+function drawCarriedBoard(ctx: Ctx, look: Look, dir: DrawDir, bob: number) {
+  const color = look.board;
+  if (!color) return;
+  const light = shade(color, 0.3);
+  if (dir === "right") {
+    const y = 18 + bob;
+    rect(ctx, 1, y, 14, 3, color);
+    rect(ctx, 0, y + 1, 1, 1, color);
+    rect(ctx, 15, y + 1, 1, 1, color);
+    rect(ctx, 1, y, 13, 1, light);
+    rect(ctx, 3, y + 2, 11, 1, shade(color, -0.12));
+    rect(ctx, 10, y - 1, 2, 3, look.skin); // hand over the rail
+    return;
+  }
+  const x = dir === "down" ? 12 : 1;
+  const top = 9 + bob;
+  rect(ctx, x + 1, top, 1, 1, color);
+  rect(ctx, x, top + 1, 3, 20, color);
+  rect(ctx, x + 1, top + 21, 1, 1, color);
+  rect(ctx, x, top + 1, 1, 20, light);
+  rect(ctx, x + 1, top + 3, 1, 17, shade(color, -0.12)); // stringer
+  if (dir === "down") rect(ctx, 12, 19 + bob, 2, 2, look.skin);
 }
 
 function drawHair(ctx: Ctx, look: Look, dir: DrawDir, y: number) {
@@ -156,7 +192,18 @@ function drawHair(ctx: Ctx, look: Look, dir: DrawDir, y: number) {
       px(ctx, 13, y + 9, hair);
     }
   }
-  if (!look.hat) rect(ctx, 5, y + 1, 3, 1, shade(hair, 0.28));
+  const hairShade = shade(hair, -0.22);
+  const hairLight = shade(hair, 0.28);
+  rect(ctx, 3, y + 4 + sideLength - 2, 2, 2, hairShade);
+  if (dir !== "right") rect(ctx, 11, y + 4 + sideLength - 2, 2, 2, hairShade);
+  if (dir === "up") {
+    rect(ctx, 5, y + 1, 4, 1, hairLight);
+    rect(ctx, 4, y + 3, 1, 3, hairLight);
+    rect(ctx, 8, y + 4, 1, 4, hairShade); // parting of the strands
+  } else if (!look.hat) {
+    rect(ctx, 5, y + 1, 3, 1, hairLight);
+    px(ctx, 4, y + 2, hairLight);
+  }
   if (hairStyle === "bun") rect(ctx, 6, y - 2, 4, 3, hair);
   if (accent) {
     rect(ctx, 5, y + 1, 3, 1, accent);
@@ -222,15 +269,22 @@ function drawHead(ctx: Ctx, look: Look, dir: DrawDir, bob: number) {
   const skinShade = shade(look.skin, -0.14);
   if (dir !== "right") rect(ctx, 11, y + 4, 1, 6, skinShade);
   rect(ctx, 5, y + 10, 6, 1, skinShade);
+  // Round the jaw so the head isn't a box.
+  ctx.clearRect(4, y + 9, 1, 1);
+  if (dir !== "right") ctx.clearRect(11, y + 9, 1, 1);
   if (dir === "right") {
     rect(ctx, 10, y + 3, 3, 6, look.skin);
     px(ctx, 13, y + 6, look.skin);
     rect(ctx, 11, y + 4, 1, 2, P.outline);
+    px(ctx, 11, y + 4, P.cream);
     px(ctx, 10, y + 7, P.pink);
     if (look.beard) rect(ctx, 8, y + 8, 4, 2, look.hair);
   } else if (dir === "down") {
     rect(ctx, 6, y + 5, 1, 2, P.outline);
     rect(ctx, 9, y + 5, 1, 2, P.outline);
+    // A glint keeps the eyes readable on every skin tone.
+    px(ctx, 6, y + 5, P.cream);
+    px(ctx, 9, y + 5, P.cream);
     px(ctx, 5, y + 7, P.pink);
     px(ctx, 10, y + 7, P.pink);
     if (look.beard) {
@@ -255,7 +309,9 @@ function drawFrame(ctx: Ctx, ox: number, oy: number, look: Look, dir: Dir, pose:
   }
 
   drawLegs(ctx, look, facing === "right", pose);
+  if (facing === "up") drawCarriedBoard(ctx, look, facing, bob);
   drawTorso(ctx, look, facing, pose, bob);
+  if (facing !== "up") drawCarriedBoard(ctx, look, facing, bob);
   drawHead(ctx, look, facing, bob);
   ctx.restore();
 }
@@ -315,9 +371,20 @@ export const WEAR_SHOPKEEPER_LOOK: Look = {
 
 export const GEAR_SHOPKEEPER_LOOK: Look = {
   skin: P.skin4,
-  hair: P.outline,
+  hair: P.ink,
   hairStyle: "ponytail",
   accent: P.ink,
   shirt: P.sun,
   shorts: P.navyDark,
+};
+
+export const SURFER_LOOK: Look = {
+  skin: P.skin2,
+  hair: P.wood,
+  hairStyle: "short",
+  shirt: P.navy,
+  shorts: P.navy,
+  wetsuit: true,
+  board: P.cream,
+  shoes: P.skin2,
 };

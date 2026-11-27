@@ -1,5 +1,6 @@
 import { rng } from "../art/canvas";
 import { PROPS, type PropSpec } from "../art/props";
+import { shoreline } from "../art/shore";
 import { LEGEND, planterTile, T, TILE } from "../art/tiles";
 import type { MapDef, MapObject } from "./types";
 
@@ -29,12 +30,14 @@ const WALLS = new Set(["M", "G"]);
 const FLOORS = new Set(["_", "D"]);
 
 export function buildGround(def: MapDef): number[][] {
+  // A coast the shore overlay can draw brings its own wet sand, so the sand tiles stay dry.
+  const smoothShore = shoreline(def.ground) !== null;
   return def.ground.map((row, y) => Array.from(row, (tile, x) => {
     const below = def.ground[y + 1]?.[x];
     const above = def.ground[y - 1]?.[x];
     const west = row[x - 1];
     const east = row[x + 1];
-    if (tile === ".") {
+    if (tile === "." && !smoothShore) {
       const eastWater = east === "~";
       // A diagonal foam corner sits east when that water tile also has land to its north.
       const cornerEast = eastWater && def.ground[y - 1]?.[x + 1] !== undefined && def.ground[y - 1][x + 1] !== "~";

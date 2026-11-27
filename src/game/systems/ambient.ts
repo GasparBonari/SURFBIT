@@ -1,5 +1,6 @@
 import type Phaser from "phaser";
 import { prefersReducedMotion, useSettings } from "@/state/settings";
+import { buildShore } from "../art/shore";
 import { FOAM_FRAMES, T, TILE, WATER_FRAMES } from "../art/tiles";
 import type { MapDef } from "../maps/types";
 import type { AnimatedProp } from "./objects";
@@ -12,26 +13,14 @@ const WATER_LOOPS = [
   [T.foamCorner0, T.foamCorner1, T.foamCorner2, T.foamCorner3],
   [T.foamInner0, T.foamInner1, T.foamInner2, T.foamInner3],
 ];
-const WAVE_PERIOD = 4_200;
-const WAVE_TRAVEL = 2_800;
 const FOOTPRINT_LIFETIME = 2_500;
 const FOOTPRINT_SPACING = 10;
-
-function findShore(ground: MapDef["ground"]) {
-  const shore = [];
-  for (let x = 2; x < ground[0].length - 2; x++) {
-    const y = ground.findIndex((row, y) => row[x] === "~" && ground[y - 1]?.[x] === ".");
-    if (y !== -1 && ground[y + 3]?.[x] === "~") shore.push({ x, y });
-  }
-  return shore;
-}
 
 export class Ambient {
   private readonly water: { tile: Phaser.Tilemaps.Tile; loop: number[]; phase: number }[] = [];
   private readonly props;
   private readonly gulls;
-  private readonly waves;
-  private readonly surfers;
+  private readonly shore?: Phaser.GameObjects.Image;
   private readonly footprints: { image: Phaser.GameObjects.Image; born: number }[] = [];
   private readonly motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   private readonly unsubscribeSettings: () => void;
@@ -70,22 +59,7 @@ export class Ambient {
       return { image, speed: i === 0 ? 46 : -38, start: width * (i === 0 ? 0.28 : 0.84), span: width + 32 };
     });
 
-    const shore = outdoor ? findShore(map.ground) : [];
-    this.waves = shore.filter((_, i) => i % 5 === 2).map(({ x, y }, i) => {
-      const endX = (x + 0.5) * TILE;
-      const endY = (y + 1) * TILE;
-      const image = scene.add.image(endX, endY, "wave").setDepth(4).setVisible(false);
-      return { image, endX, endY, phase: (i % 3) * WAVE_PERIOD / 3 };
-    });
-
-    const offshore = shore.filter(({ x, y }) => map.ground[y + 5]?.[x] === "~");
-    const surferCount = Math.min(offshore.length, 2);
-    this.surfers = Array.from({ length: surferCount }, (_, i) => {
-      const { x, y } = offshore[Math.floor((i + 0.5) * offshore.length / surferCount)];
-      const feet = (y + 4.5) * TILE;
-      return scene.add.sprite((x + 0.5) * TILE, feet, "surfer", 0)
-        .setOrigin(0.5, 1).setDepth(feet).setVisible(false);
-    });
+    this.shore = this.addShore();
 
     this.motionQuery.addEventListener("change", this.updateMotionPreference);
     this.unsubscribeSettings = useSettings.subscribe(this.updateMotionPreference);
@@ -101,6 +75,7 @@ export class Ambient {
         // Every frame in a loop has the same collision properties.
         tile.index = loop[(phase + waterFrame) % loop.length];
       }
+      this.shore?.setFrame(waterFrame);
     }
 
     if (!this.reduced) {
@@ -125,8 +100,6 @@ export class Ambient {
 
     for (const { sprite } of this.props) sprite.setFrame(0);
     for (const { image } of this.gulls) image.setVisible(false);
-    for (const { image } of this.waves) image.setVisible(false);
-    for (const surfer of this.surfers) surfer.setVisible(false);
     for (const { image } of this.footprints) image.destroy();
     this.footprints.length = 0;
     this.stride = 0;
@@ -144,16 +117,27 @@ export class Ambient {
       image.setX(Math.round(((distance % span) + span) % span) - 16)
         .setFrame(Math.floor(time / 200) % 2).setVisible(true);
     }
-    for (const { image, endX, endY, phase } of this.waves) {
-      const progress = (time + phase) % WAVE_PERIOD / WAVE_TRAVEL;
-      image.setVisible(progress < 1);
-      if (progress >= 1) continue;
-      image.setPosition(endX + Math.round((1 - progress) * 24), endY + Math.round((1 - progress) * 20))
-        .setAlpha(Math.min(progress * 4, 1 - progress) * 0.85);
+  }
+
+  /** Smooth coastline drawn over the water tiles; its frames advance with the water. */
+  private addShore() {
+    const key = `shore:${this.map.key}`;
+    const { textures } = this.scene;
+    if (!textures.exists(key)) {
+      const shore = buildShore(this.map.ground);
+      if (!shore) return undefined;
+      const canvas = textures.createCanvas(key, shore.width, shore.height * shore.frames);
+      if (!canvas) throw new Error(`Could not create texture "${key}"`);
+      canvas.context.putImageData(new ImageData(shore.pixels, shore.width, shore.height * shore.frames), 0, 0);
+      canvas.refresh();
+      for (let frame = 0; frame < shore.frames; frame++) {
+        canvas.add(frame, 0, 0, frame * shore.height, shore.width, shore.height);
+      }
+      canvas.customData = { top: shore.top };
     }
-    this.surfers.forEach((sprite, i) => {
-      sprite.setFrame(Math.floor((time + i * 450) / 900) % 2).setVisible(true);
-    });
+    const { top } = textures.get(key).customData as { top: number };
+    // Just above the ground, under flat props (1), footprints (3) and everything standing.
+    return this.scene.add.image(0, top, key, 0).setOrigin(0, 0).setDepth(0.5);
   }
 
   private updateFootprints(x: number, y: number) {

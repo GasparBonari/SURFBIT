@@ -65,7 +65,7 @@ describe("buildGround", () => {
   });
 
   it("uses a diagonal wet-sand corner beside a one-tile shoreline step", () => {
-    const tiles = buildGround(makeMap({ ground: ["....", "...~", "..~~"] }));
+    const tiles = buildGround(makeMap({ ground: ["....", "...~.", "..~~."].map((row) => row.padEnd(5, ".")) }));
 
     expect(tiles[1][2]).toBe(T.sandWetCorner);
     expect(tiles[1][3]).toBe(T.foamCorner0);
@@ -73,13 +73,21 @@ describe("buildGround", () => {
   });
 
   it("joins north and west swash around both sides of a shoreline step", () => {
-    const map = makeMap({ ground: ["....~~", "..~~~~", "..~~~~", "~~~~~~"] });
+    // The sand column on the east keeps this off the shore overlay, so the tiles draw the coast.
+    const map = makeMap({ ground: ["....~~.", "..~~~~.", "..~~~~.", "~~~~~~."] });
     const tiles = buildGround(map);
 
-    expect(tiles[0].slice(2)).toEqual([T.sandWet, T.sandWetSouthEast, T.foamWest0, T.water0]);
-    expect(tiles[1].slice(1)).toEqual([T.sandWetEast, T.foamCorner0, T.foam0, T.foamInner0, T.water0]);
-    expect(tiles[2].slice(1)).toEqual([T.sandWetSouthEast, T.foamWest0, T.water0, T.water0, T.water0]);
-    expect(tiles[3]).toEqual([T.foam0, T.foam0, T.foamInner0, T.water0, T.water0, T.water0]);
+    expect(tiles[0].slice(2, 6)).toEqual([T.sandWet, T.sandWetSouthEast, T.foamWest0, T.water0]);
+    expect(tiles[1].slice(1, 6)).toEqual([T.sandWetEast, T.foamCorner0, T.foam0, T.foamInner0, T.water0]);
+    expect(tiles[2].slice(1, 6)).toEqual([T.sandWetSouthEast, T.foamWest0, T.water0, T.water0, T.water0]);
+    expect(tiles[3].slice(0, 6)).toEqual([T.foam0, T.foam0, T.foamInner0, T.water0, T.water0, T.water0]);
+  });
+
+  it("leaves sand dry when the shore overlay draws the coast", () => {
+    const tiles = buildGround(makeMap({ ground: ["....", "...~", "..~~"] }));
+
+    expect([T.sand0, T.sand1, T.sand2]).toContain(tiles[1][2]);
+    expect(tiles[1][3]).toBe(T.foamCorner0);
   });
 
   it("chooses stable variants by position", () => {

@@ -523,24 +523,6 @@ export function drawGull(ctx: Ctx, ox: number, frame: number) {
   autoOutline(ctx, ox, 0, 13, 8, P.ink);
 }
 
-export function drawSurfer(ctx: Ctx, ox: number, frame: number) {
-  const y = frame;
-  rect(ctx, ox + 1, 9 + y, 14, 2, P.sun);
-  rect(ctx, ox + 6, 4 + y, 4, 5, P.ink);
-  rect(ctx, ox + 6, 1 + y, 4, 3, P.skin2);
-  rect(ctx, ox + 5, 5 + y, 1, 3, P.ink);
-  rect(ctx, ox + 10, 5 + y, 1, 3, P.ink);
-  autoOutline(ctx, ox, 0, 16, 13, P.outline);
-}
-
-export function drawWave(ctx: Ctx) {
-  for (let x = 0; x < 28; x++) {
-    const y = Math.round(12 - x / 3 - Math.sin((x / 27) * Math.PI) * 3);
-    px(ctx, x, y, P.foam);
-    if (x > 2 && x < 25) px(ctx, x, y + 1, P.foamShade);
-  }
-}
-
 export function drawFootprint(ctx: Ctx) {
   rect(ctx, 0, 1, 2, 3, P.sandWetDark);
   rect(ctx, 3, 0, 2, 3, P.sandWetDark);

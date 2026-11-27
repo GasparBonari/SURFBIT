@@ -1,3 +1,4 @@
+import { SURFER_LOOK } from "../art/characters";
 import { P } from "../art/palette";
 import type { MapDef, MapObject } from "./types";
 
@@ -135,7 +136,7 @@ const def: MapDef = {
     { type: "prop", prop: "volleyballNet", x: 2, y: 38 },
     {
       type: "npc", id: "tali", x: 23, y: 15, behavior: "wander", name: "Tali",
-      look: { skin: P.skin3, hair: P.woodDeep, hairStyle: "long", shirt: P.coral, shorts: P.navy, hat: { style: "straw", color: P.thatchLight, brim: P.woodDark } },
+      look: { skin: P.skin3, hair: P.woodDeep, hairStyle: "long", shirt: P.hibiscus, shorts: P.navy, hat: { style: "straw", color: P.thatchLight, brim: P.woodDark } },
       lines: ["Morning! Boards is just across the plaza to the northwest.", "I like to get there before the morning surf crowd."],
     },
     {
@@ -150,8 +151,23 @@ const def: MapDef = {
     },
     {
       type: "npc", id: "imani", x: 43, y: 30, behavior: "idle", name: "Imani",
-      look: { skin: P.skin4, hair: P.outline, hairStyle: "bun", shirt: P.lilac, shorts: P.navyDark },
+      look: { skin: P.skin4, hair: P.ink, hairStyle: "bun", shirt: P.lilac, shorts: P.navyDark },
       lines: ["I come here to watch for sets. The waves look smaller from the deck."],
+    },
+    {
+      type: "npc", id: "leo", x: 34, y: 33, behavior: "wander", name: "Leo",
+      look: SURFER_LOOK,
+      lines: ["Just waxed this one at Boards. The fish shapes go fast on small days."],
+    },
+    {
+      type: "npc", id: "sol", x: 45, y: 13, behavior: "wander", name: "Sol",
+      look: { skin: P.skin1, hair: P.sunDark, hairStyle: "ponytail", shirt: P.flagBlue, shorts: P.cream, hat: { style: "cap", color: P.cream, brim: P.navy } },
+      lines: ["Gear has fresh wax and leashes. I always forget a leash."],
+    },
+    {
+      type: "npc", id: "nico", x: 13, y: 24, behavior: "wander", name: "Nico",
+      look: { skin: P.skin3, hair: P.woodDark, hairStyle: "short", shirt: P.sky, shorts: P.woodDark, backpack: P.teal },
+      lines: ["Wear just got new tees in. The fitting rooms are at the back."],
     },
     ...placeProps("volleyballPost", [[2, 38], [5, 38]]),
     ...placeProps("fence", [[1, 6], [5, 6], [17, 6], [21, 6]]),
