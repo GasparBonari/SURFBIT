@@ -199,7 +199,8 @@ plants everywhere, soft golden light. Fitting rooms visible from the door.
 Other dressing: two fitting rooms with cream curtains and wave marks (solid),
 wall mirror + standing oval mirror, board rack with 3 decorative boards,
 sunset painting, hanging and potted plants, wave rug in the center, jute rugs
-under racks and mannequins, log posts at the entrance.
+under racks and mannequins (each rug centered under its rack; the two-tile tee
+rack uses `narrowRug`), log posts at the entrance.
 
 Shopkeeper: curly-haired woman, white cap, cream tee (`idle`, behind the counter).
 
@@ -312,7 +313,7 @@ terrain tiles. The shore overlay supplies the town's wave foam.
 
 **Interior props:** wall board rack, freestanding board rack, product placard,
 counter + register, shelves (tees, wax, caps), wicker chair, pouf, round and
-rectangle jute rugs, wave mat, wave rug, pendant lamp + glow, hanging vines,
+rectangle jute rugs (`rug`, `narrowRug`), wave mat, wave rug, pendant lamp + glow, hanging vines,
 potted palm, monstera, framed posters ×3, window with beach view, rope posts,
 log posts, fin table, bench + towel, coffee table, crates, clothes rack (tint
 variants), mannequin (tint variants), display table, fitting room, mirrors ×2,

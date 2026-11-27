@@ -318,3 +318,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Added Phase B (open SURFBIT Goods, the Workshop and the Beach Club) with the owner's decisions on what each sells; removed those interiors from the Phase 7 ideas.
 - 2026-11-27 — Step B.2 complete. Opened SURFBIT Goods with six lifestyle products, added its room and atlas, and verified the directory, online catalog, keyboard checkout and touch interactions in Chromium.
 - 2026-11-27 — B.2 follow-up. Moved the Goods wave rug one tile toward the entrance to clear the tee table.
+- 2026-11-27 — Wear follow-up. Added a two-tile `narrowRug` so the tee rack sits centered on its jute rug.

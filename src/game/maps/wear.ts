@@ -58,7 +58,7 @@ const def: MapDef = {
     { type: "display", prop: "mannequin", x: 17, y: 9, productId: "offshore-hoodie", tint: { color: P.deepBlue, accent: P.sun } },
     { type: "prop", prop: "plant", x: 1, y: 9 },
     { type: "prop", prop: "plant", x: 18, y: 9 },
-    { type: "prop", prop: "rug", x: 4, y: 9, tint: jute },
+    { type: "prop", prop: "narrowRug", x: 4, y: 9, tint: jute },
     { type: "prop", prop: "waveRug", x: 8, y: 8, tint: { color: P.sandLight, accent: P.signTeal } },
     { type: "prop", prop: "rug", x: 13, y: 9, tint: jute },
     { type: "display", prop: "clothesRack", x: 4, y: 8, productId: "logo-tee", tint: { color: P.cream, accent: P.coral } },

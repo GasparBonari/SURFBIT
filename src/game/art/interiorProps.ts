@@ -43,6 +43,17 @@ function waveRug(w: number, h: number, scale: number): PropSpec {
   };
 }
 
+function juteRug(w: number): PropSpec {
+  return {
+    w, h: 32, foot: { w: w / 16, h: 2 }, flat: true, outline: false,
+    draw: (c, x, _f, { color, accent }) => {
+      weaveRug(c, x, w, 32, color);
+      for (const y of [4, 27]) rect(c, x + 4, y, w - 8, 1, accent);
+      for (const left of [4, w - 5]) rect(c, x + left, 5, 1, 22, accent);
+    },
+  };
+}
+
 function weaveRug(c: Ctx, x: number, w: number, h: number, color: string) {
   const dark = shade(color, -0.24);
   const light = shade(color, 0.24);
@@ -370,14 +381,9 @@ export const INTERIOR_PROPS = {
       rect(c, x + 12, 8, 5, 1, P.thatchDark);
     },
   },
-  rug: {
-    w: 48, h: 32, foot: { w: 3, h: 2 }, flat: true, outline: false,
-    draw: (c, x, _f, { color, accent }) => {
-      weaveRug(c, x, 48, 32, color);
-      for (const y of [4, 27]) rect(c, x + 4, y, 40, 1, accent);
-      for (const left of [4, 43]) rect(c, x + left, 5, 1, 22, accent);
-    },
-  },
+  rug: juteRug(48),
+  // Two tiles wide so a two-tile rack can sit centered on it.
+  narrowRug: juteRug(32),
   wickerChair: {
     w: 21, h: 24, foot: { w: 1, h: 1 }, solid: true, outline: false,
     draw: (c, x) => {
