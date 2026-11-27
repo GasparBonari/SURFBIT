@@ -4,7 +4,7 @@ import { buildBlocked, getFootprint, validateMap } from "./build";
 import { MAPS } from "./index";
 import type { MapDef } from "./types";
 
-const shops = ["boards", "wear", "gear", "goods", "workshop"] as const;
+const shops = ["boards", "wear", "gear", "goods", "workshop", "beach-club"] as const;
 
 function reachableFromDoor(def: MapDef) {
   const blocked = buildBlocked(def);
@@ -67,6 +67,20 @@ describe("shop interiors", () => {
     );
     expect(titles.filter((title) => /^\d · /.test(title)).sort().map((title) => title[0])).toEqual(["1", "2", "3", "4", "5"]);
     expect(titles).toEqual(expect.arrayContaining(["Foam and resin", "Custom boards"]));
+  });
+
+  it("connects the club to the deck and keeps the four club boards readable", async () => {
+    const [club, town] = await Promise.all([MAPS["beach-club"](), MAPS.town()]);
+    const spawn = town.spawns["from-beach-club"];
+    expect(town.ground[spawn.y][spawn.x]).toBe("d");
+    expect(club.ground.at(-1)).toBe("d".repeat(20));
+
+    const titles = club.objects.flatMap((object) =>
+      object.type === "prop" && object.interact?.kind === "read" && object.interact.text.length > 0
+        ? [object.interact.title]
+        : [],
+    );
+    expect(titles.sort()).toEqual(["Next drop", "Our story", "Surf guide", "Tides and events"]);
   });
 
   it("covers the whole catalog with matching display tints", async () => {

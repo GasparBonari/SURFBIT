@@ -443,6 +443,59 @@ const seeds: Seed[] = [
     options: [{ name: "Setup", values: ["Thruster", "Quad"] }],
     price: 3900,
   },
+  // ------------------------------------------------------------- Beach Club
+  {
+    handle: "surf-lesson",
+    store: "beach-club",
+    title: "Surf Lesson",
+    category: "Lesson",
+    description:
+      "Learn to read the break, paddle and catch your first waves with a Beach Club coach. A board and wetsuit are included. Choose a group or private lesson in the morning or afternoon.",
+    art: { kind: "ticket", color: "#3c8c84", accent: "#fff3d6" },
+    options: [
+      { name: "Type", values: ["Group", "Private"] },
+      { name: "Session", values: ["Morning", "Afternoon"] },
+    ],
+    price: 6500,
+    surcharge: { Private: 4000 },
+  },
+  {
+    handle: "board-rental",
+    store: "beach-club",
+    title: "Board Rental",
+    category: "Rental",
+    description:
+      "Pick up a forgiving softboard for your first waves or a mid-length for a longer glide. Every rental includes a leash. Choose a half day or a full day.",
+    art: { kind: "board", color: "#6fccd2", accent: "#fff3d6" },
+    options: [
+      { name: "Board", values: ["Softboard", "Mid-length"] },
+      { name: "Time", values: ["Half day", "Full day"] },
+    ],
+    price: 2500,
+    surcharge: { "Full day": 1500 },
+  },
+  {
+    handle: "season-pass",
+    store: "beach-club",
+    title: "Season Pass",
+    category: "Membership",
+    description:
+      "Spend the season at the Beach Club with unlimited board rentals and access to member events.",
+    art: { kind: "ticket", color: "#f2b632", accent: "#114f6d" },
+    options: [],
+    price: 24000,
+  },
+  {
+    handle: "club-coffee-beans",
+    store: "beach-club",
+    title: "Club Coffee Beans",
+    category: "Coffee",
+    description:
+      "The Beach Club's house roast is a smooth blend with notes of cocoa and toasted nuts. Take home a bag of whole beans or have us grind it for you.",
+    art: { kind: "beans", color: "#7a4b2a", accent: "#fff3d6" },
+    options: [{ name: "Grind", values: ["Whole bean", "Ground"] }],
+    price: 1800,
+  },
 ];
 
 export const CATALOG: Product[] = seeds.map(build);

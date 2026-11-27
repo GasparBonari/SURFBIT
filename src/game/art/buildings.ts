@@ -372,7 +372,7 @@ export function buildBuilding(w: number, h: number, style: BuildingStyle, label:
     drawDisplay(ctx, doorX + 16, displayY, rightWidth, rightDisplay);
   }
   const boarded = entrance?.boarded ?? false;
-  const openFront = front === "surfboards" || front === "gear" || front === "flagship";
+  const openFront = front === "surfboards" || front === "gear" || front === "flagship" || front === "cafe";
   drawDoor(ctx, doorX, bottom, boarded, openFront && !boarded);
 
   if (style.awnings) {

@@ -1,0 +1,28 @@
+{
+  "frames": {
+    "npc:beach-club:malia": {"frame":{"x":0,"y":0,"w":48,"h":128},"sheet":{"width":16,"height":32}},
+    "npc:beach-club:ben": {"frame":{"x":48,"y":0,"w":48,"h":128},"sheet":{"width":16,"height":32}},
+    "boardRack:#6fccd2:#fff3d6": {"frame":{"x":96,"y":0,"w":47,"h":52},"sheet":{"width":47,"height":52}},
+    "pottedPalm": {"frame":{"x":143,"y":0,"w":34,"h":44},"sheet":{"width":34,"height":44}},
+    "wetsuitHanger:#3c8c84:#6fccd2": {"frame":{"x":177,"y":0,"w":16,"h":36},"sheet":{"width":16,"height":36}},
+    "wetsuitHanger:#114f6d:#6fccd2": {"frame":{"x":193,"y":0,"w":16,"h":36},"sheet":{"width":16,"height":36}},
+    "lessonBoard:#3c8c84:#fff3d6": {"frame":{"x":209,"y":0,"w":48,"h":33},"sheet":{"width":48,"height":33}},
+    "barCounter": {"frame":{"x":257,"y":0,"w":64,"h":32},"sheet":{"width":64,"height":32}},
+    "seaWindow": {"frame":{"x":321,"y":0,"w":64,"h":31},"sheet":{"width":64,"height":31}},
+    "beanShelf:#7a4b2a:#fff3d6": {"frame":{"x":385,"y":0,"w":32,"h":30},"sheet":{"width":32,"height":30}},
+    "hibiscusPot": {"frame":{"x":417,"y":0,"w":23,"h":29},"sheet":{"width":23,"height":29}},
+    "storyFrame": {"frame":{"x":440,"y":0,"w":30,"h":28},"sheet":{"width":30,"height":28}},
+    "clubSign": {"frame":{"x":470,"y":0,"w":80,"h":27},"sheet":{"width":80,"height":27}},
+    "guideRack": {"frame":{"x":550,"y":0,"w":16,"h":26},"sheet":{"width":16,"height":26}},
+    "dropCrate": {"frame":{"x":566,"y":0,"w":32,"h":26},"sheet":{"width":32,"height":26}},
+    "sunsetPoster": {"frame":{"x":598,"y":0,"w":30,"h":25},"sheet":{"width":30,"height":25}},
+    "vines": {"frame":{"x":628,"y":0,"w":23,"h":25},"sheet":{"width":23,"height":25}},
+    "wickerChair": {"frame":{"x":651,"y":0,"w":21,"h":24},"sheet":{"width":21,"height":24}},
+    "coffeeTable": {"frame":{"x":672,"y":0,"w":46,"h":24},"sheet":{"width":46,"height":24}},
+    "memberBoard:#f2b632:#114f6d": {"frame":{"x":718,"y":0,"w":16,"h":24},"sheet":{"width":16,"height":24}},
+    "clubStringLights": {"frame":{"x":734,"y":0,"w":288,"h":19},"sheet":{"width":288,"height":19}},
+    "roundRug": {"frame":{"x":0,"y":128,"w":29,"h":18},"sheet":{"width":29,"height":18}},
+    "waveMat:#6fccd2:#114f6d": {"frame":{"x":29,"y":128,"w":32,"h":16},"sheet":{"width":32,"height":16}},
+    "pouf": {"frame":{"x":61,"y":128,"w":14,"h":11},"sheet":{"width":14,"height":11}}
+  }
+}

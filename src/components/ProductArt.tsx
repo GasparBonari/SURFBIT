@@ -172,5 +172,14 @@ function ProductShape({ kind, accent }: Illustration) {
         <path d="M48 68h8m-8 8h8m20-8h8m-8 8h8m20-8h8m-8 8h8" stroke="var(--sb-navy-dark)" strokeWidth="2" />
         <path d="M52 104h56v8H52Z" fill="var(--sb-cream)" />
       </>;
+    case "beans":
+      return <>
+        <path d="M50 24h60l-3 19 9 76-6 9H50l-6-9 9-76Z" />
+        <path d="M50 24h60l-2 12H52Z" fill={accent} />
+        <path d="M60 56h40v47H60Z" fill={accent} />
+        <path d="M72 88c-6-5-3-14 2-19s12-6 16-2c5 5 3 13-3 19s-11 6-15 2Z" fill="var(--sb-fin-brown)" />
+        <path d="M73 88c0-7 11-12 15-20" fill="none" stroke={accent} strokeWidth="2" />
+        <path d="M70 96h20m-34 23h48" fill="none" stroke={accent} strokeWidth="2" />
+      </>;
   }
 }

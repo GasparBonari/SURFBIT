@@ -104,10 +104,9 @@ const def: MapDef = {
     },
     {
       type: "building", id: "beach-club", label: "Beach Club",
-      upcomingStoreName: "Beach Club",
       x: 41, y: 17, w: 12, h: 7, door: { x: 47, y: 23 },
       style: { roof: "indigo", wall: P.wood, front: "cafe" },
-      interact: { kind: "read", title: "Beach Club", text: ["The club opens soon. Enjoy the deck and the beach."] },
+      interact: { kind: "enter", target: "beach-club", spawn: "door" },
     },
     { type: "prop", prop: "plazaLogo", x: 25, y: 18 },
     {
@@ -229,6 +228,7 @@ const def: MapDef = {
     "from-gear": { x: 43, y: 12, facing: "down" },
     "from-goods": { x: 32, y: 12, facing: "down" },
     "from-workshop": { x: 54, y: 9, facing: "down" },
+    "from-beach-club": { x: 47, y: 24, facing: "down" },
   },
 };
 

@@ -62,7 +62,7 @@ src/
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
 │   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
-│   ├── mock/catalog.ts       ✅ 26 demo products across five shops
+│   ├── mock/catalog.ts       ✅ 30 demo products across six shops
 │   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
 │   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
 ├── state/                       Zustand stores (client)
@@ -88,6 +88,7 @@ src/
 │   │   ├── interiorProps.ts  ✅ shop signs, lighting, plants and fixtures
 │   │   ├── shopDisplays.ts   ✅ shop racks, shelves, mannequins and display tables
 │   │   ├── workshopProps.ts  ✅ Workshop stations, shaping lights, foam dust and displays
+│   │   ├── beachClubProps.ts ✅ Beach Club window, lighting, café furnishings and stations
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
 │   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage
@@ -95,7 +96,7 @@ src/
 │   ├── textures.test.ts      ✅ shipped atlas coverage and sheet sizes for the configured maps
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy interiors
-│   │                         ✅ Boards, Wear, Gear, Goods and Workshop interiors + catalog and read-station reachability tests
+│   │                         ✅ Boards, Wear, Gear, Goods, Workshop and Beach Club interiors + catalog and read-station reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         ✅ NPC movement and shared character sprites
@@ -188,7 +189,7 @@ is a typed object list.
 import type { Dir, Look } from "../art/characters";
 import type { PROPS, Tint } from "../art/props";
 
-export type MapKey = "town" | "boards" | "wear" | "gear" | "goods" | "workshop";
+export type MapKey = "town" | "boards" | "wear" | "gear" | "goods" | "workshop" | "beach-club";
 
 export interface MapDef {
   key: MapKey;
@@ -244,6 +245,7 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   gear: () => import("./gear").then((module) => module.default),
   goods: () => import("./goods").then((module) => module.default),
   workshop: () => import("./workshop").then((module) => module.default),
+  "beach-club": () => import("./beachClub").then((module) => module.default),
 };
 ```
 

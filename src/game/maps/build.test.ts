@@ -192,9 +192,8 @@ it("loads a valid town with walkable routes to each open shop and the beach stai
 
   const shops = town.objects.filter((object) => object.type === "building");
   const openShops = shops.filter((object) => object.interact?.kind === "enter");
-  expect(openShops.map((object) => object.id).sort()).toEqual(["boards", "gear", "goods", "wear", "workshop"]);
-  expect(shops.filter((object) => object.interact?.kind === "read").map((object) => object.id).sort())
-    .toEqual(["beach-club"]);
+  expect(openShops.map((object) => object.id).sort()).toEqual(["beach-club", "boards", "gear", "goods", "wear", "workshop"]);
+  expect(shops.filter((object) => object.interact?.kind === "read")).toEqual([]);
   expect(shops.filter((object) => !object.interact).map((object) => object.id).sort())
     .toEqual(["cottage-east", "cottage-west"]);
   for (const { id, door, interact } of openShops) {

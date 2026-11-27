@@ -251,7 +251,7 @@ traditional shop", so record this as a decision.
   - Do: as B.2, following SCENES.md §9. The shaping stations and materials wall are `read` props configured in the map. Replace the exterior's "coming soon" `read` with the `enter` interaction; the open garage front stays as it is. Shaping-light flicker respects reduced motion.
   - Accept: as B.2 for `workshop`, plus every station opens its text with keyboard and touch.
 
-- [ ] **B.4 SURFBIT Beach Club**
+- [x] **B.4 SURFBIT Beach Club**
   - Files: as B.2 for `beach-club`
   - Do: as B.2, following SCENES.md §10. Lessons, rentals and the pass are ordinary catalog products (options such as session or duration; stock = available spots) and go through the same checkout. The club content is `read` props. The door opens from the deck; the `from-beach-club` spawn stands on the deck facing down.
   - Accept: as B.2 for `beach-club`, plus every read station works with keyboard and touch.
@@ -320,3 +320,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — B.2 follow-up. Moved the Goods wave rug one tile toward the entrance to clear the tee table.
 - 2026-11-27 — Wear follow-up. Added a two-tile `narrowRug` so the tee rack sits centered on its jute rug.
 - 2026-11-27 — Step B.3 complete. Opened the SURFBIT Workshop with five products, five numbered shaping stations, a materials wall and a custom-boards teaser on a new concrete floor, and verified the directory, keyboard and touch reads, and a keyboard purchase in Chromium.
+- 2026-11-27 — Step B.4 complete. Opened the SURFBIT Beach Club from the deck with four catalog products and four read stations. Exported the room atlas and verified the directory, keyboard and touch reads, and a lesson purchase in Chromium.

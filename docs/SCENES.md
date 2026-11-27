@@ -76,7 +76,7 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 | `gear` | GEAR | ✅ | 9 × 7 | Thatch | Wood planks | Window shows wetsuits on hangers and shelves of bottles; board leaning on the right; navy sign |
 | `workshop` | WORKSHOP | ✅ (interior §9) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
 | `wear` | WEAR | ✅ | 9 × 7 | Indigo tiles (`roofIndigo*`) | Wood + cream | Two striped awnings (blue/white, orange/white); tees hanging in the windows; tee icons on the sign |
-| `beach-club` | BEACH CLUB | ❌ (teaser `read`; interior brief §10) | 12 × 7 + deck 12 × 4 | Indigo tiles | Wood | Walkable wooden deck (`d`) in front with café tables, string lights, chalkboard; stairs from deck to sand; coffee-cup icon on the sign; blue SURFBIT flag on a pole beside it |
+| `beach-club` | BEACH CLUB | ✅ (interior §10) | 12 × 7 + deck 12 × 4 | Indigo tiles | Wood | Walkable wooden deck (`d`) in front with café tables, string lights, chalkboard; stairs from deck to sand; coffee-cup icon on the sign; blue SURFBIT flag on a pole beside it |
 | `cottage-*` | — | ❌ decor | 7 × 6 | Coral / terracotta | Cream | 2 cottages along the top edge behind a wooden fence, with stone steps |
 
 ### Props (town)
@@ -512,8 +512,7 @@ shoppers along the numbered stations and to the class board.
 ## 10. Beach Club interior (`beach-club`)
 
 No reference image. Same visual language as §2–4, opening onto the deck.
-**Awaiting owner approval (roadmap B.1).** See ARCHITECTURE.md → D19 for why the club
-sells lessons, rentals, a pass and coffee.
+See ARCHITECTURE.md → D19 for why the club sells lessons, rentals, a pass and coffee.
 
 **Mood:** a breezy club house. A big window over the sea fills the back wall,
 string lights hang over a lounge, a coffee bar sits on the left and a

@@ -30,6 +30,7 @@ export interface Look {
   beard?: boolean;
   shirtMark?: string;
   shoes?: string;
+  barefoot?: boolean;
   /** Full-length wetsuit in the `shirt` color (legs and sleeves covered). */
   wetsuit?: boolean;
   /** Surfboard carried under the arm, in this color. */
@@ -64,11 +65,16 @@ function drawWaveMark(ctx: Ctx, x: number, y: number, color: string) {
 function drawLegs(ctx: Ctx, look: Look, side: boolean, pose: Pose) {
   function drawFoot(x: number, sole: number, near: boolean) {
     const shoeTop = sole - 1;
-    const shoeColor = look.shoes ?? P.navy;
+    const width = side ? 3 : 2;
     rect(ctx, x, 24, 2, shoeTop - 24, look.wetsuit ? look.shirt : look.skin);
     if (look.wetsuit) px(ctx, x + 1, 24, shade(look.shirt, -0.16));
-    rect(ctx, x, shoeTop, 2, 1, near ? shoeColor : P.ink);
-    rect(ctx, x, sole, side ? 3 : 2, 1, near ? P.cream : P.wallStoneLight);
+    if (look.barefoot) {
+      rect(ctx, x, shoeTop, 2, 1, look.skin);
+      rect(ctx, x, sole, width, 1, shade(look.skin, near ? 0.08 : -0.17));
+      return;
+    }
+    rect(ctx, x, shoeTop, 2, 1, near ? look.shoes ?? P.navy : P.ink);
+    rect(ctx, x, sole, width, 1, near ? P.cream : P.wallStoneLight);
   }
 
   // Keep the planted sole one pixel above the frame edge for its outline.
@@ -433,6 +439,25 @@ export const WORKSHOP_SHOPKEEPER_LOOK: Look = {
   shorts: P.navy,
   hat: { style: "backwardCap", color: P.deepBlue, brim: P.navyDark },
   apron: P.woodDark,
+};
+
+export const BEACH_CLUB_HOST_LOOK: Look = {
+  skin: P.skin4,
+  hair: P.ink,
+  hairStyle: "curly",
+  accent: P.sun,
+  shirt: P.hibiscus,
+  shorts: P.cream,
+};
+
+export const BEACH_CLUB_COACH_LOOK: Look = {
+  skin: P.skin3,
+  hair: P.woodDeep,
+  hairStyle: "short",
+  shirt: P.teal,
+  shorts: P.tealDark,
+  wetsuit: true,
+  barefoot: true,
 };
 
 export const SURFER_LOOK: Look = {

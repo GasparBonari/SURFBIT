@@ -8,4 +8,5 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   gear: () => import("./gear").then((module) => module.default),
   goods: () => import("./goods").then((module) => module.default),
   workshop: () => import("./workshop").then((module) => module.default),
+  "beach-club": () => import("./beachClub").then((module) => module.default),
 };

@@ -1,4 +1,5 @@
 import { P } from "./palette";
+import { BEACH_CLUB_PROPS } from "./beachClubProps";
 import { type Ctx, px, rect } from "./canvas";
 import { autoOutline } from "./characters";
 import { INTERIOR_PROPS } from "./interiorProps";
@@ -44,6 +45,7 @@ export const PROPS = {
   ...INTERIOR_PROPS,
   ...SHOP_DISPLAYS,
   ...WORKSHOP_PROPS,
+  ...BEACH_CLUB_PROPS,
 } satisfies Record<string, PropSpec>;
 
 // ------------------------------------------------------------- effects

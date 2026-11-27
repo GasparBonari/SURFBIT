@@ -132,6 +132,7 @@ function look(value: unknown): Look {
     beard: optional(data.beard, "look.beard", bool),
     shirtMark: optional(data.shirtMark, "look.shirtMark", color),
     shoes: optional(data.shoes, "look.shoes", color),
+    barefoot: optional(data.barefoot, "look.barefoot", bool),
     wetsuit: optional(data.wetsuit, "look.wetsuit", bool),
     board: optional(data.board, "look.board", color),
     apron: optional(data.apron, "look.apron", color),

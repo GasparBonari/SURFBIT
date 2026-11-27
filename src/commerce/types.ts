@@ -3,7 +3,7 @@
  * the UI only ever see these shapes, never a provider's own specifics.
  */
 
-export type StoreId = "boards" | "wear" | "gear" | "goods" | "workshop";
+export type StoreId = "boards" | "wear" | "gear" | "goods" | "workshop" | "beach-club";
 
 export interface Money {
   /** Minor units (cents) to avoid floating point drift. */
@@ -35,7 +35,8 @@ export interface ProductArt {
     | "ticket"
     | "blank"
     | "sock"
-    | "plugs";
+    | "plugs"
+    | "beans";
   color: string;
   accent: string;
 }
@@ -118,5 +119,10 @@ export const STORES: Record<
     name: "SURFBIT Workshop",
     tagline: "See how a board is made, then take a little of the workshop home.",
     color: "#2f6f8f",
+  },
+  "beach-club": {
+    name: "SURFBIT Beach Club",
+    tagline: "Surf lessons, board rentals and coffee by the sea.",
+    color: "#6fccd2",
   },
 };
