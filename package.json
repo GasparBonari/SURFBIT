@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "art:export": "node scripts/exportArt.mjs",
+    "map:import": "node scripts/runMapImporter.mjs",
     "dev": "next dev --port 3005",
     "build": "next build",
     "start": "next start",

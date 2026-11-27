@@ -119,6 +119,9 @@ exporter in `scripts/` reads the generators and map definitions. Run
 `npm run art:export` after changing art, building designs, NPC looks or prop
 tints.
 
+✅ `scripts/tiled-to-mapdef.ts` converts Tiled maps, with a Node launcher and
+Vitest coverage in `scripts/`.
+
 ✅ `docs/art-references/` contains the town, Boards, and Wear concept images.
 [Visual references](ART_DIRECTION.md#visual-references)
 
@@ -263,6 +266,44 @@ opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
 Use `M` or `G` for walls and `_` for floors when adapting a draft map that
 used the retired placeholder tiles `W`, `V`, `K`, `+` or `o`.
 
+### Importing from Tiled
+
+Create a finite orthogonal map with 16 × 16 px tiles. Add
+`public/assets/world/tiles.png` as the only tileset, with zero margin and
+spacing. Paint a tile layer named `ground` using the terrain tiles listed in
+`LEGEND`. Blank cells become solid `X` void. The game generates terrain edges,
+autotiles and animation frames from the imported symbols. Choose **CSV** tile
+layer format to export numeric tile IDs in the JSON. [Tiled JSON format](https://doc.mapeditor.org/en/stable/reference/json-map-format/)
+
+Add string map properties `key` (a registered `MapKey`), `name` (HUD label),
+`kind` (`outdoor` or `interior`) and `ambience` (`beach` or `shop`). Put
+objects on top-level object layers with zero offset. Snap points and rectangles
+to grid intersections. A point at pixel `(x, y)` anchors the tile `(x/16, y/16)`.
+Set each object's class and name, then add a `data` string property containing
+the fields below as JSON. Palette fields accept keys from `P` (such as `navy`)
+or their exact color values.
+
+| Class | Shape and anchor | Tiled name | `data` fields |
+|---|---|---|---|
+| `spawn` | Point at the spawn tile | Spawn key such as `default` or `door` | `facing` |
+| `building` | Rectangle covering the footprint | Building ID | `style`, `label`, `door` (absolute tile coordinates), optional `upcomingStoreName` and `interact` |
+| `prop` | Point at the bottom-left footprint tile | Prop key | Optional `tint` and `interact` |
+| `display` | Point at the bottom-left footprint tile | Display prop key | `productId` (catalog handle), `tint` |
+| `npc` | Point at the home tile | NPC ID | `look`, `behavior`, `name` (dialog name), `lines` |
+
+For example, set the `data` property on a `spawn` point named `door` to
+`{"facing":"up"}`. Include the spawn keys used by the map's entry points.
+Export as JSON (`.tmj` or `.json`) and generate a TypeScript module to review
+before placing it in `src/game/maps/`.
+
+```bash
+npm run --silent map:import -- path/to/boards.tmj > /tmp/boards.ts
+```
+
+The importer runs `validateMap` before emitting the module. After replacing
+a registered map, run `npm run art:export` to pack its building textures, NPC
+looks and prop tints, then run `npm run check`.
+
 ### Coordinates and depth (must be consistent everywhere)
 
 - **Units:** map data is in **tiles** (16 px). Systems work in **pixels**.
@@ -363,7 +404,7 @@ if you change your mind.
 |---|---|---|
 | D1 | **Mock commerce provider** behind `CommerceProvider` | The world and UI can be built and tested without a store; any real backend stays a drop-in behind the same interface. |
 | D2 | **Procedural art** in `src/game/art` defines the original grid, palette and layout | The generators started as placeholders and became the production art source during Phase A (see D14). |
-| D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the MVP | Type-checked, diff-able, easy for AI agents to edit. A Tiled importer that outputs the same `MapDef` can be added later (phase 6) without touching systems. |
+| D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the runtime | Type-checked, diff-able, easy for AI agents to edit. The Tiled importer (step 6.2) emits the same `MapDef` modules offline. |
 | D4 | **One `MapScene` class** restarted with a map key, instead of one Phaser class per shop | Each restart builds the destination's own map, objects and camera state. Map data is lazy-loaded. |
 | D5 | **Free (8-way) movement with 4-directional animation** | Feels smoother than grid-locked 4-way (Stardew-like). To get strict 4-way, zero the minor axis in `Player`. |
 | D6 | **Custom tile-grid collision** instead of Arcade physics | Simpler, deterministic, enough for walking. |
