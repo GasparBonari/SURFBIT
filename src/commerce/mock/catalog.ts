@@ -318,6 +318,74 @@ const seeds: Seed[] = [
       { label: "Entry", value: "Back zip" },
     ],
   },
+  // ----------------------------------------------------------------- Goods
+  {
+    handle: "wave-trucker-cap",
+    store: "goods",
+    title: "Wave Trucker Cap",
+    category: "Cap",
+    description:
+      "A mesh-back trucker cap with the SURFBIT wave embroidered up front. The adjustable snapback keeps the brim where you want it on windy beach days.",
+    art: { kind: "cap", color: "#114f6d", accent: "#fff3d6" },
+    options: [{ name: "Color", values: ["Navy", "Sand"] }],
+    price: 3200,
+  },
+  {
+    handle: "polarized-shades",
+    store: "goods",
+    title: "Polarized Shades",
+    category: "Sunglasses",
+    description:
+      "Polarized lenses cut glare off the water so you can watch the sets roll in. The lightweight frame is comfortable for a whole afternoon on the beach.",
+    art: { kind: "shades", color: "#2b2b3a", accent: "#6fccd2" },
+    options: [{ name: "Frame", values: ["Black", "Tortoise"] }],
+    price: 5800,
+  },
+  {
+    handle: "day-pack",
+    store: "goods",
+    title: "Day Pack",
+    category: "Backpack",
+    description:
+      "A 20 L day pack with room for a change of clothes, a towel and a bottle. A separate wet pocket keeps a damp swimsuit away from the rest of your kit.",
+    art: { kind: "backpack", color: "#2f6f8f", accent: "#f2b632" },
+    options: [],
+    price: 7400,
+  },
+  {
+    handle: "stripe-beach-towel",
+    store: "goods",
+    title: "Stripe Beach Towel",
+    category: "Towel",
+    description:
+      "A flat-woven cotton towel that shakes sand loose before you pack up. Wide stripes make it easy to spot from the water.",
+    art: { kind: "towel", color: "#e8734a", accent: "#fff3d6" },
+    options: [{ name: "Color", values: ["Coral", "Teal"] }],
+    price: 4200,
+  },
+  {
+    handle: "steel-bottle",
+    store: "goods",
+    title: "Steel Bottle",
+    category: "Water bottle",
+    description:
+      "Double-wall stainless steel keeps your water cold through a whole session. The screw cap has a carry loop for the walk down to the beach.",
+    art: { kind: "bottle", color: "#3fa7a0", accent: "#fff3d6" },
+    options: [{ name: "Size", values: ["500 ml", "750 ml"] }],
+    price: 2800,
+    surcharge: { "750 ml": 400 },
+  },
+  {
+    handle: "pixel-sticker-pack",
+    store: "goods",
+    title: "Pixel Sticker Pack",
+    category: "Stickers",
+    description:
+      "Waterproof vinyl stickers featuring the pixel wave and a little piece of SURFBIT town. Stick them on a bottle, a board case or a laptop for a reminder of the coast.",
+    art: { kind: "stickers", color: "#fff3d6", accent: "#e8734a" },
+    options: [],
+    price: 900,
+  },
 ];
 
 export const CATALOG: Product[] = seeds.map(build);

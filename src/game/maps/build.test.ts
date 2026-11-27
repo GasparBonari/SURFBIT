@@ -56,11 +56,14 @@ describe("buildGround", () => {
   });
 
   it("adds skirting where interior walls meet the floor and splits doormats into halves", () => {
-    const tiles = buildGround(makeMap({ ground: ["MGM", "M_M", "_DD", "D._"] }));
+    const map = makeMap({ ground: ["MGMW", "M__W", "_DD_", "D.__"] });
+    const tiles = buildGround(map);
 
-    expect(tiles[0]).toEqual([T.wallWood, T.wallSageTrim, T.wallWood]);
+    expect(tiles[0]).toEqual([T.wallWood, T.wallSageTrim, T.wallWoodTrim, T.wallCream]);
     expect(tiles[1][0]).toBe(T.wallWoodTrim);
-    expect(tiles[2].slice(1)).toEqual([T.matW, T.matE]);
+    expect(tiles[1][3]).toBe(T.wallCreamTrim);
+    expect(buildBlocked(map)[1][3]).toBe(true);
+    expect(tiles[2].slice(1, 3)).toEqual([T.matW, T.matE]);
     expect(tiles[3][0]).toBe(T.matWE);
   });
 
@@ -189,11 +192,11 @@ it("loads a valid town with walkable routes to each open shop and the beach stai
 
   const shops = town.objects.filter((object) => object.type === "building");
   const openShops = shops.filter((object) => object.interact?.kind === "enter");
-  expect(openShops.map((object) => object.id).sort()).toEqual(["boards", "gear", "wear"]);
+  expect(openShops.map((object) => object.id).sort()).toEqual(["boards", "gear", "goods", "wear"]);
   expect(shops.filter((object) => object.interact?.kind === "read").map((object) => object.id).sort())
     .toEqual(["beach-club", "workshop"]);
   expect(shops.filter((object) => !object.interact).map((object) => object.id).sort())
-    .toEqual(["cottage-east", "cottage-west", "goods"]);
+    .toEqual(["cottage-east", "cottage-west"]);
   for (const { id, door, interact } of openShops) {
     expect(interact).toEqual({ kind: "enter", target: id, spawn: "door" });
     expect(town.spawns[`from-${id}`]).toEqual({ x: door.x, y: door.y + 1, facing: "down" });

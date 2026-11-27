@@ -140,6 +140,7 @@ export const INTERIOR_PROPS = {
   boardsSign: shopSign("BOARDS", P.woodLight),
   wearSign: shopSign("WEAR", P.woodLight),
   gearSign: shopSign("GEAR", P.sun),
+  goodsSign: shopSign("GOODS", P.woodLight),
   counter: {
     w: 48, h: 28, foot: { w: 3, h: 1 }, solid: true, outline: false,
     draw: (c, x) => {

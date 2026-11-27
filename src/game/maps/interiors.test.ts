@@ -4,7 +4,7 @@ import { buildBlocked, getFootprint, validateMap } from "./build";
 import { MAPS } from "./index";
 import type { MapDef } from "./types";
 
-const shops = ["boards", "wear", "gear"] as const;
+const shops = ["boards", "wear", "gear", "goods"] as const;
 
 function reachableFromDoor(def: MapDef) {
   const blocked = buildBlocked(def);
@@ -31,11 +31,15 @@ describe("shop interiors", () => {
     expect(def.spawns.door.facing).toBe("up");
 
     const storefront = town.objects.find((object) => object.type === "building" && object.id === shop);
+    if (storefront?.type !== "building") throw new Error(`Missing storefront for ${shop}`);
     expect(storefront).toMatchObject({ interact: { kind: "enter", target: shop, spawn: "door" } });
+    expect(storefront.upcomingStoreName).toBeUndefined();
 
     const exit = def.objects.find((object) => object.type === "prop" && object.interact?.kind === "exit");
     expect(exit).toMatchObject({ interact: { target: "town", spawn: `from-${shop}` } });
-    expect(town.spawns[`from-${shop}`]).toMatchObject({ facing: "down" });
+    expect(town.spawns[`from-${shop}`]).toEqual({
+      x: storefront.door.x, y: storefront.door.y + 1, facing: "down",
+    });
 
     const reachable = reachableFromDoor(def);
     const { x, y } = def.spawns.door;

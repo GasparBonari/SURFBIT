@@ -129,6 +129,7 @@ colors change.
 | Indigo roof / Dark / Deep | `#6a6796` / `#524f8f` / `#232f4c` | `roofIndigo*` | Wear and Beach Club roofs |
 | Slate roof / Dark | `#8791ba` / `#6c5a69` | `roofSlate*` | Workshop roof |
 | Sage wall / Dark | `#577559` / `#234144` | `wallSage*` | Wear interior back wall |
+| Cream plaster | Cream / Parchment / Foam | `cream`, `parchment`, `foam` | Goods back wall with wood skirting |
 | Iron / Dark | `#4f565c` / `#171e2a` | `iron*` | Street lamps, racks |
 | Glow / Warm | `#fdf2ad` / `#e4ab3f` | `glow*` | Lamp light, windows at dusk |
 

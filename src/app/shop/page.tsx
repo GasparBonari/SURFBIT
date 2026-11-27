@@ -10,8 +10,8 @@ import { ShopSections } from "./ShopSections";
 import styles from "./Shop.module.css";
 
 export const metadata: Metadata = {
-  title: "Shop Surfboards, Surf Wear & Gear",
-  description: "Browse surfboards, beachwear, fins, wetsuits and more from SURFBIT Boards, Wear and Gear.",
+  title: "Shop Surfboards, Surf Wear, Gear & Goods",
+  description: "Browse surfboards, beachwear, surf gear and beach-day essentials from SURFBIT.",
   alternates: { canonical: "/shop" },
 };
 

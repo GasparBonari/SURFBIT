@@ -216,10 +216,9 @@ be built.
 
 ## Phase B — Open the remaining shops
 
-SURFBIT Goods, the Workshop and the Beach Club are boarded up ("coming soon").
-This phase opens them in the same visual language as Boards, Wear and Gear.
-There are no concept images for these rooms, so B.1 writes their briefs first
-and the owner approves them before any building starts.
+This phase opens SURFBIT Goods, the Workshop and the Beach Club in the same
+visual language as Boards, Wear and Gear.
+B.1 gives each room a brief for owner approval before implementation.
 
 One id per place, used everywhere: `StoreId`, `MapKey`, town building id,
 spawn `from-<id>`, `/shop#<id>`. The ids are `goods`, `workshop` and
@@ -232,7 +231,7 @@ house with a surf school: readable club content plus bookable lessons,
 rentals, a season pass and coffee. SPEC §4 calls the Beach Club "not a
 traditional shop", so record this as a decision.
 
-- [ ] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19; awaiting owner approval before B.2)*
+- [ ] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19. Goods approved for B.2. Workshop and Beach Club awaiting approval.)*
   - Files: `docs/SCENES.md` (new §8–10, §1 buildings table, §5 characters, §7 asset checklist), `docs/ARCHITECTURE.md` (Decisions)
   - Do: write one brief per room in the format of SCENES.md §2–4: mood, accent color (palette token), size and shell, ASCII layout, a display → product handle → prop table, a product lineup table (handle, title, category, art kind, options, price in cents), read stations (title and short text), other dressing, and the shopkeeper's look. Use the shared shell (~20 × 14 tiles, back wall 3 rows, 1-tile side columns, low railing with a 2-tile opening, exit mat). Start from these lineups and adjust names or prices if needed:
     - **Goods** (`goods`) — flagship lifestyle boutique, navy accent, cream walls, wood floor. `wave-trucker-cap`, `polarized-shades`, `day-pack`, `stripe-beach-towel`, `steel-bottle`, `pixel-sticker-pack`.
@@ -242,9 +241,9 @@ traditional shop", so record this as a decision.
     - Add Decision D19: the Beach Club sells services and coffee alongside its club content, and the Workshop is exhibit-first.
   - Accept: each brief can be built without guessing; every display maps to a lineup handle; product titles, prices and descriptions are planned for the catalog, never the map files; the owner approves.
 
-- [ ] **B.2 SURFBIT Goods**
+- [x] **B.2 SURFBIT Goods**
   - Files: `src/commerce/types.ts` (`StoreId`, `STORES`, `ProductArt` kinds), `src/commerce/mock/catalog.ts`, `src/components/ProductArt.tsx`, `src/game/maps/{goods,index,types,town}.ts`, `src/game/art/*`, `src/game/maps/interiors.test.ts`, `public/assets/world/goods.{png,json}`
-  - Do: add the store and its lineup from SCENES.md §8 (new `ProductArt` kinds drawn in the style of the existing ones). Build the room exactly as briefed with the shared shell. Draw new props, tiles and the shopkeeper in `src/game/art` at the A.3/A.4 standard: palette only, selective outlines, top-left light, no smoothing. New tiles the brief names (`wallCream` for Goods, `floorConcrete` for the Workshop) go into `TILE_NAMES` and `LEGEND`, drawn to the A.4 standard. Open the town building: replace `upcomingStoreName` with an `enter` interaction and add the `from-goods` spawn, so the door is no longer boarded. Run `npm run art:export`.
+  - Do: add the store and its lineup from SCENES.md §8 (new `ProductArt` kinds drawn in the style of the existing ones). Build the room exactly as briefed with the shared shell. Draw new props, tiles and the shopkeeper in `src/game/art` at the A.3/A.4 standard: palette only, selective outlines, top-left light, no smoothing. Add `wallCream` with skirting to `TILE_NAMES` and `LEGEND`. Open the town building: replace `upcomingStoreName` with an `enter` interaction and add the `from-goods` spawn, so the door is no longer boarded. Run `npm run art:export`.
   - Accept: `interiors.test.ts` covers `goods` (door, exit, reachable displays, whole-catalog coverage with matching tints); `/shop#goods` and every new `/products/[handle]` work; the directory lists Goods with Walk there and Browse online; a keyboard-only purchase works in the room; screenshot of the room compared with `boards-interior.webp` and `wear-interior.webp` (shell, light, density), main differences listed.
 
 - [ ] **B.3 SURFBIT Workshop**
@@ -317,3 +316,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step 6.3 complete. Split art into per-map atlases and deferred Phaser until after first paint. Initial home JS was 156 KB gzipped. Local Chromium medians for LCP and INP were 72 ms and 72 ms on desktop, and 1,080 ms and 136 ms on throttled mobile.
 - 2026-11-27 — Step 6.4 complete. Added structured logs for page views, product inspections, cart additions, checkout starts, and browser and server errors. Verified the events in Chromium and against a production build.
 - 2026-11-27 — Added Phase B (open SURFBIT Goods, the Workshop and the Beach Club) with the owner's decisions on what each sells; removed those interiors from the Phase 7 ideas.
+- 2026-11-27 — Step B.2 complete. Opened SURFBIT Goods with six lifestyle products, added its room and atlas, and verified the directory, online catalog, keyboard checkout and touch interactions in Chromium.

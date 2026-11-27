@@ -4,15 +4,11 @@ import { PROPS, type Tint } from "../src/game/art/props";
 import { LEGEND, TILE, TILE_NAMES, type TileName } from "../src/game/art/tiles";
 import { validateMap } from "../src/game/maps/build";
 import { MAPS } from "../src/game/maps/index";
-import type { BuildingStyle, Interaction, MapDef, MapKey, MapObject, Spawn } from "../src/game/maps/types";
+import { DISPLAY_PROPS, type BuildingStyle, type Interaction, type MapDef, type MapKey, type MapObject, type Spawn } from "../src/game/maps/types";
 
 const terrain = new Map<TileName, string>(
   Object.entries(LEGEND).flatMap(([code, { tiles }]) => tiles.map((tile) => [tile, code] as const)),
 );
-const displayProps = [
-  "boardDisplay", "boardRack", "finTable", "clothesRack", "hoodieRack", "swimRack", "mannequin",
-  "shortsMannequin", "teeTable", "shelf", "pegboard", "wetsuitHanger", "leashHooks", "bagRack", "padTable",
-] as const satisfies readonly Extract<MapObject, { type: "display" }>["prop"][];
 const palette = new Map<string, string>(Object.entries(P));
 const paletteValues = new Set(palette.values());
 
@@ -187,7 +183,7 @@ function readObject(value: unknown): MapObject | { type: "spawn"; name: string; 
           tint: optional(data.tint, "tint", tint), interact: optional(data.interact, "interact", interaction),
         };
       case "display":
-        return { type, prop: oneOf(name, "display prop", displayProps), x, y, productId: string(data.productId, "productId"), tint: tint(data.tint, "tint") };
+        return { type, prop: oneOf(name, "display prop", DISPLAY_PROPS), x, y, productId: string(data.productId, "productId"), tint: tint(data.tint, "tint") };
       case "npc":
         return {
           type, id: name, x, y, look: look(data.look), behavior: oneOf(data.behavior, "behavior", ["idle", "wander"]),

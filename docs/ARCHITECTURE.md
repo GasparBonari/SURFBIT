@@ -62,7 +62,7 @@ src/
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
 │   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
-│   ├── mock/catalog.ts       ✅ 15 demo products across the three shops
+│   ├── mock/catalog.ts       ✅ 21 demo products across four shops
 │   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
 │   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
 ├── state/                       Zustand stores (client)
@@ -94,7 +94,7 @@ src/
 │   ├── textures.test.ts      ✅ shipped atlas coverage and sheet sizes for the configured maps
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy interiors
-│   │                         ✅ Boards, Wear and Gear interiors + catalog reachability tests
+│   │                         ✅ Boards, Wear, Gear and Goods interiors + catalog reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         ✅ NPC movement and shared character sprites
@@ -187,7 +187,7 @@ is a typed object list.
 import type { Dir, Look } from "../art/characters";
 import type { PROPS, Tint } from "../art/props";
 
-export type MapKey = "town" | "boards" | "wear" | "gear";
+export type MapKey = "town" | "boards" | "wear" | "gear" | "goods";
 
 export interface MapDef {
   key: MapKey;
@@ -223,9 +223,7 @@ export type MapObject =
       interact?: Interaction /* omitted for boarded shops and decorative buildings */ }
   | { type: "prop"; prop: keyof typeof PROPS; x: number; y: number;
       tint?: Tint; interact?: Interaction }
-  | { type: "display"; prop: "boardDisplay" | "boardRack" | "finTable"
-        | "clothesRack" | "hoodieRack" | "swimRack" | "mannequin" | "shortsMannequin" | "teeTable"
-        | "shelf" | "pegboard" | "wetsuitHanger" | "leashHooks" | "bagRack" | "padTable";
+  | { type: "display"; prop: (typeof DISPLAY_PROPS)[number];
       x: number; y: number; productId: string; tint: Tint }
   | { type: "npc"; id: string; x: number; y: number; look: Look;
       behavior: "idle" | "wander"; name: string; lines: string[] };
@@ -233,6 +231,7 @@ export type MapObject =
 
 The registry includes the town with the deferred game code. Each shop
 ships in a separate chunk that loads on entry.
+`DISPLAY_PROPS` in the map types is the allowlist shared with the Tiled importer.
 
 ```ts
 import town from "./town";
@@ -242,6 +241,7 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   boards: () => import("./boards").then((module) => module.default),
   wear: () => import("./wear").then((module) => module.default),
   gear: () => import("./gear").then((module) => module.default),
+  goods: () => import("./goods").then((module) => module.default),
 };
 ```
 
@@ -268,15 +268,16 @@ stays dry in `buildGround`; collision is still the tile grid.
 Neighbour-aware tiles: a planter picks one of 16 rim tiles from which sides
 face non-planter ground (`planterTile(mask)`, 1 = north, 2 = east, 4 = south,
 8 = west). A retaining wall gets a squared end pillar where it meets anything
-other than wall or the map edge. Interior walls (`M`, `G`) get a skirting
+other than wall or the map edge. Interior walls (`M`, `G`, `W`) get a skirting
 board where the floor (`_`, `D`) is directly below. A run of doormat tiles
 (`D`) draws one mat with a single wave mark across its two halves.
 
 Shop floorboards (`_`) use deterministic variants. Interior wood walls
-(`M`), sage walls (`G`) and railings (`R`) are solid. Each two-tile
-opening (`DD`) is walkable and carries a wave-mat prop with the exit action.
-Use `M` or `G` for walls and `_` for floors when adapting a draft map that
-used the retired placeholder tiles `W`, `V`, `K`, `+` or `o`.
+(`M`), sage walls (`G`), cream plaster walls (`W`) and railings (`R`) are solid.
+Each two-tile opening (`DD`) is walkable and carries a wave-mat prop with the
+exit action.
+Use `M`, `G` or `W` for walls and `_` for floors when adapting a draft map that
+used the retired placeholder tiles `V`, `K`, `+` or `o`.
 
 ### Importing from Tiled
 

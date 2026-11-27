@@ -72,7 +72,7 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 | id | Label on sign | Enterable (MVP) | Size | Roof | Walls | Signature details |
 |---|---|---|---|---|---|---|
 | `boards` | BOARDS | ✅ | 9 × 7 | Thatch (`thatch*`) | Wood planks | Open shopfront showing boards inside; 4 boards leaning against the left wall outside; navy sign with wave mark; potted plants |
-| `goods` | SURFBIT | ❌ (flagship, coming soon; interior brief §8) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the door; hibiscus vines on both corners; A-frame sign |
+| `goods` | SURFBIT | ✅ (flagship, interior §8) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the open door; hibiscus vines on both corners; A-frame sign |
 | `gear` | GEAR | ✅ | 9 × 7 | Thatch | Wood planks | Window shows wetsuits on hangers and shelves of bottles; board leaning on the right; navy sign |
 | `workshop` | WORKSHOP | ❌ (teaser `read`; interior brief §9) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
 | `wear` | WEAR | ✅ | 9 × 7 | Indigo tiles (`roofIndigo*`) | Wood + cream | Two striped awnings (blue/white, orange/white); tees hanging in the windows; tee icons on the sign |
@@ -194,7 +194,7 @@ plants everywhere, soft golden light. Fitting rooms visible from the door.
 | Mannequin B (hoodie + shorts) | `offshore-hoodie` | `mannequin` |
 | Swimwear rail next to the fitting rooms | `tide-one-piece` | `swimRack` |
 | Front tables | `logo-tee` / decorative caps | `teeTable` / `capTable` |
-| Cap shelf behind the counter | decorative until a cap product exists | `capShelf` |
+| Cap shelf behind the counter | decorative | `capShelf` |
 
 Other dressing: two fitting rooms with cream curtains and wave marks (solid),
 wall mirror + standing oval mirror, board rack with 3 decorative boards,
@@ -203,9 +203,7 @@ under racks and mannequins, log posts at the entrance.
 
 Shopkeeper: curly-haired woman, white cap, cream tee (`idle`, behind the counter).
 
-> Catalog note: the reference shows caps and a bucket hat. Adding a
-> `wave-cap` product to the Wear catalog would make the cap shelf
-> interactive.
+The Wave Trucker Cap is displayed for sale at Goods (§8).
 
 ---
 
@@ -299,7 +297,7 @@ texture keys and frame sizes stable (ART_DIRECTION.md → Production art).
 cobblestone street (3), plaza pavers (2), grass/garden bed, raised planter
 rim, stone retaining wall (face + top + ends), stone stairs, wooden deck,
 water (4 frames), foam edges incl. **diagonal corners** (4 frames), interior
-wood floor, wood wall, sage wall, wall trim, railing.
+wood floor, wood wall, sage wall, cream plaster wall, wall trim, railing.
 
 **Buildings:** Boards, SURFBIT Goods, Gear, Workshop, Wear, Beach Club (+
 deck), 2 cottages. Each split into roof/wall layers if possible, plus a
@@ -318,9 +316,10 @@ rectangle jute rugs, wave mat, wave rug, pendant lamp + glow, hanging vines,
 potted palm, monstera, framed posters ×3, window with beach view, rope posts,
 log posts, fin table, bench + towel, coffee table, crates, clothes rack (tint
 variants), mannequin (tint variants), display table, fitting room, mirrors ×2,
-pegboard, wetsuit hanger, board-bag rack, shop sign boards (BOARDS, WEAR, GEAR).
+pegboard, wetsuit hanger, board-bag rack, shop sign boards (BOARDS, WEAR, GEAR,
+GOODS).
 
-**Characters (16 × 32, 3 × 4 sheets):** player, 3 shopkeepers, 4–6
+**Characters (16 × 32, 3 × 4 sheets):** player, 4 shopkeepers, 4–6
 townsfolk, surfer with board. Optional: sitting and lying frames.
 
 **Phase B rooms (§8–10):**
@@ -341,12 +340,13 @@ townsfolk, surfer with board. Optional: sitting and lying frames.
 
 ## 8. Goods interior (`goods`)
 
-Coordinates are top-left tiles in the 20 × 15 room, as in the map files.
+Coordinates use the map convention: props and displays are anchored at the
+bottom-left tile of their footprint in the 20 × 15 room.
 Shift a piece by a tile if footprints collide or the aisle closes, and
 update the brief in the same change (AGENTS.md).
 
 No reference image. Build it in the language of Boards and Wear (§2–3): same
-shell, warm light, plants and wave mats. **Awaiting owner approval (roadmap B.1).**
+shell, warm light, plants and wave mats. **Approved for B.2.**
 
 **Mood:** the brand's flagship boutique. Cream plaster back wall with wood
 trim (matching the cream-and-wood storefront), warm wood floor, golden
@@ -363,21 +363,21 @@ onto the street.
  ┌──────────────────────────────────────────────────┐
  │  window   ╔SURFBIT GOODS╗  mirror   [wave print] vines│ cream wall (rows 0–2)
  │      lamp            lamp            lamp      lamp   │
- │ [cap shelf] [shades]          [bottle fridge][COUNTER]│ row 4
- │                                          Lani         │
+ │ [cap shelf] [shades]          [bottle fridge] Lani    │ row 4
+ │                                            [COUNTER] │
  │pack                                          towel    │
  │hooks       ┌wave rug─────────────┐           ladder   │ rows 6–8
  │            │  tee table (x-sell)  │                   │
  │ round rug  └─────────────────────┘                    │
  │ pouf  palm                          sticker rack      │ row 10
- │ palm                                         palm     │
+ │                                              palm     │
  │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
  └──────────────────────────────────────────────────┘
 ```
 
 | Display | Product handle | Prop | Tile (x, y) |
 |---|---|---|---|
-| Cap shelf (back wall) | `wave-trucker-cap` | `capShelf` (existing, add to the display union) | (2, 4) |
+| Cap shelf (back wall) | `wave-trucker-cap` | `capShelf` (shared with Wear) | (2, 4) |
 | Sunglasses stand with a small mirror | `polarized-shades` | `shadesStand` (new) | (6, 4) |
 | Glass-door fridge of bottles | `steel-bottle` | `bottleFridge` (new) | (12, 4) |
 | Backpack hooks (left wall) | `day-pack` | `packHooks` (new, like `leashHooks`) | (1, 7) |
@@ -404,13 +404,14 @@ waterproof vinyl stickers of the pixel wave and town.
 (`goodsSign`, built like `gearSign`), window with blinds, wall mirror beside
 the shades, a framed wave print, vines, four pendants, round jute rug and
 pouf, potted palms, hibiscus pots either side of the mat, navy wave mat.
-Fixed positions: `counter` (15, 5), round rug + pouf (2, 9), palms (3, 10)
-and (17, 11), hibiscus pots (8, 13) and (11, 13), wave mat (9, 13), spawn
-`door` (9, 12) facing up.
+Fixed positions: `counter` (15, 5), wave print (15, 1) above Lani, round rug
+and pouf (2, 9), palms (4, 10) and (17, 11), hibiscus pots (8, 13) and
+(11, 13), wave mat (9, 13), spawn `door` (9, 12) facing up. The left
+palm sits a tile inward to keep its fronds clear of the pouf.
 
 **Shopkeeper:** Lani (`idle`, behind the counter at (16, 4)): bun, navy SURFBIT tee with a
-cream wave mark, cream shorts, cream bucket hat. Lines point to the caps by
-the window and the stickers by the door; no prices.
+cream wave mark, cream shorts, cream bucket hat. Lani points shoppers to the
+caps by the window and the stickers by the door.
 
 ---
 

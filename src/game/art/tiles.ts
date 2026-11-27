@@ -28,6 +28,7 @@ export const TILE_NAMES = [
   "floorWood",
   "mat", "matW", "matE", "matWE",
   "wallWood", "wallSage", "wallWoodTrim", "wallSageTrim", "railing", "floorWood1", "floorWood2",
+  "wallCream", "wallCreamTrim",
 ] as const;
 
 export type TileName = (typeof TILE_NAMES)[number];
@@ -383,13 +384,24 @@ function shopWall(ctx: Ctx, ox: number, color: string, seam: string, trim: boole
     rect(ctx, ox + x + 7, 0, 1, TILE, shade(color, -0.12));
     rect(ctx, ox + x + 4, x === 0 ? 4 : 10, 1, 3, shade(color, -0.14));
   }
-  if (trim) {
-    rect(ctx, ox, 11, TILE, 1, seam);
-    rect(ctx, ox, 12, TILE, 1, P.woodLight);
-    rect(ctx, ox, 13, TILE, 2, P.wood);
-    rect(ctx, ox, 15, TILE, 1, P.woodDeep);
-    for (const x of [3, 11]) px(ctx, ox + x, 13, P.woodDark);
-  }
+  if (trim) skirting(ctx, ox, seam);
+}
+
+function skirting(ctx: Ctx, ox: number, seam: string) {
+  rect(ctx, ox, 11, TILE, 1, seam);
+  rect(ctx, ox, 12, TILE, 1, P.woodLight);
+  rect(ctx, ox, 13, TILE, 2, P.wood);
+  rect(ctx, ox, 15, TILE, 1, P.woodDeep);
+  for (const x of [3, 11]) px(ctx, ox + x, 13, P.woodDark);
+}
+
+function plaster(ctx: Ctx, ox: number, trim: boolean) {
+  rect(ctx, ox, 0, TILE, TILE, P.cream);
+  rect(ctx, ox + 2, 3, 3, 1, P.foam);
+  rect(ctx, ox + 9, 8, 4, 1, P.parchment);
+  px(ctx, ox + 8, 7, P.parchment);
+  px(ctx, ox + 4, 13, P.parchment);
+  if (trim) skirting(ctx, ox, P.sandDark);
 }
 
 /** Warm horizontal floorboards, two per tile, with staggered butt joints and a little grain. */
@@ -518,6 +530,9 @@ export function buildTileset(): HTMLCanvasElement {
       case "wallSage": case "wallSageTrim":
         shopWall(ctx, ox, P.wallSage, P.wallSageDark, name === "wallSageTrim");
         break;
+      case "wallCream": case "wallCreamTrim":
+        plaster(ctx, ox, name === "wallCreamTrim");
+        break;
       case "railing":
         railing(ctx, ox);
         break;
@@ -549,6 +564,7 @@ export const LEGEND: Record<string, { tiles: TileName[]; solid?: boolean }> = {
   X: { tiles: ["void"], solid: true },
   M: { tiles: ["wallWood"], solid: true },
   G: { tiles: ["wallSage"], solid: true },
+  W: { tiles: ["wallCream"], solid: true },
   R: { tiles: ["railing"], solid: true },
   _: { tiles: ["floorWood", "floorWood1", "floorWood2"] },
   D: { tiles: ["mat"] },

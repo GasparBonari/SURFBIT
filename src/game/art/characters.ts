@@ -204,7 +204,18 @@ function drawHair(ctx: Ctx, look: Look, dir: DrawDir, y: number) {
     rect(ctx, 5, y + 1, 3, 1, hairLight);
     px(ctx, 4, y + 2, hairLight);
   }
-  if (hairStyle === "bun") rect(ctx, 6, y - 2, 4, 3, hair);
+  if (hairStyle === "bun") {
+    if (!look.hat) {
+      rect(ctx, 6, y - 2, 4, 3, hair);
+    } else if (dir !== "down") {
+      // A hat leaves room for a low bun at the nape.
+      const bunX = dir === "right" ? 3 : 8;
+      const bunY = y + 7;
+      ellipse(ctx, bunX, bunY, 2, 2, hair);
+      px(ctx, bunX - 1, bunY - 1, hairLight);
+      px(ctx, bunX + 1, bunY + 1, hairShade);
+    }
+  }
   if (accent) {
     rect(ctx, 5, y + 1, 3, 1, accent);
     if (dir === "up" && hairStyle === "ponytail") rect(ctx, 10, y + 6, 1, 4, accent);
@@ -376,6 +387,16 @@ export const GEAR_SHOPKEEPER_LOOK: Look = {
   accent: P.ink,
   shirt: P.sun,
   shorts: P.navyDark,
+};
+
+export const GOODS_SHOPKEEPER_LOOK: Look = {
+  skin: P.skin3,
+  hair: P.ink,
+  hairStyle: "bun",
+  shirt: P.navy,
+  shorts: P.cream,
+  hat: { style: "bucket", color: P.cream, brim: P.parchment, mark: P.navy },
+  shirtMark: P.cream,
 };
 
 export const SURFER_LOOK: Look = {

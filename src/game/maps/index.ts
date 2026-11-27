@@ -6,4 +6,5 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   boards: () => import("./boards").then((module) => module.default),
   wear: () => import("./wear").then((module) => module.default),
   gear: () => import("./gear").then((module) => module.default),
+  goods: () => import("./goods").then((module) => module.default),
 };

@@ -70,6 +70,21 @@ function drawBottle(c: Ctx, x: number, y: number, color: string, accent: string)
   px(c, x + 1, y + 3, P.cream);
 }
 
+function drawDayPack(c: Ctx, x: number, y: number, { color, accent }: Tint) {
+  rect(c, x + 4, y, 4, 3, P.navyDark);
+  rect(c, x + 2, y + 3, 8, 1, P.navyDark);
+  box(c, x, y + 4, 12, 15, color, P.navyDark);
+  rect(c, x + 1, y + 5, 1, 10, P.fishBlue);
+  rect(c, x + 2, y + 4, 5, 1, P.fishBlue);
+  rect(c, x + 2, y + 7, 7, 1, P.navyDark);
+  px(c, x + 8, y + 8, accent);
+  box(c, x + 2, y + 11, 9, 6, color, P.navyDark);
+  rect(c, x + 3, y + 12, 6, 1, accent);
+  px(c, x + 8, y + 13, P.cream);
+  rect(c, x + 4, y + 19, 2, 2, P.navyDark);
+  rect(c, x + 8, y + 19, 2, 2, P.navyDark);
+}
+
 function drawGarment(c: Ctx, x: number, y: number, { color, accent }: Tint, hoodie = false) {
   const dark = shade(color, -0.32);
   if (hoodie) {
@@ -387,6 +402,99 @@ export const SHOP_DISPLAYS = {
         px(c, x + left + 10, top + 10, P.cream);
       }
       drawRackBase(c, x + 1, 38, 30);
+    },
+  },
+  shadesStand: {
+    w: 32, h: 33, solid: true, outline: false,
+    draw: (c, x, _f, { color, accent }) => {
+      box(c, x + 21, 1, 10, 16, P.sky, P.woodDeep);
+      rect(c, x + 22, 2, 7, 1, P.cream);
+      rect(c, x + 23, 5, 4, 2, P.foamShade);
+      rect(c, x + 25, 17, 2, 9, P.woodDark);
+      rect(c, x + 22, 25, 8, 2, P.wood);
+      box(c, x + 2, 5, 17, 25, P.parchment, P.woodDeep);
+      rect(c, x + 3, 6, 15, 1, P.cream);
+      for (const [y, frame] of [[9, color], [16, P.woodDark], [23, color]] as const) {
+        rect(c, x + 4, y, 13, 2, frame);
+        rect(c, x + 5, y + 2, 4, 2, frame);
+        rect(c, x + 12, y + 2, 4, 2, frame);
+        rect(c, x + 5, y + 1, 3, 1, accent);
+        rect(c, x + 12, y + 1, 3, 1, accent);
+      }
+      drawRackBase(c, x, 27, 32);
+    },
+  },
+  bottleFridge: {
+    w: 30, h: 41, solid: true, outline: false,
+    draw: (c, x, _f, { color, accent }) => {
+      ellipse(c, x + 15, 39, 14, 1, P.shadow);
+      box(c, x + 1, 0, 28, 39, P.bagSilver, P.ironDark);
+      rect(c, x + 2, 1, 24, 1, P.foam);
+      rect(c, x + 25, 2, 3, 35, P.iron);
+      box(c, x + 3, 4, 21, 28, P.signTealDark, P.ironDark);
+      rect(c, x + 4, 5, 18, 1, P.foamShade);
+      for (const y of [7, 20]) {
+        drawBottle(c, x + 5, y, color, accent);
+        drawBottle(c, x + 11, y + 2, P.navy, accent);
+        drawBottle(c, x + 17, y + 1, color, accent);
+        rect(c, x + 4, y + 10, 19, 1, P.sky);
+      }
+      rect(c, x + 4, 8, 1, 19, P.foamShade);
+      rect(c, x + 22, 13, 2, 10, P.ironDark);
+      px(c, x + 22, 14, P.foam);
+      for (const y of [34, 36]) rect(c, x + 6, y, 15, 1, P.iron);
+    },
+  },
+  packHooks: {
+    w: 30, h: 36, solid: true, outline: false,
+    draw: (c, x, _f, tint) => {
+      box(c, x, 2, 30, 30, P.sandDark, P.woodDeep);
+      rect(c, x + 1, 3, 28, 2, P.woodLight);
+      rect(c, x + 14, 5, 1, 26, P.wood);
+      rect(c, x + 2, 30, 26, 1, P.woodDark);
+      rect(c, x + 7, 6, 2, 4, P.iron);
+      rect(c, x + 21, 6, 2, 4, P.iron);
+      drawDayPack(c, x + 2, 10, tint);
+      drawDayPack(c, x + 16, 8, { color: P.signTeal, accent: P.cream });
+      rect(c, x + 2, 32, 3, 4, P.woodDeep);
+      rect(c, x + 25, 32, 3, 4, P.woodDeep);
+    },
+  },
+  towelLadder: {
+    w: 16, h: 38, solid: true, outline: false,
+    draw: (c, x, _f, { color, accent }) => {
+      box(c, x + 1, 0, 3, 36, P.woodLight, P.woodDeep);
+      box(c, x + 12, 2, 3, 36, P.woodLight, P.woodDeep);
+      for (const y of [4, 15, 26, 34]) rect(c, x + 3, y, 10, 2, P.woodDark);
+      for (const [y, fill, dark] of [[4, color, P.coralDark], [16, P.teal, P.tealDark], [27, color, P.coralDark]] as const) {
+        rect(c, x + 3, y + 1, 10, 9, dark);
+        rect(c, x + 3, y, 9, 8, fill);
+        rect(c, x + 3, y, 9, 1, accent);
+        rect(c, x + 5, y + 2, 2, 7, accent);
+        rect(c, x + 9, y + 2, 1, 7, accent);
+        for (const left of [4, 7, 10]) px(c, x + left, y + 10, P.parchment);
+      }
+    },
+  },
+  stickerRack: {
+    w: 28, h: 37, solid: true, outline: false,
+    draw: (c, x, _f, { color, accent }) => {
+      ellipse(c, x + 14, 34, 11, 2, P.shadow);
+      ellipse(c, x + 14, 33, 8, 2, P.ironDark);
+      rect(c, x + 13, 4, 3, 28, P.ironDark);
+      rect(c, x + 13, 5, 1, 27, P.bagSilver);
+      box(c, x + 6, 0, 16, 8, P.navy, P.navyDark);
+      drawSmallWaveMark(c, x + 10, 0, color);
+      for (const [y, inset] of [[9, 2], [20, 0]]) {
+        rect(c, x + inset, y + 8, 28 - inset * 2, 2, P.ironDark);
+        for (const [i, mark] of [accent, P.navy, P.signTeal].entries()) {
+          const left = x + 2 + inset + i * 7;
+          box(c, left, y + i % 2, 8, 9, color, P.woodDark);
+          px(c, left + 3, y + i % 2 + 2, P.sandDark);
+          rect(c, left + 2, y + i % 2 + 4, 4, 2, mark);
+          px(c, left + 3, y + i % 2 + 3, mark);
+        }
+      }
     },
   },
 } satisfies Record<string, PropSpec>;

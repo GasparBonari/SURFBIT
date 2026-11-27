@@ -80,9 +80,9 @@ const def: MapDef = {
     },
     {
       type: "building", id: "goods", label: "SURFBIT",
-      upcomingStoreName: "SURFBIT Goods",
       x: 24, y: 4, w: 12, h: 8, door: { x: 32, y: 11 },
       style: { roof: "terracotta", wall: P.cream, front: "flagship", awnings: stripedAwnings },
+      interact: { kind: "enter", target: "goods", spawn: "door" },
     },
     {
       type: "building", id: "gear", label: "Gear",
@@ -228,6 +228,7 @@ const def: MapDef = {
     "from-boards": { x: 12, y: 12, facing: "down" },
     "from-wear": { x: 10, y: 23, facing: "down" },
     "from-gear": { x: 43, y: 12, facing: "down" },
+    "from-goods": { x: 32, y: 12, facing: "down" },
   },
 };
 

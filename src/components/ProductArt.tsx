@@ -85,5 +85,55 @@ function ProductShape({ kind, accent }: Illustration) {
         <path d="m57 41 14 10h18l14-10 8 8-19 13H68L49 49Z" fill={accent} />
         <path d="M80 68v18" stroke={accent} />
       </>;
+    case "cap":
+      return <>
+        <path d="M28 91c0-25 12-46 42-46 26 0 41 16 45 46l-17 9H43Z" />
+        <path d="M64 46c17 1 27 19 28 45" fill="none" stroke={accent} strokeWidth="2" />
+        <path d="M94 64l12 12m-10-2 13 13m-10-2 9 9" stroke={accent} strokeWidth="2" />
+        <path d="M55 96c17-7 37-11 57-8l22 13c6 4-4 12-21 12-22 0-41-8-58-17Z" />
+        <path d="M44 76h5v-6h5v-4h11v4h4v5h-5v-4h-6v5h4v4h11v4H57v-4h-4v-4h-4v8h-5Z" fill={accent} stroke="none" />
+      </>;
+    case "shades":
+      return <>
+        <path d="m27 65 22-20 19 4m65 16-22-20-19 4" fill="none" strokeWidth="5" strokeLinecap="round" />
+        <path d="M23 62c17-8 41-7 54 2h6c13-9 37-10 54-2l-4 15-5 1c-4 19-10 29-23 29-14 0-21-10-24-31h-2c-3 21-10 31-24 31-13 0-19-10-23-29l-5-1Z" />
+        <path d="M36 68c12-4 25-4 35 1-2 18-7 28-16 28s-16-9-19-29Zm53 1c10-5 23-5 35-1-3 20-10 29-19 29s-14-10-16-28Z" fill={accent} />
+        <path d="m44 83 13-14m39 14 13-14" stroke="var(--sb-cream)" strokeWidth="2" />
+      </>;
+    case "backpack":
+      return <>
+        <path d="M62 39v-8c0-10 36-10 36 0v8h-8v-6c0-4-20-4-20 0v6Z" fill={accent} />
+        <path d="M49 49h62l10 58-8 13H47l-8-13Z" />
+        <path d="M47 107V60c0-17 14-26 33-26s33 9 33 26v47c0 9-6 15-14 15H61c-8 0-14-6-14-15Z" />
+        <path d="M58 67v-7c0-10 11-16 22-16s22 6 22 16v7" fill="none" stroke={accent} strokeWidth="2" />
+        <rect x="59" y="80" width="42" height="29" rx="5" />
+        <path d="M63 87h34m-8 0v6M78 58h4v9h-4Z" stroke={accent} />
+      </>;
+    case "towel":
+      return <>
+        <path d="M44 25h64l12 87H55Z" />
+        <path d="M44 25v85l11 10 11-8-8-87Z" />
+        <path d="M45 34h64l1 8H45zm0 16h66l1 8H45zm0 39h72l1 8H45z" fill={accent} stroke="none" />
+        <path d="M58 25l8 87-11 8m19-8v6m8-6v7m8-7v6m8-6v7m8-7v6m8-6v7" fill="none" />
+        <path d="M77 70h24" stroke={accent} strokeWidth="2" />
+      </>;
+    case "bottle":
+      return <>
+        <path d="M73 28v-9c0-12 25-12 25 0v10h-7V19c0-4-11-4-11 0v9Z" fill={accent} />
+        <rect x="65" y="26" width="30" height="16" rx="3" fill={accent} />
+        <path d="M68 42h24v7l10 12v55c0 7-4 11-11 11H69c-7 0-11-4-11-11V61l10-12Z" />
+        <path d="M58 108h44v8c0 7-4 11-11 11H69c-7 0-11-4-11-11Z" fill={accent} />
+        <path d="M65 64v35m7-66h16" stroke={accent} strokeWidth="2" />
+        <path d="M73 84h4v-5h9v4h-5v4h5v4h8v4H82v-4h-5v4h-4Z" fill={accent} stroke="none" />
+      </>;
+    case "stickers":
+      return <>
+        <path d="M56 28h66v76H56Z" fill={accent} />
+        <path d="M35 41h66v73H35Z" />
+        <path d="M43 98h7l12-18h13l9 18h8v8H43Z" fill="var(--sb-sky)" />
+        <path d="M49 67h8v-8h8v-6h15v5h7v9h-6v-7H71v6h-5v5h4v4h14v7H66v-4h-7v-6h-3v10h-7Z" fill="var(--sb-navy)" stroke="none" />
+        <path d="M96 91h7V79h20v12h8v25H96Z" />
+        <path d="m98 93 14-15 16 15Zm5 7h18v9h-18Z" fill={accent} />
+      </>;
   }
 }

@@ -26,7 +26,7 @@ function containsTile(footprint: Footprint, x: number, y: number): boolean {
     && y >= footprint.y && y < footprint.y + footprint.h;
 }
 
-const WALLS = new Set(["M", "G"]);
+const WALL_TRIM: Partial<Record<string, number>> = { M: T.wallWoodTrim, G: T.wallSageTrim, W: T.wallCreamTrim };
 const FLOORS = new Set(["_", "D"]);
 
 export function buildGround(def: MapDef): number[][] {
@@ -57,8 +57,9 @@ export function buildGround(def: MapDef): number[][] {
       if (east !== undefined && east !== "S") return face ? T.retainingWallFaceEndE : T.retainingWallEndE;
       return face ? T.retainingWallFace : T.retainingWall;
     }
-    if (WALLS.has(tile) && below !== undefined && FLOORS.has(below)) {
-      return tile === "G" ? T.wallSageTrim : T.wallWoodTrim;
+    const trim = WALL_TRIM[tile];
+    if (trim !== undefined && below !== undefined && FLOORS.has(below)) {
+      return trim;
     }
     if (tile === "D") {
       const edgeW = west !== "D";
