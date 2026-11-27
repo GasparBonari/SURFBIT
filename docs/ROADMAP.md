@@ -232,24 +232,24 @@ house with a surf school: readable club content plus bookable lessons,
 rentals, a season pass and coffee. SPEC §4 calls the Beach Club "not a
 traditional shop", so record this as a decision.
 
-- [ ] **B.1 Shop briefs** *(owner approves before B.2)*
+- [ ] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19; awaiting owner approval before B.2)*
   - Files: `docs/SCENES.md` (new §8–10, §1 buildings table, §5 characters, §7 asset checklist), `docs/ARCHITECTURE.md` (Decisions)
   - Do: write one brief per room in the format of SCENES.md §2–4: mood, accent color (palette token), size and shell, ASCII layout, a display → product handle → prop table, a product lineup table (handle, title, category, art kind, options, price in cents), read stations (title and short text), other dressing, and the shopkeeper's look. Use the shared shell (~20 × 14 tiles, back wall 3 rows, 1-tile side columns, low railing with a 2-tile opening, exit mat). Start from these lineups and adjust names or prices if needed:
     - **Goods** (`goods`) — flagship lifestyle boutique, navy accent, cream walls, wood floor. `wave-trucker-cap`, `polarized-shades`, `day-pack`, `stripe-beach-towel`, `steel-bottle`, `pixel-sticker-pack`.
     - **Workshop** (`workshop`) — shaping room, deep-blue accent, wood walls, concrete floor, shaping bay with side lights and foam dust. Read stations: blank → outline and rocker → rails → glassing → sanding and fins, a materials wall (PU/EPS, polyester/epoxy), and a "custom boards later" teaser. Products: `ding-repair-kit`, `shaping-class`, `foam-blank`, `board-sock`, `fin-plug-kit`.
     - **Beach Club** (`beach-club`) — lounge with a big sea window, bar counter and a surf-school corner, sky accent. Read stations: surf guide (etiquette, reading waves), tides and events board, brand story, next-drop teaser. Products: `surf-lesson`, `board-rental`, `season-pass`, `club-coffee-beans`.
     - Mark Goods, Workshop and Beach Club as enterable in SCENES.md §1 only when their step ships (B.2–B.4); in B.1 just reference the new sections.
-    - Add Decision D17: the Beach Club sells services and coffee alongside its club content, and the Workshop is exhibit-first.
+    - Add Decision D19: the Beach Club sells services and coffee alongside its club content, and the Workshop is exhibit-first.
   - Accept: each brief can be built without guessing; every display maps to a lineup handle; product titles, prices and descriptions are planned for the catalog, never the map files; the owner approves.
 
 - [ ] **B.2 SURFBIT Goods**
   - Files: `src/commerce/types.ts` (`StoreId`, `STORES`, `ProductArt` kinds), `src/commerce/mock/catalog.ts`, `src/components/ProductArt.tsx`, `src/game/maps/{goods,index,types,town}.ts`, `src/game/art/*`, `src/game/maps/interiors.test.ts`, `public/assets/world/goods.{png,json}`
-  - Do: add the store and its lineup from SCENES.md §8 (new `ProductArt` kinds drawn in the style of the existing ones). Build the room exactly as briefed with the shared shell. Draw new props, tiles and the shopkeeper in `src/game/art` at the A.3/A.4 standard: palette only, selective outlines, top-left light, no smoothing. Any legacy tile you use (`wallCream`, `wallTeal`, `floorConcrete`, `floorTile`) gets brought up to that standard first. Open the town building: replace `upcomingStoreName` with an `enter` interaction and add the `from-goods` spawn, so the door is no longer boarded. Run `npm run art:export`.
+  - Do: add the store and its lineup from SCENES.md §8 (new `ProductArt` kinds drawn in the style of the existing ones). Build the room exactly as briefed with the shared shell. Draw new props, tiles and the shopkeeper in `src/game/art` at the A.3/A.4 standard: palette only, selective outlines, top-left light, no smoothing. New tiles the brief names (`wallCream` for Goods, `floorConcrete` for the Workshop) go into `TILE_NAMES` and `LEGEND`, drawn to the A.4 standard. Open the town building: replace `upcomingStoreName` with an `enter` interaction and add the `from-goods` spawn, so the door is no longer boarded. Run `npm run art:export`.
   - Accept: `interiors.test.ts` covers `goods` (door, exit, reachable displays, whole-catalog coverage with matching tints); `/shop#goods` and every new `/products/[handle]` work; the directory lists Goods with Walk there and Browse online; a keyboard-only purchase works in the room; screenshot of the room compared with `boards-interior.webp` and `wear-interior.webp` (shell, light, density), main differences listed.
 
 - [ ] **B.3 SURFBIT Workshop**
   - Files: as B.2 for `workshop`
-  - Do: as B.2, following SCENES.md §9. The shaping stations and materials wall are `read` props configured in the map. Replace the exterior's "coming soon" `read` with the `enter` interaction; the open garage front stays as it is.
+  - Do: as B.2, following SCENES.md §9. The shaping stations and materials wall are `read` props configured in the map. Replace the exterior's "coming soon" `read` with the `enter` interaction; the open garage front stays as it is. Shaping-light flicker respects reduced motion.
   - Accept: as B.2 for `workshop`, plus every station opens its text with keyboard and touch.
 
 - [ ] **B.4 SURFBIT Beach Club**
@@ -306,7 +306,7 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-26 — Step A.4 complete. Brought the terrain to the A.3 standard: block-laid retaining wall with end pillars, 16 planter rim tiles with lush beds, diagonal shoreline corners and wet sand, stone and timber stairs, deck planks, tufted grass edges, interior floorboards, plank walls with skirting, a railing, and a two-tile wave doormat. Compared the town and Boards interior with their references.
 - 2026-11-26 — Step A.5 complete. Finished all character sheets: shaded faces and hair, eye glints on every skin tone, rounded jaws and collars. Added wetsuit and carried-board options with a surfer NPC on the beach, shoppers near Gear and Wear, and a redrawn surfer in the water. Checked every direction and pose up close and in the town.
 - 2026-11-26 — A.4 follow-up (owner feedback on the shoreline). Replaced the stepped foam and wet-sand tiles on the town coast with a generated shore overlay: smooth diagonal coast, wet-sand band, swash foam, shallows and two surf lines rolling in (D15). Removed the separate wave sprites it replaces.
-- 2026-11-27 — A.5 follow-up. Removed the ambient surfers from the town ocean (D16). Verified the animated shoreline in Chromium.
+- 2026-11-27 — A.5 follow-up. Removed the ambient surfers from the town ocean (D18). Verified the animated shoreline in Chromium.
 - 2026-11-27 — Step A.6 complete. Finished the six shop façades and two cottages with distinct roof silhouettes, shop displays, and shuttered windows. Compared the town with its reference and verified shop travel in Chromium.
 - 2026-11-27 — Step A.7 complete. Finished the town foliage, street and beach props, and Beach Club deck fixtures. Compared the town with its reference and verified prop collision, sign interactions, and reduced motion in Chromium.
 - 2026-11-27 — Step A.8 complete. Finished the generated Boards, Wear, and Gear props, including product displays, shop signs, woven rugs, and pendant lights. Compared Boards and Wear with their references, checked Gear against its scene brief, and verified shop travel, product inspection, and reduced motion in Chromium.

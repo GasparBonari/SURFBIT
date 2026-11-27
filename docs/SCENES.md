@@ -72,11 +72,11 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 | id | Label on sign | Enterable (MVP) | Size | Roof | Walls | Signature details |
 |---|---|---|---|---|---|---|
 | `boards` | BOARDS | ✅ | 9 × 7 | Thatch (`thatch*`) | Wood planks | Open shopfront showing boards inside; 4 boards leaning against the left wall outside; navy sign with wave mark; potted plants |
-| `goods` | SURFBIT | ❌ (flagship, coming soon) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the door; hibiscus vines on both corners; A-frame sign |
+| `goods` | SURFBIT | ❌ (flagship, coming soon; interior brief §8) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the door; hibiscus vines on both corners; A-frame sign |
 | `gear` | GEAR | ✅ | 9 × 7 | Thatch | Wood planks | Window shows wetsuits on hangers and shelves of bottles; board leaning on the right; navy sign |
-| `workshop` | WORKSHOP | ❌ (teaser `read`) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
+| `workshop` | WORKSHOP | ❌ (teaser `read`; interior brief §9) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
 | `wear` | WEAR | ✅ | 9 × 7 | Indigo tiles (`roofIndigo*`) | Wood + cream | Two striped awnings (blue/white, orange/white); tees hanging in the windows; tee icons on the sign |
-| `beach-club` | BEACH CLUB | ❌ (teaser `read`) | 12 × 7 + deck 12 × 4 | Indigo tiles | Wood | Walkable wooden deck (`d`) in front with café tables, string lights, chalkboard; stairs from deck to sand; coffee-cup icon on the sign; blue SURFBIT flag on a pole beside it |
+| `beach-club` | BEACH CLUB | ❌ (teaser `read`; interior brief §10) | 12 × 7 + deck 12 × 4 | Indigo tiles | Wood | Walkable wooden deck (`d`) in front with café tables, string lights, chalkboard; stairs from deck to sand; coffee-cup icon on the sign; blue SURFBIT flag on a pole beside it |
 | `cottage-*` | — | ❌ decor | 7 × 6 | Coral / terracotta | Cream | 2 cottages along the top edge behind a wooden fence, with stone steps |
 
 ### Props (town)
@@ -257,6 +257,10 @@ ART_DIRECTION.md).
 | Boards shopkeeper | Beard, white cap with wave, white SURFBIT tee |
 | Wear shopkeeper | Curly brown hair, white cap, cream tee |
 | Gear shopkeeper | Ponytail, sun-yellow tee |
+| Goods shopkeeper (Lani, §8) | Bun, navy SURFBIT tee with cream wave, cream shorts, cream bucket hat |
+| Workshop shaper (Rafa, §9) | Short ink hair, beard, foam-dusted grey tee, navy shorts, deep-blue backward cap (optional `apron`) |
+| Beach Club host (Malia, §10) | Curly ink hair with a sun-yellow accent, hibiscus tee, cream shorts |
+| Surf coach (Ben, §10) | Sun-dark hair, teal wetsuit, barefoot |
 | Surfer (`SURFER_LOOK`) | Navy wetsuit (`wetsuit: true`), barefoot, cream board under the arm (`board`): upright at the side from front/back, level across the hips in profile |
 | Townsfolk | Mix of skin tones (`skin1..4`), hats (straw, cap, bucket), tees in palette colors |
 
@@ -318,3 +322,256 @@ pegboard, wetsuit hanger, board-bag rack, shop sign boards (BOARDS, WEAR, GEAR).
 
 **Characters (16 × 32, 3 × 4 sheets):** player, 3 shopkeepers, 4–6
 townsfolk, surfer with board. Optional: sitting and lying frames.
+
+**Phase B rooms (§8–10):**
+- Tiles: cream plaster wall `wallCream` (`W`, with skirting trim), concrete
+  floor `floorConcrete` (`o`, 3 variants with foam dust).
+- Goods: `goodsSign`, `shadesStand`, `bottleFridge`, `packHooks`,
+  `towelLadder`, `stickerRack`.
+- Workshop: `workshopSign`, `toolWall`, `blankRack`, `templateRack`,
+  `shapingStand`, `shapingLight`, `foamDust`, `glassingRack`, `sandingTable`,
+  `materialsBoard`, `classBoard`, `workbench`, `stationPlacard`.
+- Beach Club: `clubSign`, `seaWindow`, `barCounter`, `beanShelf`,
+  `lessonBoard`, `memberBoard`, `guideRack`, `storyFrame`, `dropCrate`.
+- Product art kinds: `cap`, `shades`, `backpack`, `towel`, `bottle`,
+  `stickers`, `kit`, `ticket`, `blank`, `sock`, `plugs`, `beans`.
+- Characters: Lani, Rafa, Malia, Ben.
+
+---
+
+## 8. Goods interior (`goods`)
+
+Coordinates are top-left tiles in the 20 × 15 room, as in the map files.
+Shift a piece by a tile if footprints collide or the aisle closes, and
+update the brief in the same change (AGENTS.md).
+
+No reference image. Build it in the language of Boards and Wear (§2–3): same
+shell, warm light, plants and wave mats. **Awaiting owner approval (roadmap B.1).**
+
+**Mood:** the brand's flagship boutique. Cream plaster back wall with wood
+trim (matching the cream-and-wood storefront), warm wood floor, golden
+pendant light, tidy displays with room to browse. **Accent: Navy** (`navy*`).
+
+**Size and shell:** 20 × 15 tiles like Gear. Back wall 3 rows of a new
+**cream plaster wall tile** (`wallCream`, legend `W`, with the same skirting
+trim as `wallWood`). Side columns `M`. Floor `_`. Row 13 is the railing with
+the exit mat `DD` at x 9–10. Row 14 is cobble street (`:`), since Goods opens
+onto the street.
+
+```
+ x: 0    2    4    6    8   10   12   14   16   18 19
+ ┌──────────────────────────────────────────────────┐
+ │  window   ╔SURFBIT GOODS╗  mirror   [wave print] vines│ cream wall (rows 0–2)
+ │      lamp            lamp            lamp      lamp   │
+ │ [cap shelf] [shades]          [bottle fridge][COUNTER]│ row 4
+ │                                          Lani         │
+ │pack                                          towel    │
+ │hooks       ┌wave rug─────────────┐           ladder   │ rows 6–8
+ │            │  tee table (x-sell)  │                   │
+ │ round rug  └─────────────────────┘                    │
+ │ pouf  palm                          sticker rack      │ row 10
+ │ palm                                         palm     │
+ │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
+ └──────────────────────────────────────────────────┘
+```
+
+| Display | Product handle | Prop | Tile (x, y) |
+|---|---|---|---|
+| Cap shelf (back wall) | `wave-trucker-cap` | `capShelf` (existing, add to the display union) | (2, 4) |
+| Sunglasses stand with a small mirror | `polarized-shades` | `shadesStand` (new) | (6, 4) |
+| Glass-door fridge of bottles | `steel-bottle` | `bottleFridge` (new) | (12, 4) |
+| Backpack hooks (left wall) | `day-pack` | `packHooks` (new, like `leashHooks`) | (1, 7) |
+| Towel ladder (right wall) | `stripe-beach-towel` | `towelLadder` (new) | (18, 7) |
+| Spinner rack of sticker packs | `pixel-sticker-pack` | `stickerRack` (new) | (13, 10) |
+| Tee table on the wave rug (cross-sell, also in Wear) | `logo-tee` | `teeTable` | (7, 7) |
+
+| Handle | Title | Category | Art kind | Art color / accent | Options | Price (cents) |
+|---|---|---|---|---|---|---|
+| `wave-trucker-cap` | Wave Trucker Cap | Cap | `cap` (new) | `navy` / `cream` | Color: Navy, Sand | 3200 |
+| `polarized-shades` | Polarized Shades | Sunglasses | `shades` (new) | `gearCharcoal` / `sky` | Frame: Black, Tortoise | 5800 |
+| `day-pack` | Day Pack | Backpack | `backpack` (new) | `deepBlue` / `sun` | — | 7400 |
+| `stripe-beach-towel` | Stripe Beach Towel | Towel | `towel` (new) | `coral` / `cream` | Color: Coral, Teal | 4200 |
+| `steel-bottle` | Steel Bottle | Water bottle | `bottle` (new) | `productTeal` / `cream` | Size: 500 ml, 750 ml (+400) | 2800 |
+| `pixel-sticker-pack` | Pixel Sticker Pack | Stickers | `stickers` (new) | `cream` / `coral` | — | 900 |
+
+Descriptions (write them in the catalog, two sentences each like the existing
+products): mesh-back cap with an embroidered wave; polarized lenses that cut
+glare off the water; a 20 L day pack with a wet pocket; a sand-shedding
+cotton towel; a double-wall bottle that keeps water cold all session;
+waterproof vinyl stickers of the pixel wave and town.
+
+**Other dressing:** navy sign board `SURFBIT GOODS` with the wave above
+(`goodsSign`, built like `gearSign`), window with blinds, wall mirror beside
+the shades, a framed wave print, vines, four pendants, round jute rug and
+pouf, potted palms, hibiscus pots either side of the mat, navy wave mat.
+Fixed positions: `counter` (15, 5), round rug + pouf (2, 9), palms (3, 10)
+and (17, 11), hibiscus pots (8, 13) and (11, 13), wave mat (9, 13), spawn
+`door` (9, 12) facing up.
+
+**Shopkeeper:** Lani (`idle`, behind the counter at (16, 4)): bun, navy SURFBIT tee with a
+cream wave mark, cream shorts, cream bucket hat. Lines point to the caps by
+the window and the stickers by the door; no prices.
+
+---
+
+## 9. Workshop interior (`workshop`)
+
+No reference image. Same visual language as §2–4, but a working room.
+**Awaiting owner approval (roadmap B.1).**
+
+**Mood:** a shaping workshop you can walk through. A numbered path of five
+stations shows how a board is made; the shop part is small and sits by the
+counter and entrance. Bright shaping lights, foam dust on the floor, tools on
+the wall. **Accent: Deep Blue** (`deepBlue`), echoing the slate-blue roof.
+
+**Size and shell:** 20 × 15 tiles. Back wall 3 rows of `M`, side columns `M`.
+Floor is a new **concrete floor tile** (`floorConcrete`, legend `o`, three
+variants with pale foam-dust specks, drawn to the A.4 standard). Railing and
+`DD` exit mat on row 13. Row 14 is cobble street (`:`).
+
+```
+ x: 0    2    4    6    8   10   12   14   16   18 19
+ ┌──────────────────────────────────────────────────┐
+ │ [tool wall]  ╔WORKSHOP ⚒╗  lamp       window   vines │ wood wall (rows 0–2)
+ │ ①blank rack ①   ②templates      ④glassing [COUNTER]  │ row 4
+ │                                          Rafa          │
+ │            light ┌─────────┐ light            materials│
+ │                  │③ SHAPING│                  wall     │ rows 6–8
+ │ shelf:           │  STAND  │                           │
+ │ repair kits      └ foam dust┘                          │
+ │ workbench                         ⑤ sanding table ⑤   │ row 9
+ │ sock rack    "custom boards"          class board     │ row 11
+ │                chalkboard                        crates│
+ │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
+ └──────────────────────────────────────────────────┘
+```
+
+| Display | Product handle | Prop | Tile (x, y) |
+|---|---|---|---|
+| Rack of leaning foam blanks (station 1) | `foam-blank` | `blankRack` (new) | (2, 4) |
+| Sanding table with fin plugs and a sander (station 5) | `fin-plug-kit` | `sandingTable` (new) | (14, 9) |
+| Wall shelf of repair tins | `ding-repair-kit` | `shelf` (tinted) | (1, 7) |
+| Board-sock rack | `board-sock` | `bagRack` (tinted) | (2, 11) |
+| Class sign-up board with a schedule sheet | `shaping-class` | `classBoard` (new) | (15, 11) |
+
+| Handle | Title | Category | Art kind | Art color / accent | Options | Price (cents) |
+|---|---|---|---|---|---|---|
+| `ding-repair-kit` | Ding Repair Kit | Repair | `kit` (new) | `sun` / `gearCharcoal` | Resin: Polyester, Epoxy | 2400 |
+| `shaping-class` | Shaping Class | Class | `ticket` (new) | `deepBlue` / `cream` | Session: Saturday, Sunday | 34000 |
+| `foam-blank` | PU Foam Blank | Blank | `blank` (new) | `cream` / `finBrown` | Length: 6′4″, 7′2″ (+1500), 9′2″ (+4000) | 12500 |
+| `board-sock` | Board Sock | Board cover | `sock` (new) | `sky` / `navy` | Length: 6′0″, 7′0″, 9′0″ | 3600 |
+| `fin-plug-kit` | Fin Plug Kit | Fin system | `plugs` (new) | `gearCharcoal` / `sun` | Setup: Thruster, Quad | 3900 |
+
+The class is a one-day session: stock is the number of seats left, and the
+description says what's included (your own blank shaped under supervision).
+
+**Read stations** (`read` props; the interaction sits on a small numbered
+placard on a post, `stationPlacard`, next to the object unless noted):
+
+| # | Title | Text | Placard / prop at |
+|---|---|---|---|
+| 1 | The blank | Every board starts as a foam blank with a wooden stringer down the middle. We choose the blank for the length and rocker the board needs. | (4, 5) |
+| 2 | Outline and rocker | Templates trace the outline onto the blank. The planer then sets the rocker, the curve from nose to tail that decides how the board fits the wave. | `templateRack` (new) at (7, 4) |
+| 3 | Rails | Rails are the board's edges. Soft rails forgive, hard rails release water and bite. Most of the shaping hours go here. | `shapingStand` (new) at (9, 7) |
+| 4 | Glassing | Fiberglass cloth and resin seal the foam: two layers on the deck, one on the bottom for a standard layup. | `glassingRack` (new) at (12, 4) |
+| 5 | Sanding and fins | Sanding fairs the glass, then the fin boxes go in. The board cures for a week before its first surf. | (16, 9) |
+| — | Foam and resin | PU foam with polyester resin: the classic feel, flexible and lively. EPS foam with epoxy: lighter, floatier and tougher against dings. | `materialsBoard` (new) at (18, 6) |
+| — | Custom boards | Design your own shape, size and colors here in a later version of the shop. | `chalkboard` (town prop) at (6, 11) |
+
+**Other dressing:** navy `WORKSHOP` sign board with the crossed-tools icon
+(`workshopSign`, matching the storefront), a tool wall (planer, sander,
+rasps, calipers as silhouettes; `toolWall`, wall-mounted), two tall shaping
+lights either side of the stand (`shapingLight`, warm tubes; flicker only
+without reduced motion), a flat foam-dust patch under the stand
+(`foamDust`, `flat`), a workbench with clamps (`workbench`), crates, a
+window, vines, pendants, hibiscus pots at the entrance, a deep-blue wave mat.
+Fixed positions: `toolWall` (2, 1), `counter` (15, 5), shaping lights (7, 6)
+and (12, 6), foam dust (9, 8), `workbench` (2, 9), crates (17, 12) and
+(18, 12), wave mat (9, 13), spawn `door` (9, 12) facing up.
+
+**Shopkeeper:** Rafa the shaper (`idle`, behind the counter at (16, 4)): short ink hair,
+beard, foam-dusted grey tee (`bagSilver`), navy shorts, deep-blue backward
+cap. If the tee alone doesn't read as a shaper, add an `apron` option to
+`Look` (wood-dark shop apron) rather than special-casing him.
+
+---
+
+## 10. Beach Club interior (`beach-club`)
+
+No reference image. Same visual language as §2–4, opening onto the deck.
+**Awaiting owner approval (roadmap B.1).** See ARCHITECTURE.md → D19 for why the club
+sells lessons, rentals, a pass and coffee.
+
+**Mood:** a breezy club house. A big window over the sea fills the back wall,
+string lights hang over a lounge, a coffee bar sits on the left and a
+surf-school corner with softboards and wetsuits on the right. Boards you can
+rent, a guide to read, and the week's events. **Accent: Sky** (`sky`), with
+hibiscus pinks in the plants.
+
+**Size and shell:** 20 × 15 tiles. Back wall 3 rows of `M`, side columns `M`.
+The floor is the **deck tile** (`d`) so the room reads as a continuation of
+the deck outside; no new floor tile. Railing and `DD` exit mat on row 13.
+Row 14 is deck (`d`).
+
+```
+ x: 0    2    4    6    8   10   12   14   16   18 19
+ ┌──────────────────────────────────────────────────┐
+ │ sunset print ╔BEACH CLUB ☕╗ [══ SEA WINDOW ══]  vines │ wood wall (rows 0–2)
+ │  string lights ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      │
+ │ [BAR COUNTER ☕] [bean shelf]  [lesson board] wetsuits│ row 4
+ │   Malia                                      Ben      │
+ │                 café table                            │
+ │ guide  ┌round rug┐                       softboard     │ rows 7–9
+ │ rack   │ wicker  │ coffee table          rack (rental) │
+ │        └ pouf ───┘                        member board │
+ │                                                        │
+ │ story easel                         events   next-drop │ row 11
+ │                                      board    crate    │
+ │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
+ └──────────────────────────────────────────────────┘
+```
+
+| Display | Product handle | Prop | Tile (x, y) |
+|---|---|---|---|
+| Wall shelf of coffee bags beside the bar | `club-coffee-beans` | `beanShelf` (new) | (7, 4) |
+| Whiteboard with a lesson schedule and a wave sketch | `surf-lesson` | `lessonBoard` (new) | (12, 4) |
+| Softboard rack (rental boards) | `board-rental` | `boardRack` (tinted) | (15, 8) |
+| Framed member card on an easel | `season-pass` | `memberBoard` (new) | (18, 9) |
+
+| Handle | Title | Category | Art kind | Art color / accent | Options | Price (cents) |
+|---|---|---|---|---|---|---|
+| `surf-lesson` | Surf Lesson | Lesson | `ticket` | `teal` / `cream` | Type: Group, Private (+4000); Session: Morning, Afternoon | 6500 |
+| `board-rental` | Board Rental | Rental | `board` | `sky` / `cream` | Board: Softboard, Mid-length; Time: Half day, Full day (+1500) | 2500 |
+| `season-pass` | Season Pass | Membership | `ticket` | `sun` / `navy` | — | 24000 |
+| `club-coffee-beans` | Club Coffee Beans | Coffee | `beans` (new) | `finBrown` / `cream` | Grind: Whole bean, Ground | 1800 |
+
+Lessons and rentals are ordinary products: stock is the spots or boards left
+for that option, and they go through the same cart and checkout. Their
+descriptions say what's included (board and wetsuit for lessons; leash for
+rentals); the season pass covers unlimited rentals and member events.
+
+**Read stations** (`read` props):
+
+| Title | Text | Prop at |
+|---|---|---|
+| Surf guide | Lineup etiquette: the surfer closest to the peak has the wave. Don't drop in, and paddle wide of anyone riding. / Watch a few sets before you paddle out, and use the channel where waves don't break to get back out. | `guideRack` (new, magazine rack) at (1, 8) |
+| Tides and events | Dawn patrol meets here every Saturday at 6:30. / Beach clean-up on the first Sunday of the month. / Tides are posted on this board every morning. | `noticeBoard` (town prop) at (14, 11) |
+| Our story | SURFBIT started as a board rack behind a beach shack. Every board, tee and fin we sell is tested in these waves first. | `storyFrame` (new, photo easel) at (2, 11) |
+| Next drop | Something's under the tarp. The next SURFBIT collection lands with the summer swell. | `dropCrate` (new, tarp-covered crate with a NEXT DROP tag) at (17, 11) |
+
+**Other dressing:** navy `BEACH CLUB` sign board with the coffee-cup icon
+(`clubSign`, matching the storefront), a 4-tile sea window with sky, horizon
+and a wave line (`seaWindow`, wall-mounted at x 12–15), a sunset print,
+string lights across the ceiling (reuse `stringLights` if it reads indoors,
+else an interior variant), a bar counter with an espresso machine and cups
+(`barCounter`, 4 tiles), a café table with chairs (`cafeTable`), round rug,
+wicker chair, pouf and coffee table, two wetsuit hangers (decorative), potted
+palms and hibiscus, a sky-blue wave mat.
+Fixed positions: `barCounter` (1, 5), `cafeTable` (9, 6), round rug +
+wicker chair + pouf + coffee table around (4, 8), wetsuit hangers (17, 4) and
+(18, 4), wave mat (9, 13), spawn `door` (9, 12) facing up.
+
+**Host:** Malia (`idle`, behind the bar at (2, 4)): curly ink hair with a sun-yellow
+accent, hibiscus tee, cream shorts. **Surf coach:** Ben (`idle`, school
+corner at (16, 6)): sun-dark hair, teal wetsuit (`wetsuit: true`), barefoot. Their lines
+invite you to book a lesson or rent a board; no prices.
