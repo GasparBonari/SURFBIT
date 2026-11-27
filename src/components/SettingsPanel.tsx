@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type KeyboardEvent } from "react";
+import { appearanceOptions, defaultPlayerAppearance, readPlayerAppearance, type PlayerAppearance } from "@/state/playerAppearance";
 import { useSettings } from "@/state/settings";
 import { useUI } from "@/state/ui";
 import styles from "./SettingsPanel.module.css";
@@ -8,6 +9,12 @@ import styles from "./SettingsPanel.module.css";
 const volumeControls = [
   ["musicVolume", "Music volume"],
   ["ambienceVolume", "Ambience volume"],
+] as const;
+
+const appearanceControls = [
+  ["skin", "Skin tone"],
+  ["shirt", "Shirt color"],
+  ["headwear", "Headwear"],
 ] as const;
 
 export function SettingsPanel() {
@@ -26,7 +33,7 @@ function SettingsDialog() {
   const closeAll = useUI((state) => state.closeAll);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const motionRef = useRef<HTMLSelectElement>(null);
+  const resetRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -43,7 +50,7 @@ function SettingsDialog() {
   function onKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.key !== "Tab") return;
     const first = closeRef.current;
-    const last = motionRef.current;
+    const last = resetRef.current;
     if (event.shiftKey ? event.target === first : event.target === last) {
       event.preventDefault();
       (event.shiftKey ? last : first)?.focus();
@@ -103,7 +110,6 @@ function SettingsDialog() {
         <label className={styles.row}>
           Reduced motion
           <select
-            ref={motionRef}
             value={settings.reducedMotion === null ? "system" : settings.reducedMotion ? "on" : "off"}
             onChange={(event) => {
               const value = event.currentTarget.value;
@@ -115,7 +121,67 @@ function SettingsDialog() {
             <option value="off">Off</option>
           </select>
         </label>
+        <fieldset className={styles.appearance}>
+          <legend>Appearance</legend>
+          <div className={styles.appearanceBody}>
+            <div className={styles.preview}>
+              <AppearancePreview appearance={settings.appearance} />
+            </div>
+            <div className={styles.appearanceFields}>
+              {appearanceControls.map(([field, label]) => (
+                <label key={field}>
+                  {label}
+                  <select
+                    value={settings.appearance[field]}
+                    onChange={(event) => settings.set({
+                      appearance: readPlayerAppearance({
+                        ...settings.appearance,
+                        [field]: event.currentTarget.value,
+                      }),
+                    })}
+                  >
+                    {Object.entries(appearanceOptions[field]).map(([value, name]) => (
+                      <option key={value} value={value}>{name}</option>
+                    ))}
+                  </select>
+                </label>
+              ))}
+              <button
+                ref={resetRef}
+                type="button"
+                className="sb-btn sb-btn--secondary"
+                onClick={() => settings.set({ appearance: defaultPlayerAppearance })}
+              >
+                Reset appearance
+              </button>
+            </div>
+          </div>
+        </fieldset>
       </div>
     </dialog>
   );
+}
+
+function AppearancePreview({ appearance }: { appearance: PlayerAppearance }) {
+  const previewRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const preview = previewRef.current;
+    if (!preview) return;
+    let cancelled = false;
+
+    void import("@/game/art/characters").then(({ buildCharacterSheet, playerLook, CHAR_W, CHAR_H }) => {
+      if (cancelled) return;
+      preview.width = CHAR_W;
+      preview.height = CHAR_H;
+      // The preview canvas clips the sheet to its front-facing stand frame.
+      preview.getContext("2d")?.drawImage(buildCharacterSheet(playerLook(appearance)), 0, 0);
+    }).catch((error: unknown) => {
+      if (!cancelled) console.warn("Could not draw the player preview", error);
+    });
+
+    return () => { cancelled = true; };
+  }, [appearance]);
+
+  return <canvas ref={previewRef} aria-hidden="true" />;
 }

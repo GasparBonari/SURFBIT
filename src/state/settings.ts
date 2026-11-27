@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { defaultPlayerAppearance, readPlayerAppearance, type PlayerAppearance } from "./playerAppearance";
 
 interface SettingsState {
   muted: boolean;
@@ -9,6 +10,7 @@ interface SettingsState {
   ambienceVolume: number;
   /** null = follow the OS `prefers-reduced-motion` setting. */
   reducedMotion: boolean | null;
+  appearance: PlayerAppearance;
   set(patch: Partial<Omit<SettingsState, "set">>): void;
 }
 
@@ -19,9 +21,23 @@ export const useSettings = create<SettingsState>()(
       musicVolume: 0.5,
       ambienceVolume: 0.7,
       reducedMotion: null,
+      appearance: defaultPlayerAppearance,
       set: (patch) => set(patch),
     }),
-    { name: "surfbit-settings", version: 1, skipHydration: true },
+    {
+      name: "surfbit-settings",
+      version: 1,
+      skipHydration: true,
+      merge: (persisted, current) => {
+        const saved = persisted as Partial<SettingsState> | undefined;
+        return {
+          ...current,
+          ...saved,
+          set: current.set,
+          appearance: readPlayerAppearance(saved?.appearance),
+        };
+      },
+    },
   ),
 );
 

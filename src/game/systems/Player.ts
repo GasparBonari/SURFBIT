@@ -1,5 +1,7 @@
 import type Phaser from "phaser";
+import type { PlayerAppearance } from "@/state/playerAppearance";
 import { isOverlayOpen, useUI } from "@/state/ui";
+import { buildCharacterSheet, playerLook } from "../art/characters";
 import { TILE } from "../art/tiles";
 import { virtualStick } from "../bridge";
 import type { Spawn } from "../maps/types";
@@ -23,6 +25,20 @@ export class Player extends Character {
       up: addKey("UP"), left: addKey("LEFT"), down: addKey("DOWN"), right: addKey("RIGHT"),
       shift: addKey("SHIFT"),
     };
+  }
+
+  setAppearance(appearance: PlayerAppearance) {
+    const texture = this.sprite.texture;
+    const canvas = texture.getSourceImage();
+    const context = canvas instanceof HTMLCanvasElement ? canvas.getContext("2d") : null;
+    if (!context || !("refresh" in texture) || typeof texture.refresh !== "function") {
+      throw new Error("The player texture must be backed by a canvas");
+    }
+    const sheet = buildCharacterSheet(playerLook(appearance));
+    // Existing animation frames keep their references to the shared player texture.
+    context.clearRect(0, 0, sheet.width, sheet.height);
+    context.drawImage(sheet, 0, 0);
+    texture.refresh();
   }
 
   update(delta: number, obstacles: readonly Point[], stopAt?: (x: number, y: number) => boolean) {

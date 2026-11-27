@@ -254,7 +254,7 @@ ART_DIRECTION.md).
 
 | Character | Look |
 |---|---|
-| **Player** | Blue/white trucker cap (worn forward), brown hair, white tee, blue shorts, brown backpack, sneakers |
+| **Player** | Defaults to a blue/white trucker cap (worn forward), brown hair, white tee, blue shorts, brown backpack, sneakers |
 | Boards shopkeeper | Beard, white cap with wave, white SURFBIT tee |
 | Wear shopkeeper | Curly brown hair, white cap, cream tee |
 | Gear shopkeeper | Ponytail, sun-yellow tee |
@@ -269,6 +269,10 @@ Every character gets the same finish: shaded far edge of shirt and face, a
 collar line, a rounded jaw, two-tone hair with a lit crown, and a cream glint
 in each eye so faces read on every skin tone. Dark hair uses `ink`, never
 `outline`, so it doesn't merge with the outline.
+
+Settings → Appearance lets players choose any of the four skin tones, a
+white, coral, teal or navy tee, and a trucker cap, cream bucket hat or bare head.
+The preview shows the front-facing idle frame at 3× zoom.
 
 ---
 

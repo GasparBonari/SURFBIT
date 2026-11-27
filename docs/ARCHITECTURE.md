@@ -68,7 +68,9 @@ src/
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
 │   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
-│   ├── settings.ts           ✅ audio + reduced motion, persisted
+│   ├── settings.ts           ✅ audio, reduced motion and player appearance, persisted
+│   ├── settings.test.ts      ✅ hydration of legacy settings and saved appearances
+│   ├── playerAppearance.ts   ✅ appearance options and persisted choice validation
 │   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location, and travel readiness
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
 ├── telemetry/                   first-party instrumentation
@@ -116,7 +118,7 @@ src/
     ├── Hud.tsx                ✅ world location, cart count, directory, settings, mute, and fullscreen (with CSS module)
     ├── StoreDirectory.tsx     ✅ town shops, travel shortcuts, and storefront links (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── SettingsPanel.tsx      ✅ persisted audio and reduced-motion controls (with CSS module)
+    └── SettingsPanel.tsx      ✅ audio, reduced-motion and player appearance controls (with CSS module)
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -362,6 +364,10 @@ looks and prop tints, then run `npm run check`.
   0.15 dead zone to `virtualStick`. It releases movement when the gesture ends,
   an overlay opens, or travel starts.
 - Facing = dominant axis of the input vector; animations are 4-directional.
+- Player appearance is stored with local settings. Settings draws the still
+  preview from the shared character generator. MapScene applies the saved look
+  on entry and subscribes to appearance changes until shutdown. Player redraws
+  the canvas-backed `player` texture in place so animation frames keep their keys.
 - Camera: `startFollow(player, true)`, bounded to the map with `roundPixels: true`.
   Town zoom is `max(2, floor(viewportHeight / 240))`. Interiors use the
   smallest integer zoom of at least 2× that covers both viewport dimensions.

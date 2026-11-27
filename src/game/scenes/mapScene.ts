@@ -1,5 +1,5 @@
 import type Phaser from "phaser";
-import { prefersReducedMotion } from "@/state/settings";
+import { prefersReducedMotion, useSettings } from "@/state/settings";
 import { isOverlayOpen, useUI } from "@/state/ui";
 import { reportClientError } from "@/telemetry/client";
 import { P } from "../art/palette";
@@ -65,10 +65,12 @@ export function createMapScene(
       const { signal } = lifecycle;
       let updateZoom: (() => void) | undefined;
       let stopTravel: (() => void) | undefined;
+      let stopAppearance: (() => void) | undefined;
 
       const cleanup = () => {
         lifecycle.abort();
         stopTravel?.();
+        stopAppearance?.();
         this.transitioning = false;
         this.ambient?.destroy();
         this.ambient = undefined;
@@ -110,6 +112,10 @@ export function createMapScene(
         const animatedProps = spawnObjects(this, def);
         this.blocked = buildBlocked(def);
         const player = new Player(this, start, this.blocked);
+        player.setAppearance(useSettings.getState().appearance);
+        stopAppearance = useSettings.subscribe(({ appearance }, previous) => {
+          if (appearance !== previous.appearance) player.setAppearance(appearance);
+        });
         this.npcs = def.objects.flatMap((object) => object.type === "npc" ? [new Npc(this, def.key, object)] : []);
         this.interactions = new Interactions(this, def.objects, this.npcs);
         this.ambient = new Ambient(this, def, ground, animatedProps, player.sprite);

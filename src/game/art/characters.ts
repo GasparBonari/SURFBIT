@@ -1,3 +1,4 @@
+import type { PlayerAppearance } from "@/state/playerAppearance";
 import { type Ctx, ellipse, makeCanvas, px, rect, shade } from "./canvas";
 import { P } from "./palette";
 
@@ -388,6 +389,18 @@ export const PLAYER_LOOK: Look = {
   backpack: P.wood,
   shoes: P.coralDark,
 };
+
+const playerSkin = { light: P.skin1, tan: P.skin2, brown: P.skin3, deep: P.skin4 };
+const playerShirts = { white: P.white, coral: P.coral, teal: P.teal, navy: P.navy };
+const playerHats: Record<PlayerAppearance["headwear"], Look["hat"]> = {
+  trucker: PLAYER_LOOK.hat,
+  bucket: { style: "bucket", color: P.cream, brim: P.sandDark, mark: P.navy },
+  none: undefined,
+};
+
+export function playerLook({ skin, shirt, headwear }: PlayerAppearance): Look {
+  return { ...PLAYER_LOOK, skin: playerSkin[skin], shirt: playerShirts[shirt], hat: playerHats[headwear] };
+}
 
 export const BOARDS_SHOPKEEPER_LOOK: Look = {
   skin: P.skin3,
