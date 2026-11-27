@@ -231,7 +231,7 @@ house with a surf school: readable club content plus bookable lessons,
 rentals, a season pass and coffee. SPEC §4 calls the Beach Club "not a
 traditional shop", so record this as a decision.
 
-- [ ] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19. Goods approved for B.2. Workshop and Beach Club awaiting approval.)*
+- [x] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19. Goods approved for B.2. Workshop and Beach Club awaiting approval.)*
   - Files: `docs/SCENES.md` (new §8–10, §1 buildings table, §5 characters, §7 asset checklist), `docs/ARCHITECTURE.md` (Decisions)
   - Do: write one brief per room in the format of SCENES.md §2–4: mood, accent color (palette token), size and shell, ASCII layout, a display → product handle → prop table, a product lineup table (handle, title, category, art kind, options, price in cents), read stations (title and short text), other dressing, and the shopkeeper's look. Use the shared shell (~20 × 14 tiles, back wall 3 rows, 1-tile side columns, low railing with a 2-tile opening, exit mat). Start from these lineups and adjust names or prices if needed:
     - **Goods** (`goods`) — flagship lifestyle boutique, navy accent, cream walls, wood floor. `wave-trucker-cap`, `polarized-shades`, `day-pack`, `stripe-beach-towel`, `steel-bottle`, `pixel-sticker-pack`.
