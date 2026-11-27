@@ -264,7 +264,7 @@ traditional shop", so record this as a decision.
 ## Phase 7 — Post-MVP ideas (from spec §14)
 
 - [x] **7.1 Character customization**
-  - Do: add an Appearance section to the world Settings dialog with skin tone,
+  - Do: add an Appearance tab to the world Settings dialog with skin tone,
     shirt color and headwear, a still pixel preview, and a reset to the original
     outfit. Save choices with the existing browser settings and use the shared
     character art for the preview and player sprite.
@@ -332,3 +332,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step B.4 complete. Opened the SURFBIT Beach Club from the deck with four catalog products and four read stations. Exported the room atlas and verified the directory, keyboard and touch reads, and a lesson purchase in Chromium.
 - 2026-11-27 — Step B.5 complete. Updated town and shop signs and townsfolk dialogue. Verified all six doors and directory links, indoor audio and location live regions in the three new rooms, and six keyboard and touch demo orders with analytics in Chromium.
 - 2026-11-27 — Step 7.1 complete. Added local player appearance settings with a pixel preview and reset. Verified keyboard and touch controls, all four walk directions, shop travel, reload, and the original outfit for existing settings.
+- 2026-11-27 — Step 7.1 follow-up. Separated Settings into Audio, Appearance and Accessibility tabs. Verified keyboard and touch navigation, focus return, and scrolling on short screens.

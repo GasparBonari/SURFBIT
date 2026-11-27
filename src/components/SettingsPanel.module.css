@@ -1,6 +1,10 @@
 .panel {
+  /* Keep the tab row in place when the active panel changes height. */
+  --settings-top: max(var(--sb-space-4), calc(50dvh - 14rem));
+  inset-block: var(--settings-top) auto;
+  margin-block: 0;
   width: min(25rem, calc(100% - 2 * var(--sb-space-4)));
-  max-height: calc(100dvh - 2 * var(--sb-space-4));
+  max-height: calc(100dvh - var(--settings-top) - var(--sb-space-4));
   padding: 0;
   color: var(--sb-text);
   overflow: hidden;
@@ -27,7 +31,6 @@
 .header {
   flex: none;
   padding: var(--sb-space-3) var(--sb-space-4);
-  border-bottom: var(--sb-border);
   background: var(--sb-cream);
   color: var(--sb-navy-dark);
 }
@@ -42,12 +45,46 @@
   font-size: 14px;
 }
 
+.tabs {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(max-content, 1fr));
+  gap: var(--sb-space-1);
+  padding: 0 var(--sb-space-3) var(--sb-space-3);
+  border-bottom: var(--sb-border);
+  background: var(--sb-cream);
+}
+
+.tabs button {
+  min-height: 44px;
+  padding-inline: var(--sb-space-1);
+  border: 2px solid transparent;
+  border-radius: var(--sb-radius);
+  background: transparent;
+  color: var(--sb-navy-dark);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tabs button:hover {
+  background: var(--sb-sand-light);
+}
+
+.tabs button[aria-selected="true"] {
+  border-color: var(--sb-outline);
+  background: var(--sb-navy-dark);
+  color: var(--sb-white);
+}
+
+.tabPanel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .controls {
   display: grid;
   gap: var(--sb-space-2);
-  padding: var(--sb-space-3) var(--sb-space-4);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: var(--sb-space-4);
 }
 
 .row,
@@ -88,28 +125,22 @@
   font-variant-numeric: tabular-nums;
 }
 
-.appearance {
-  min-inline-size: 0;
-  margin: var(--sb-space-2) 0 0;
-  padding: 0;
-  border: 0;
-}
-
-.appearance legend {
-  padding: 0;
-  color: var(--sb-navy-dark);
-  font-weight: 700;
+.help {
+  margin: 0;
+  color: var(--sb-text-muted);
+  font-size: 14px;
 }
 
 .appearanceBody {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(68px, 24%) minmax(0, 1fr);
   gap: var(--sb-space-3);
-  margin-top: var(--sb-space-2);
 }
 
 .preview {
+  position: sticky;
+  inset-block-start: var(--sb-space-4);
+  align-self: start;
   display: grid;
   place-items: center;
   padding: var(--sb-space-2);
