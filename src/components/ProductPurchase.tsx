@@ -5,6 +5,7 @@ import { defaultSelection, findVariant, formatMoney } from "@/commerce/format";
 import type { Product, ProductVariant } from "@/commerce/types";
 import { gameEvents } from "@/game/bridge";
 import { useCart } from "@/state/cart";
+import { trackEvent } from "@/telemetry/client";
 import styles from "./ProductPurchase.module.css";
 
 export function ProductPurchase({ product }: { product: Product }) {
@@ -50,6 +51,7 @@ export function ProductPurchase({ product }: { product: Product }) {
     if (added <= 0) return;
 
     cart.add(product, variant, added);
+    trackEvent({ event: "add_to_cart", product: product.handle });
     gameEvents.emit("sound", "add-to-cart");
     setRequested(1);
     setConfirmation(`Added ${added} to cart. ${alreadyAdded + added} in cart for this selection.`);

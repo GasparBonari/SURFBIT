@@ -39,8 +39,11 @@ Status: ✅ exists · 🔲 to be built (see [ROADMAP.md](ROADMAP.md))
 
 ```
 src/
+├── instrumentation.ts          ✅ reports Next.js server request errors
+├── instrumentation-client.ts   ✅ listens for browser errors and unhandled rejections
 ├── app/                         Next.js App Router
 │   ├── layout.tsx            ✅ fonts, metadata, global CSS, store hydration, audio and cart drawer
+│   ├── PageAnalytics.tsx     ✅ initial and client-side page views
 │   ├── StoreAudio.tsx        ✅ client entry for the shared audio lifecycle
 │   ├── globals.css           ✅ design tokens + .sb-btn / .sb-panel
 │   ├── page.tsx              ✅ world page, catalog hydration, and HUD
@@ -52,7 +55,8 @@ src/
 │   ├── sitemap.ts           ✅ town, shop and provider-backed product URLs
 │   ├── siteUrl.ts           ✅ shared site origin and product paths
 │   ├── checkout/             ✅ checkout review + demo confirmation (with CSS module)
-│   └── api/checkout/route.ts ✅ validates POST lines → commerce.createCheckout
+│   ├── api/checkout/route.ts ✅ validates POST lines → commerce.createCheckout
+│   └── api/telemetry/route.ts ✅ validates browser telemetry and writes structured logs
 ├── commerce/                    server-side commerce seam
 │   ├── types.ts              ✅ Product, Variant, Money, CommerceProvider, STORES
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
@@ -67,6 +71,9 @@ src/
 │   ├── settings.ts           ✅ audio + reduced motion, persisted
 │   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location, and travel readiness
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
+├── telemetry/                   first-party instrumentation
+│   ├── client.ts             ✅ best-effort same-origin event and error reporting
+│   └── events.ts             ✅ event types, route labels and error categories
 ├── game/                        Phaser world — never imported by server code
 │   ├── bridge.ts             ✅ world controls and audio events + virtualStick (Phaser-free)
 │   ├── art/                     procedural pixel art
@@ -399,6 +406,23 @@ and clears it when the world unmounts. Beach and shop ambience use filtered
 noise, and interiors add a looping chiptune. Successful world interactions
 and add-to-cart actions emit cues through the same bridge. Mute applies to all
 audio, and the music and ambience sliders adjust their levels live.
+
+## Analytics and error tracking
+
+Search the application logs (`npm run start` locally or Vercel Runtime Logs)
+for `"scope":"surfbit"`. Each entry is a JSON record. `page_view` records the
+initial page and changes to the pathname, with product URLs grouped under
+`/products/[handle]`. `product_inspect` records an opened world product modal,
+`add_to_cart` records a successful addition from the modal or product page,
+and `checkout_start` records a submitted checkout review with items.
+
+`client_error` records uncaught browser errors, unhandled rejections and
+handled world loading, travel or checkout failures. `server_error` records
+errors that Next.js captures with their route and framework digest when
+available. Browser events use a same-origin POST with delivery independent of
+the user flow. Logged fields are limited to route labels, catalog handles,
+and error categories or digests. The collector drops extra fields, including
+any raw URLs, query strings, cookies, cart contents, or exception messages.
 
 ## Decisions
 

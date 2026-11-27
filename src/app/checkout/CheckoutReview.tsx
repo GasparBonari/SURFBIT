@@ -5,6 +5,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { formatMoney } from "@/commerce/format";
 import { useCartHydrated } from "@/components/StoreHydrator";
 import { cartSubtotal, useCart, type CartLine } from "@/state/cart";
+import { reportClientError, trackEvent } from "@/telemetry/client";
 import styles from "./Checkout.module.css";
 
 const checkoutReturnKey = "surfbit-checkout-return";
@@ -27,6 +28,7 @@ export function CheckoutReview() {
     setSubmitting(true);
     setError("");
     const body = JSON.stringify({ lines: checkoutLines(cart.lines) });
+    trackEvent({ event: "checkout_start" });
 
     let message = checkoutError;
     try {
@@ -49,8 +51,8 @@ export function CheckoutReview() {
           message = result.error;
         }
       }
-    } catch {
-      // Keep the review available if the request or redirect fails.
+    } catch (error) {
+      reportClientError("checkout_request", error);
     }
     setError(message);
     setSubmitting(false);

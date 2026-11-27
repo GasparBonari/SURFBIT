@@ -2,6 +2,7 @@
 
 import type { Game } from "phaser";
 import { useEffect, useRef, useState } from "react";
+import { reportClientError } from "@/telemetry/client";
 import { gameEvents, type Ambience } from "./bridge";
 
 export function WorldClient({ className }: { className: string }) {
@@ -19,6 +20,7 @@ export function WorldClient({ className }: { className: string }) {
       if (cancelled) return;
       gameEvents.emit("ambience", null);
       console.error("Could not load the SURFBIT beach town", error);
+      reportClientError("world_load", error);
       setFailed(true);
     }
 

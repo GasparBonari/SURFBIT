@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Press_Start_2P } from "next/font/google";
+import { Suspense } from "react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { StoreHydrator } from "@/components/StoreHydrator";
+import { PageAnalytics } from "./PageAnalytics";
 import { StoreAudio } from "./StoreAudio";
 import { siteUrl } from "./siteUrl";
 import "./globals.css";
@@ -40,6 +42,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${pixel.variable} ${body.variable}`}>
       <body>
+        <Suspense fallback={null}>
+          <PageAnalytics />
+        </Suspense>
         <StoreHydrator />
         <StoreAudio />
         {children}

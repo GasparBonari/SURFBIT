@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import { useCatalog } from "@/state/catalog";
 import { useUI } from "@/state/ui";
+import { trackEvent } from "@/telemetry/client";
 import { ProductArt } from "./ProductArt";
 import { ProductPurchase } from "./ProductPurchase";
 import styles from "./ProductModal.module.css";
@@ -17,6 +18,7 @@ function ProductPanel({ handle }: { handle: string }) {
   const product = useCatalog((state) => state.products[handle]);
   const closeAll = useUI((state) => state.closeAll);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const tracked = useRef(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -24,11 +26,15 @@ function ProductPanel({ handle }: { handle: string }) {
     const dialog = dialogRef.current;
     if (!dialog) return;
     dialog.showModal();
+    if (!tracked.current) {
+      tracked.current = true;
+      trackEvent({ event: "product_inspect", product: handle });
+    }
     return () => {
       dialog.close();
       document.getElementById("world-canvas")?.focus({ preventScroll: true });
     };
-  }, []);
+  }, [handle]);
 
   function onKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.repeat && (event.key === "Enter" || event.key === " ")) {

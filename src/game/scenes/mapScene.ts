@@ -1,6 +1,7 @@
 import type Phaser from "phaser";
 import { prefersReducedMotion } from "@/state/settings";
 import { isOverlayOpen, useUI } from "@/state/ui";
+import { reportClientError } from "@/telemetry/client";
 import { P } from "../art/palette";
 import { TILE } from "../art/tiles";
 import { gameEvents, type Ambience } from "../bridge";
@@ -171,6 +172,7 @@ export function createMapScene(
             } catch (error) {
               if (signal.aborted) return;
               console.error(`Could not travel to "${map}"`, error);
+              reportClientError("world_travel", error);
               if (fade) reveal();
               else finishTransition();
             }
