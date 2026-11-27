@@ -5,6 +5,7 @@ import { INTERIOR_PROPS } from "./interiorProps";
 import { drawBoard } from "./motifs";
 import { SHOP_DISPLAYS } from "./shopDisplays";
 import { TOWN_PROPS } from "./townProps";
+import { WORKSHOP_PROPS } from "./workshopProps";
 
 export interface Tint {
   color: string;
@@ -42,6 +43,7 @@ export const PROPS = {
   },
   ...INTERIOR_PROPS,
   ...SHOP_DISPLAYS,
+  ...WORKSHOP_PROPS,
 } satisfies Record<string, PropSpec>;
 
 // ------------------------------------------------------------- effects

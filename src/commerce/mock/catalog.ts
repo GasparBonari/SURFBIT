@@ -386,6 +386,63 @@ const seeds: Seed[] = [
     options: [],
     price: 900,
   },
+  // -------------------------------------------------------------- Workshop
+  {
+    handle: "ding-repair-kit",
+    store: "workshop",
+    title: "Ding Repair Kit",
+    category: "Repair",
+    description:
+      "Resin, hardener, fiberglass cloth and sandpaper to seal a ding before it soaks up water. Pick the resin that matches your board: polyester for PU, epoxy for EPS.",
+    art: { kind: "kit", color: "#f2b632", accent: "#2b2b3a" },
+    options: [{ name: "Resin", values: ["Polyester", "Epoxy"] }],
+    price: 2400,
+  },
+  {
+    handle: "shaping-class",
+    store: "workshop",
+    title: "Shaping Class",
+    category: "Class",
+    description:
+      "A one-day class in the SURFBIT Workshop: you shape your own blank under a shaper's eye, from outline to rails. Your blank and the tools are included, and seats are limited.",
+    art: { kind: "ticket", color: "#2f6f8f", accent: "#fff3d6" },
+    options: [{ name: "Session", values: ["Saturday", "Sunday"] }],
+    price: 34000,
+  },
+  {
+    handle: "foam-blank",
+    store: "workshop",
+    title: "PU Foam Blank",
+    category: "Blank",
+    description:
+      "A polyurethane blank with a cedar stringer, the same foam our shapers start from. Choose a length with room to spare for the outline you have in mind.",
+    art: { kind: "blank", color: "#fff3d6", accent: "#7a4b2a" },
+    options: [{ name: "Length", values: ["6'4\"", "7'2\"", "9'2\""] }],
+    price: 12500,
+    surcharge: { "7'2\"": 1500, "9'2\"": 4000 },
+  },
+  {
+    handle: "board-sock",
+    store: "workshop",
+    title: "Board Sock",
+    category: "Board cover",
+    description:
+      "A stretch-knit sock that keeps wax off the car seats and scratches off the deck. The drawstring nose slips on in seconds.",
+    art: { kind: "sock", color: "#6fccd2", accent: "#114f6d" },
+    options: [{ name: "Length", values: ["6'0\"", "7'0\"", "9'0\""] }],
+    price: 3600,
+  },
+  {
+    handle: "fin-plug-kit",
+    store: "workshop",
+    title: "Fin Plug Kit",
+    category: "Fin system",
+    description:
+      "Fin plugs, a drill guide and a template for setting fin boxes in a fresh board. Choose a thruster or quad layout.",
+    art: { kind: "plugs", color: "#2b2b3a", accent: "#f2b632" },
+    options: [{ name: "Setup", values: ["Thruster", "Quad"] }],
+    price: 3900,
+  },
 ];
 
 export const CATALOG: Product[] = seeds.map(build);

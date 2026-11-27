@@ -130,6 +130,7 @@ colors change.
 | Slate roof / Dark | `#8791ba` / `#6c5a69` | `roofSlate*` | Workshop roof |
 | Sage wall / Dark | `#577559` / `#234144` | `wallSage*` | Wear interior back wall |
 | Cream plaster | Cream / Parchment / Foam | `cream`, `parchment`, `foam` | Goods back wall with wood skirting |
+| Concrete | Wall stone / Parchment | `wallStone`, `parchment` | Workshop floor, mottled with pale foam dust |
 | Iron / Dark | `#4f565c` / `#171e2a` | `iron*` | Street lamps, racks |
 | Glow / Warm | `#fdf2ad` / `#e4ab3f` | `glow*` | Lamp light, windows at dusk |
 

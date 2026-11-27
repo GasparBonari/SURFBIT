@@ -62,7 +62,7 @@ src/
 │   ├── format.ts             ✅ formatMoney, priceRange, findVariant, defaultSelection
 │   ├── format.test.ts        ✅ money formatting and variant selection tests
 │   ├── index.ts              ✅ `commerce` (server-only) — selects provider
-│   ├── mock/catalog.ts       ✅ 21 demo products across four shops
+│   ├── mock/catalog.ts       ✅ 26 demo products across five shops
 │   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
 │   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
 ├── state/                       Zustand stores (client)
@@ -87,6 +87,7 @@ src/
 │   │   ├── shore.ts          ✅ smooth coastline overlay (wet sand, swash, surf lines)
 │   │   ├── interiorProps.ts  ✅ shop signs, lighting, plants and fixtures
 │   │   ├── shopDisplays.ts   ✅ shop racks, shelves, mannequins and display tables
+│   │   ├── workshopProps.ts  ✅ Workshop stations, shaping lights, foam dust and displays
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
 │   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage
@@ -94,7 +95,7 @@ src/
 │   ├── textures.test.ts      ✅ shipped atlas coverage and sheet sizes for the configured maps
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy interiors
-│   │                         ✅ Boards, Wear, Gear and Goods interiors + catalog reachability tests
+│   │                         ✅ Boards, Wear, Gear, Goods and Workshop interiors + catalog and read-station reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         ✅ NPC movement and shared character sprites
@@ -187,7 +188,7 @@ is a typed object list.
 import type { Dir, Look } from "../art/characters";
 import type { PROPS, Tint } from "../art/props";
 
-export type MapKey = "town" | "boards" | "wear" | "gear" | "goods";
+export type MapKey = "town" | "boards" | "wear" | "gear" | "goods" | "workshop";
 
 export interface MapDef {
   key: MapKey;
@@ -242,6 +243,7 @@ export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
   wear: () => import("./wear").then((module) => module.default),
   gear: () => import("./gear").then((module) => module.default),
   goods: () => import("./goods").then((module) => module.default),
+  workshop: () => import("./workshop").then((module) => module.default),
 };
 ```
 
@@ -269,15 +271,15 @@ Neighbour-aware tiles: a planter picks one of 16 rim tiles from which sides
 face non-planter ground (`planterTile(mask)`, 1 = north, 2 = east, 4 = south,
 8 = west). A retaining wall gets a squared end pillar where it meets anything
 other than wall or the map edge. Interior walls (`M`, `G`, `W`) get a skirting
-board where the floor (`_`, `D`) is directly below. A run of doormat tiles
+board where the floor (`_`, `o`, `D`) is directly below. A run of doormat tiles
 (`D`) draws one mat with a single wave mark across its two halves.
 
-Shop floorboards (`_`) use deterministic variants. Interior wood walls
+Shop floorboards (`_`) and the Workshop's concrete floor (`o`) use deterministic variants. Interior wood walls
 (`M`), sage walls (`G`), cream plaster walls (`W`) and railings (`R`) are solid.
 Each two-tile opening (`DD`) is walkable and carries a wave-mat prop with the
 exit action.
-Use `M`, `G` or `W` for walls and `_` for floors when adapting a draft map that
-used the retired placeholder tiles `V`, `K`, `+` or `o`.
+Use `M`, `G` or `W` for walls and `_` or `o` for floors when adapting a draft map that
+used the retired placeholder tiles `V`, `K` or `+`.
 
 ### Importing from Tiled
 

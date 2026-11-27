@@ -1,12 +1,13 @@
 import type { Dir, Look } from "../art/characters";
 import type { PROPS, Tint } from "../art/props";
 
-export type MapKey = "town" | "boards" | "wear" | "gear" | "goods";
+export type MapKey = "town" | "boards" | "wear" | "gear" | "goods" | "workshop";
 
 export const DISPLAY_PROPS = [
   "boardDisplay", "boardRack", "finTable", "clothesRack", "hoodieRack", "swimRack", "mannequin",
   "shortsMannequin", "teeTable", "shelf", "pegboard", "wetsuitHanger", "leashHooks", "bagRack", "padTable",
   "capShelf", "shadesStand", "bottleFridge", "packHooks", "towelLadder", "stickerRack",
+  "blankRack", "sandingTable", "classBoard",
 ] as const satisfies readonly (keyof typeof PROPS)[];
 
 export interface MapDef {

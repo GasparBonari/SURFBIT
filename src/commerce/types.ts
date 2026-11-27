@@ -3,7 +3,7 @@
  * the UI only ever see these shapes, never a provider's own specifics.
  */
 
-export type StoreId = "boards" | "wear" | "gear" | "goods";
+export type StoreId = "boards" | "wear" | "gear" | "goods" | "workshop";
 
 export interface Money {
   /** Minor units (cents) to avoid floating point drift. */
@@ -30,7 +30,12 @@ export interface ProductArt {
     | "backpack"
     | "towel"
     | "bottle"
-    | "stickers";
+    | "stickers"
+    | "kit"
+    | "ticket"
+    | "blank"
+    | "sock"
+    | "plugs";
   color: string;
   accent: string;
 }
@@ -108,5 +113,10 @@ export const STORES: Record<
     name: "SURFBIT Goods",
     tagline: "Beach-day essentials and a little SURFBIT to take home.",
     color: "#114f6d",
+  },
+  workshop: {
+    name: "SURFBIT Workshop",
+    tagline: "See how a board is made, then take a little of the workshop home.",
+    color: "#2f6f8f",
   },
 };

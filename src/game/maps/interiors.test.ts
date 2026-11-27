@@ -4,7 +4,7 @@ import { buildBlocked, getFootprint, validateMap } from "./build";
 import { MAPS } from "./index";
 import type { MapDef } from "./types";
 
-const shops = ["boards", "wear", "gear", "goods"] as const;
+const shops = ["boards", "wear", "gear", "goods", "workshop"] as const;
 
 function reachableFromDoor(def: MapDef) {
   const blocked = buildBlocked(def);
@@ -47,13 +47,26 @@ describe("shop interiors", () => {
     expect(reachable(x, y + 1)).toBe(true);
     expect(reachable(x + 1, y + 1)).toBe(true);
 
+    // Displays and read stations are used from the tile below their footprint.
     for (const object of def.objects) {
-      if (object.type !== "display") continue;
+      if (object.type !== "display" && !(object.type === "prop" && object.interact?.kind === "read")) continue;
       const { x, y, w, h } = getFootprint(object);
       const left = x + Math.floor((w - 1) / 2);
       const right = x + Math.floor(w / 2);
-      expect(reachable(left, y + h) || reachable(right, y + h), object.productId).toBe(true);
+      const label = object.type === "display" ? object.productId : object.prop;
+      expect(reachable(left, y + h) || reachable(right, y + h), label).toBe(true);
     }
+  });
+
+  it("gives the workshop its five numbered stations, materials wall and custom-boards teaser", async () => {
+    const def = await MAPS.workshop();
+    const titles = def.objects.flatMap((object) =>
+      object.type === "prop" && object.interact?.kind === "read" && object.interact.text.length > 0
+        ? [object.interact.title]
+        : [],
+    );
+    expect(titles.filter((title) => /^\d · /.test(title)).sort().map((title) => title[0])).toEqual(["1", "2", "3", "4", "5"]);
+    expect(titles).toEqual(expect.arrayContaining(["Foam and resin", "Custom boards"]));
   });
 
   it("covers the whole catalog with matching display tints", async () => {

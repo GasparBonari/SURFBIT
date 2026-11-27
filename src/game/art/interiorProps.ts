@@ -5,7 +5,7 @@ import { P } from "./palette";
 import type { PropSpec } from "./props";
 import { drawPalmFrond } from "./townProps";
 
-function shopSign(label: string, trim: string): PropSpec {
+function shopSign(label: string, trim: string, icon?: (c: Ctx, x: number) => void): PropSpec {
   return {
     w: 90, h: 30, wall: true, outline: false,
     draw: (c, x) => {
@@ -25,10 +25,25 @@ function shopSign(label: string, trim: string): PropSpec {
       drawText(c, "SURFBIT", x + 18, 9, P.cream, 1, 2);
       const spacing = 2;
       drawText(c, label, x + (90 - textWidth(label, spacing)) / 2, 20, P.cream, spacing);
-      rect(c, x + 11, 22, 12, 1, trim);
-      rect(c, x + 67, 22, 12, 1, trim);
+      if (icon) {
+        icon(c, x + 14);
+        icon(c, x + 69);
+      } else {
+        rect(c, x + 11, 22, 12, 1, trim);
+        rect(c, x + 67, 22, 12, 1, trim);
+      }
     },
   };
+}
+
+/** Crossed rasp and planer blade, matching the Workshop storefront sign. */
+function drawCrossedTools(c: Ctx, x: number) {
+  for (let i = 0; i < 6; i++) {
+    px(c, x + i, 19 + i, P.cream);
+    px(c, x + 5 - i, 19 + i, P.sandDark);
+  }
+  rect(c, x - 1, 18, 2, 2, P.cream);
+  rect(c, x + 5, 18, 2, 2, P.sandDark);
 }
 
 function waveRug(w: number, h: number, scale: number): PropSpec {
@@ -152,6 +167,7 @@ export const INTERIOR_PROPS = {
   wearSign: shopSign("WEAR", P.woodLight),
   gearSign: shopSign("GEAR", P.sun),
   goodsSign: shopSign("GOODS", P.woodLight),
+  workshopSign: shopSign("WORKSHOP", P.woodLight, drawCrossedTools),
   counter: {
     w: 48, h: 28, foot: { w: 3, h: 1 }, solid: true, outline: false,
     draw: (c, x) => {

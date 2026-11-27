@@ -135,5 +135,42 @@ function ProductShape({ kind, accent }: Illustration) {
         <path d="M96 91h7V79h20v12h8v25H96Z" />
         <path d="m98 93 14-15 16 15Zm5 7h18v9h-18Z" fill={accent} />
       </>;
+    case "kit":
+      return <>
+        <path d="M30 62h78v58H30Z" />
+        <path d="M26 49h86v15H26Z" />
+        <path d="M38 78h62v28H38Z" fill={accent} />
+        <path d="M46 92h12m6 0h28" stroke="var(--sb-cream)" strokeWidth="3" />
+        <path d="M113 72h9v-9h8v9h10v48h-27Z" fill="var(--sb-cream)" />
+        <path d="M113 92h27v12h-27Z" fill={accent} />
+      </>;
+    case "ticket":
+      return <>
+        <path d="M22 50h116v18a12 12 0 0 0 0 24v18H22V92a12 12 0 0 0 0-24Z" />
+        <path d="M102 55v50" stroke={accent} strokeWidth="3" strokeDasharray="5 5" />
+        <path d="M62 58c-8 5-11 18-11 22s3 17 11 22c8-5 11-18 11-22s-3-17-11-22Z" fill={accent} />
+        <path d="M62 63v34" stroke="var(--sb-navy-dark)" strokeWidth="2" />
+        <path d="M112 70h16m-16 10h16m-16 10h10" stroke={accent} strokeWidth="3" />
+      </>;
+    case "blank":
+      return <>
+        <path d="M80 14c-18 6-27 30-27 60 0 26 5 44 11 54h32c6-10 11-28 11-54 0-30-9-54-27-60Z" />
+        <path d="M62 42c-3 10-4 22-4 34" fill="none" stroke="var(--sb-sand-dark)" strokeWidth="3" />
+        <path d="M80 16v111" stroke={accent} strokeWidth="4" />
+      </>;
+    case "sock":
+      return <>
+        <path d="M80 20c-14 8-21 32-21 58 0 22 5 39 11 50h20c6-11 11-28 11-50 0-26-7-50-21-58Z" />
+        <path d="M63 48h34M60 62h40M59 76h42M60 90h40M62 104h36M66 118h28" fill="none" stroke={accent} strokeWidth="2" />
+        <path d="M80 20c-4 3-7 0-10-7m10 7c4 3 7 0 10-7" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" />
+      </>;
+    case "plugs":
+      return <>
+        <rect x="28" y="30" width="104" height="92" rx="6" />
+        <path d="M30 46h100" stroke={accent} strokeWidth="3" />
+        <path d="M44 60h16v34H44Zm28 0h16v34H72Zm28 0h16v34h-16Z" fill={accent} />
+        <path d="M48 68h8m-8 8h8m20-8h8m-8 8h8m20-8h8m-8 8h8" stroke="var(--sb-navy-dark)" strokeWidth="2" />
+        <path d="M52 104h56v8H52Z" fill="var(--sb-cream)" />
+      </>;
   }
 }

@@ -1,0 +1,28 @@
+{
+  "frames": {
+    "npc:workshop:shopkeeper": {"frame":{"x":0,"y":0,"w":48,"h":128},"sheet":{"width":16,"height":32}},
+    "blankRack:#fff3d6:#7a4b2a": {"frame":{"x":48,"y":0,"w":32,"h":44},"sheet":{"width":32,"height":44}},
+    "shapingLight": {"frame":{"x":80,"y":0,"w":64,"h":44},"sheet":{"width":16,"height":44}},
+    "bagRack:#6fccd2:#114f6d": {"frame":{"x":144,"y":0,"w":32,"h":44},"sheet":{"width":32,"height":44}},
+    "glassingRack": {"frame":{"x":176,"y":0,"w":32,"h":42},"sheet":{"width":32,"height":42}},
+    "templateRack": {"frame":{"x":208,"y":0,"w":32,"h":38},"sheet":{"width":32,"height":38}},
+    "materialsBoard": {"frame":{"x":240,"y":0,"w":16,"h":38},"sheet":{"width":16,"height":38}},
+    "classBoard:#2f6f8f:#fff3d6": {"frame":{"x":256,"y":0,"w":30,"h":34},"sheet":{"width":30,"height":34}},
+    "shelf:#f2b632:#2b2b3a": {"frame":{"x":286,"y":0,"w":32,"h":32},"sheet":{"width":32,"height":32}},
+    "workshopSign": {"frame":{"x":318,"y":0,"w":90,"h":30},"sheet":{"width":90,"height":30}},
+    "pendant": {"frame":{"x":408,"y":0,"w":84,"h":30},"sheet":{"width":28,"height":30}},
+    "hibiscusPot": {"frame":{"x":492,"y":0,"w":23,"h":29},"sheet":{"width":23,"height":29}},
+    "toolWall": {"frame":{"x":515,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "counter": {"frame":{"x":563,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "foamDust": {"frame":{"x":611,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "workbench": {"frame":{"x":659,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "shapingStand": {"frame":{"x":707,"y":0,"w":48,"h":26},"sheet":{"width":48,"height":26}},
+    "vines": {"frame":{"x":755,"y":0,"w":23,"h":25},"sheet":{"width":23,"height":25}},
+    "sandingTable:#2b2b3a:#f2b632": {"frame":{"x":778,"y":0,"w":46,"h":24},"sheet":{"width":46,"height":24}},
+    "stationPlacard1": {"frame":{"x":824,"y":0,"w":13,"h":22},"sheet":{"width":13,"height":22}},
+    "stationPlacard5": {"frame":{"x":837,"y":0,"w":13,"h":22},"sheet":{"width":13,"height":22}},
+    "window": {"frame":{"x":850,"y":0,"w":28,"h":18},"sheet":{"width":28,"height":18}},
+    "waveMat:#2f6f8f:#fff3d6": {"frame":{"x":878,"y":0,"w":32,"h":16},"sheet":{"width":32,"height":16}},
+    "crate": {"frame":{"x":910,"y":0,"w":14,"h":14},"sheet":{"width":14,"height":14}}
+  }
+}

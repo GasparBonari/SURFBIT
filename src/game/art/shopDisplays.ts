@@ -11,7 +11,7 @@ function drawCubby(c: Ctx, x: number, y: number, w: number, h: number) {
 }
 
 // Keep the tabletop profile consistent across the floor displays.
-function displayTable(drawGoods: (ctx: Ctx, x: number, tint: Tint) => void): PropSpec {
+export function displayTable(drawGoods: (ctx: Ctx, x: number, tint: Tint) => void): PropSpec {
   return {
     w: 46, h: 24, solid: true, outline: false,
     draw: (c, x, _f, tint) => {
@@ -102,7 +102,7 @@ function drawGarment(c: Ctx, x: number, y: number, { color, accent }: Tint, hood
   }
 }
 
-function drawRackBase(c: Ctx, x: number, y: number, w: number) {
+export function drawRackBase(c: Ctx, x: number, y: number, w: number) {
   box(c, x, y, w, 6, P.wood, P.woodDeep);
   rect(c, x + 1, y + 1, w - 2, 1, P.thatchLight);
   rect(c, x + 2, y + 4, w - 4, 1, P.woodDark);

@@ -74,7 +74,7 @@ noted. Coming-soon shops have a boarded door and a SOON tag. A configured
 | `boards` | BOARDS | ✅ | 9 × 7 | Thatch (`thatch*`) | Wood planks | Open shopfront showing boards inside; 4 boards leaning against the left wall outside; navy sign with wave mark; potted plants |
 | `goods` | SURFBIT | ✅ (flagship, interior §8) | 12 × 8 | Terracotta gable (`terracotta*`) | Cream + wood trim | Largest building, center-north. Big navy `SURFBIT` sign under the gable; blue/white awning over a tee window, orange/white awning over the open door; hibiscus vines on both corners; A-frame sign |
 | `gear` | GEAR | ✅ | 9 × 7 | Thatch | Wood planks | Window shows wetsuits on hangers and shelves of bottles; board leaning on the right; navy sign |
-| `workshop` | WORKSHOP | ❌ (teaser `read`; interior brief §9) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
+| `workshop` | WORKSHOP | ✅ (interior §9) | 10 × 7 | Slate blue (`roofSlate*`) | Wood | Open garage front: surfboard on a shaping stand under a warm lamp; crossed-tools icon on the sign |
 | `wear` | WEAR | ✅ | 9 × 7 | Indigo tiles (`roofIndigo*`) | Wood + cream | Two striped awnings (blue/white, orange/white); tees hanging in the windows; tee icons on the sign |
 | `beach-club` | BEACH CLUB | ❌ (teaser `read`; interior brief §10) | 12 × 7 + deck 12 × 4 | Indigo tiles | Wood | Walkable wooden deck (`d`) in front with café tables, string lights, chalkboard; stairs from deck to sand; coffee-cup icon on the sign; blue SURFBIT flag on a pole beside it |
 | `cottage-*` | — | ❌ decor | 7 × 6 | Coral / terracotta | Cream | 2 cottages along the top edge behind a wooden fence, with stone steps |
@@ -318,9 +318,9 @@ potted palm, monstera, framed posters ×3, window with beach view, rope posts,
 log posts, fin table, bench + towel, coffee table, crates, clothes rack (tint
 variants), mannequin (tint variants), display table, fitting room, mirrors ×2,
 pegboard, wetsuit hanger, board-bag rack, shop sign boards (BOARDS, WEAR, GEAR,
-GOODS).
+GOODS, WORKSHOP).
 
-**Characters (16 × 32, 3 × 4 sheets):** player, 4 shopkeepers, 4–6
+**Characters (16 × 32, 3 × 4 sheets):** player, 5 shopkeepers, 4–6
 townsfolk, surfer with board. Optional: sitting and lying frames.
 
 **Phase B rooms (§8–10):**
@@ -330,7 +330,8 @@ townsfolk, surfer with board. Optional: sitting and lying frames.
   `towelLadder`, `stickerRack`.
 - Workshop: `workshopSign`, `toolWall`, `blankRack`, `templateRack`,
   `shapingStand`, `shapingLight`, `foamDust`, `glassingRack`, `sandingTable`,
-  `materialsBoard`, `classBoard`, `workbench`, `stationPlacard`.
+  `materialsBoard`, `classBoard`, `workbench`, `stationPlacard1`,
+  `stationPlacard5`.
 - Beach Club: `clubSign`, `seaWindow`, `barCounter`, `beanShelf`,
   `lessonBoard`, `memberBoard`, `guideRack`, `storyFrame`, `dropCrate`.
 - Product art kinds: `cap`, `shades`, `backpack`, `towel`, `bottle`,
@@ -420,8 +421,11 @@ caps by the window and the stickers by the door.
 
 ## 9. Workshop interior (`workshop`)
 
+Coordinates use the map convention (bottom-left tile of each footprint), as
+in §8.
+
 No reference image. Same visual language as §2–4, but a working room.
-**Awaiting owner approval (roadmap B.1).**
+**Approved for B.3.**
 
 **Mood:** a shaping workshop you can walk through. A numbered path of five
 stations shows how a board is made; the shop part is small and sits by the
@@ -429,7 +433,7 @@ counter and entrance. Bright shaping lights, foam dust on the floor, tools on
 the wall. **Accent: Deep Blue** (`deepBlue`), echoing the slate-blue roof.
 
 **Size and shell:** 20 × 15 tiles. Back wall 3 rows of `M`, side columns `M`.
-Floor is a new **concrete floor tile** (`floorConcrete`, legend `o`, three
+Floor is a new **concrete floor tile** (`floorConcrete0–2`, legend `o`, three
 variants with pale foam-dust specks, drawn to the A.4 standard). Railing and
 `DD` exit mat on row 13. Row 14 is cobble street (`:`).
 
@@ -443,8 +447,8 @@ variants with pale foam-dust specks, drawn to the A.4 standard). Railing and
  │                  │③ SHAPING│                  wall     │ rows 6–8
  │ shelf:           │  STAND  │                           │
  │ repair kits      └ foam dust┘                          │
- │ workbench                         ⑤ sanding table ⑤   │ row 9
- │ sock rack    "custom boards"          class board     │ row 11
+ │       workbench                   sanding table ⑤     │ row 9
+ │sock rack     "custom boards"          class board     │ row 11
  │                chalkboard                        crates│
  │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
  └──────────────────────────────────────────────────┘
@@ -455,7 +459,7 @@ variants with pale foam-dust specks, drawn to the A.4 standard). Railing and
 | Rack of leaning foam blanks (station 1) | `foam-blank` | `blankRack` (new) | (2, 4) |
 | Sanding table with fin plugs and a sander (station 5) | `fin-plug-kit` | `sandingTable` (new) | (14, 9) |
 | Wall shelf of repair tins | `ding-repair-kit` | `shelf` (tinted) | (1, 7) |
-| Board-sock rack | `board-sock` | `bagRack` (tinted) | (2, 11) |
+| Board-sock rack | `board-sock` | `bagRack` (tinted) | (1, 11) |
 | Class sign-up board with a schedule sheet | `shaping-class` | `classBoard` (new) | (15, 11) |
 
 | Handle | Title | Category | Art kind | Art color / accent | Options | Price (cents) |
@@ -469,8 +473,10 @@ variants with pale foam-dust specks, drawn to the A.4 standard). Railing and
 The class is a one-day session: stock is the number of seats left, and the
 description says what's included (your own blank shaped under supervision).
 
-**Read stations** (`read` props; the interaction sits on a small numbered
-placard on a post, `stationPlacard`, next to the object unless noted):
+**Read stations** (`read` props). Stations 1 and 5 use a small numbered
+placard on a post (`stationPlacard1`, `stationPlacard5`) beside their display;
+stations 2–4 are the props themselves and carry the number as a small deep-blue
+tag. Titles in the map are prefixed with the number (`1 · The blank`):
 
 | # | Title | Text | Placard / prop at |
 |---|---|---|---|
@@ -478,7 +484,7 @@ placard on a post, `stationPlacard`, next to the object unless noted):
 | 2 | Outline and rocker | Templates trace the outline onto the blank. The planer then sets the rocker, the curve from nose to tail that decides how the board fits the wave. | `templateRack` (new) at (7, 4) |
 | 3 | Rails | Rails are the board's edges. Soft rails forgive, hard rails release water and bite. Most of the shaping hours go here. | `shapingStand` (new) at (9, 7) |
 | 4 | Glassing | Fiberglass cloth and resin seal the foam: two layers on the deck, one on the bottom for a standard layup. | `glassingRack` (new) at (12, 4) |
-| 5 | Sanding and fins | Sanding fairs the glass, then the fin boxes go in. The board cures for a week before its first surf. | (16, 9) |
+| 5 | Sanding and fins | Sanding fairs the glass, then the fin boxes go in. The board cures for a week before its first surf. | (17, 9), beside the 3-tile sanding table |
 | — | Foam and resin | PU foam with polyester resin: the classic feel, flexible and lively. EPS foam with epoxy: lighter, floatier and tougher against dings. | `materialsBoard` (new) at (18, 6) |
 | — | Custom boards | Design your own shape, size and colors here in a later version of the shop. | `chalkboard` (town prop) at (6, 11) |
 
@@ -489,14 +495,17 @@ lights either side of the stand (`shapingLight`, warm tubes; flicker only
 without reduced motion), a flat foam-dust patch under the stand
 (`foamDust`, `flat`), a workbench with clamps (`workbench`), crates, a
 window, vines, pendants, hibiscus pots at the entrance, a deep-blue wave mat.
-Fixed positions: `toolWall` (2, 1), `counter` (15, 5), shaping lights (7, 6)
-and (12, 6), foam dust (9, 8), `workbench` (2, 9), crates (17, 12) and
-(18, 12), wave mat (9, 13), spawn `door` (9, 12) facing up.
+Fixed positions: `toolWall` (2, 1), sign (7, 1), window (15, 2), vines
+(17, 1), pendants (5, 1), (13, 1) and (18, 1), `counter` (15, 5), shaping
+lights (7, 6) and (12, 6), foam dust (9, 8), `workbench` (4, 9), crates
+(17, 12) and (18, 12), wave mat (9, 13), spawn `door` (9, 12) facing up. The
+workbench and sock rack sit a tile apart so the tall socks don't cover the
+bench.
 
 **Shopkeeper:** Rafa the shaper (`idle`, behind the counter at (16, 4)): short ink hair,
-beard, foam-dusted grey tee (`bagSilver`), navy shorts, deep-blue backward
-cap. If the tee alone doesn't read as a shaper, add an `apron` option to
-`Look` (wood-dark shop apron) rather than special-casing him.
+beard, grey tee (`bagSilver`), navy shorts, deep-blue backward
+cap and a wood-dark shop apron (the `apron` option on `Look`). Rafa points
+shoppers along the numbered stations and to the class board.
 
 ---
 

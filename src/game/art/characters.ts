@@ -34,6 +34,8 @@ export interface Look {
   wetsuit?: boolean;
   /** Surfboard carried under the arm, in this color. */
   board?: string;
+  /** Work apron over the shirt, in this color. */
+  apron?: string;
 }
 
 /** Adds a 1px outline around every opaque pixel in a region. */
@@ -118,6 +120,7 @@ function drawTorso(ctx: Ctx, look: Look, dir: DrawDir, pose: Pose, bob: number) 
   if (dir === "down") rect(ctx, 7, y, 2, 1, shirtShade); // collar
 
   if (dir === "down" && look.shirtMark) drawWaveMark(ctx, 6, y + 3, look.shirtMark);
+  if (look.apron) drawApron(ctx, look.apron, dir, y);
   if (look.backpack) drawBackpack(ctx, look.backpack, dir, y + 1);
 
   // Wetsuits have long sleeves; only the hands show.
@@ -135,6 +138,28 @@ function drawTorso(ctx: Ctx, look: Look, dir: DrawDir, pose: Pose, bob: number) 
     rect(ctx, 12, y + 4, 2, 3 - swing, look.skin);
     if (look.wetsuit) rect(ctx, 12, y + 4, 2, 2 - swing, look.shirt);
   }
+}
+
+function drawApron(ctx: Ctx, color: string, dir: DrawDir, y: number) {
+  const dark = shade(color, -0.25);
+  if (dir === "up") {
+    rect(ctx, 5, y, 1, 7, color);
+    rect(ctx, 10, y, 1, 7, color);
+    rect(ctx, 4, y + 6, 8, 1, color);
+    return;
+  }
+  if (dir === "right") {
+    rect(ctx, 9, y + 2, 2, 22 - y, color);
+    rect(ctx, 10, y + 2, 1, 22 - y, dark);
+    rect(ctx, 5, y + 6, 5, 1, color);
+    return;
+  }
+  rect(ctx, 5, y, 1, 2, color);
+  rect(ctx, 10, y, 1, 2, color);
+  rect(ctx, 5, y + 2, 6, 23 - y, color);
+  rect(ctx, 10, y + 2, 1, 23 - y, dark);
+  rect(ctx, 6, y + 6, 4, 2, dark);
+  px(ctx, 6, y + 6, shade(color, 0.2));
 }
 
 /** Board under the arm: upright at the side when seen front or back, level across the body in profile. */
@@ -397,6 +422,17 @@ export const GOODS_SHOPKEEPER_LOOK: Look = {
   shorts: P.cream,
   hat: { style: "bucket", color: P.cream, brim: P.parchment, mark: P.navy },
   shirtMark: P.cream,
+};
+
+export const WORKSHOP_SHOPKEEPER_LOOK: Look = {
+  skin: P.skin2,
+  hair: P.ink,
+  hairStyle: "short",
+  beard: true,
+  shirt: P.bagSilver,
+  shorts: P.navy,
+  hat: { style: "backwardCap", color: P.deepBlue, brim: P.navyDark },
+  apron: P.woodDark,
 };
 
 export const SURFER_LOOK: Look = {

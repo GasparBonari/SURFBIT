@@ -134,6 +134,7 @@ function look(value: unknown): Look {
     shoes: optional(data.shoes, "look.shoes", color),
     wetsuit: optional(data.wetsuit, "look.wetsuit", bool),
     board: optional(data.board, "look.board", color),
+    apron: optional(data.apron, "look.apron", color),
     hat: optional(data.hat, "look.hat", (value, field) => {
       const hat = record(value, field);
       return {

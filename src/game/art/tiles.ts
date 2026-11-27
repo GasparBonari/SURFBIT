@@ -29,6 +29,7 @@ export const TILE_NAMES = [
   "mat", "matW", "matE", "matWE",
   "wallWood", "wallSage", "wallWoodTrim", "wallSageTrim", "railing", "floorWood1", "floorWood2",
   "wallCream", "wallCreamTrim",
+  "floorConcrete0", "floorConcrete1", "floorConcrete2",
 ] as const;
 
 export type TileName = (typeof TILE_NAMES)[number];
@@ -421,6 +422,16 @@ function shopFloor(ctx: Ctx, ox: number, variant: number) {
   }
 }
 
+/** Workshop slab: softly mottled warm concrete with a little pale foam dust; variant 2 has a hairline crack. */
+function concrete(ctx: Ctx, ox: number, variant: number) {
+  rect(ctx, ox, 0, TILE, TILE, P.wallStone);
+  speckle(ctx, ox, 70 + variant * 13, [shade(P.wallStone, 0.05), shade(P.wallStone, -0.04)], 14);
+  speckle(ctx, ox, 90 + variant * 7, [P.parchment], variant + 1);
+  if (variant === 2) {
+    for (const [x, y] of [[5, 6], [6, 7], [7, 7], [8, 8]]) px(ctx, ox + x, y, shade(P.wallStone, -0.1));
+  }
+}
+
 /** Woven teal doormat; a pair of tiles shares one wave mark across the seam. */
 function mat(ctx: Ctx, ox: number, west: boolean, east: boolean) {
   shopFloor(ctx, ox, 1);
@@ -545,6 +556,9 @@ export function buildTileset(): HTMLCanvasElement {
       case "floorWood1": case "floorWood2":
         shopFloor(ctx, ox, i - T.floorWood1 + 1);
         break;
+      case "floorConcrete0": case "floorConcrete1": case "floorConcrete2":
+        concrete(ctx, ox, i - T.floorConcrete0);
+        break;
     }
   });
   return canvas;
@@ -567,5 +581,6 @@ export const LEGEND: Record<string, { tiles: TileName[]; solid?: boolean }> = {
   W: { tiles: ["wallCream"], solid: true },
   R: { tiles: ["railing"], solid: true },
   _: { tiles: ["floorWood", "floorWood1", "floorWood2"] },
+  o: { tiles: ["floorConcrete0", "floorConcrete1", "floorConcrete2"] },
   D: { tiles: ["mat"] },
 };

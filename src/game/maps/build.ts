@@ -27,7 +27,7 @@ function containsTile(footprint: Footprint, x: number, y: number): boolean {
 }
 
 const WALL_TRIM: Partial<Record<string, number>> = { M: T.wallWoodTrim, G: T.wallSageTrim, W: T.wallCreamTrim };
-const FLOORS = new Set(["_", "D"]);
+const FLOORS = new Set(["_", "o", "D"]);
 
 export function buildGround(def: MapDef): number[][] {
   // A coast the shore overlay can draw brings its own wet sand, so the sand tiles stay dry.

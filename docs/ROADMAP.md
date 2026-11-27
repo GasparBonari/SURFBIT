@@ -231,7 +231,7 @@ house with a surf school: readable club content plus bookable lessons,
 rentals, a season pass and coffee. SPEC §4 calls the Beach Club "not a
 traditional shop", so record this as a decision.
 
-- [x] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19. Goods approved for B.2. Workshop and Beach Club awaiting approval.)*
+- [x] **B.1 Shop briefs** *(written in SCENES.md §8–10 and D19. Goods approved for B.2, Workshop for B.3. Beach Club awaiting approval.)*
   - Files: `docs/SCENES.md` (new §8–10, §1 buildings table, §5 characters, §7 asset checklist), `docs/ARCHITECTURE.md` (Decisions)
   - Do: write one brief per room in the format of SCENES.md §2–4: mood, accent color (palette token), size and shell, ASCII layout, a display → product handle → prop table, a product lineup table (handle, title, category, art kind, options, price in cents), read stations (title and short text), other dressing, and the shopkeeper's look. Use the shared shell (~20 × 14 tiles, back wall 3 rows, 1-tile side columns, low railing with a 2-tile opening, exit mat). Start from these lineups and adjust names or prices if needed:
     - **Goods** (`goods`) — flagship lifestyle boutique, navy accent, cream walls, wood floor. `wave-trucker-cap`, `polarized-shades`, `day-pack`, `stripe-beach-towel`, `steel-bottle`, `pixel-sticker-pack`.
@@ -246,7 +246,7 @@ traditional shop", so record this as a decision.
   - Do: add the store and its lineup from SCENES.md §8 (new `ProductArt` kinds drawn in the style of the existing ones). Build the room exactly as briefed with the shared shell. Draw new props, tiles and the shopkeeper in `src/game/art` at the A.3/A.4 standard: palette only, selective outlines, top-left light, no smoothing. Add `wallCream` with skirting to `TILE_NAMES` and `LEGEND`. Open the town building: replace `upcomingStoreName` with an `enter` interaction and add the `from-goods` spawn, so the door is no longer boarded. Run `npm run art:export`.
   - Accept: `interiors.test.ts` covers `goods` (door, exit, reachable displays, whole-catalog coverage with matching tints); `/shop#goods` and every new `/products/[handle]` work; the directory lists Goods with Walk there and Browse online; a keyboard-only purchase works in the room; screenshot of the room compared with `boards-interior.webp` and `wear-interior.webp` (shell, light, density), main differences listed.
 
-- [ ] **B.3 SURFBIT Workshop**
+- [x] **B.3 SURFBIT Workshop**
   - Files: as B.2 for `workshop`
   - Do: as B.2, following SCENES.md §9. The shaping stations and materials wall are `read` props configured in the map. Replace the exterior's "coming soon" `read` with the `enter` interaction; the open garage front stays as it is. Shaping-light flicker respects reduced motion.
   - Accept: as B.2 for `workshop`, plus every station opens its text with keyboard and touch.
@@ -319,3 +319,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step B.2 complete. Opened SURFBIT Goods with six lifestyle products, added its room and atlas, and verified the directory, online catalog, keyboard checkout and touch interactions in Chromium.
 - 2026-11-27 — B.2 follow-up. Moved the Goods wave rug one tile toward the entrance to clear the tee table.
 - 2026-11-27 — Wear follow-up. Added a two-tile `narrowRug` so the tee rack sits centered on its jute rug.
+- 2026-11-27 — Step B.3 complete. Opened the SURFBIT Workshop with five products, five numbered shaping stations, a materials wall and a custom-boards teaser on a new concrete floor, and verified the directory, keyboard and touch reads, and a keyboard purchase in Chromium.

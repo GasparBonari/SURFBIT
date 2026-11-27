@@ -92,10 +92,9 @@ const def: MapDef = {
     },
     {
       type: "building", id: "workshop", label: "Workshop",
-      upcomingStoreName: "Workshop",
       x: 49, y: 2, w: 10, h: 7, door: { x: 54, y: 8 },
       style: { roof: "slate", wall: P.wood, front: "shaping" },
-      interact: { kind: "read", title: "Workshop", text: ["Our shaping room is coming soon."] },
+      interact: { kind: "enter", target: "workshop", spawn: "door" },
     },
     {
       type: "building", id: "wear", label: "Wear",
@@ -229,6 +228,7 @@ const def: MapDef = {
     "from-wear": { x: 10, y: 23, facing: "down" },
     "from-gear": { x: 43, y: 12, facing: "down" },
     "from-goods": { x: 32, y: 12, facing: "down" },
+    "from-workshop": { x: 54, y: 9, facing: "down" },
   },
 };
 
