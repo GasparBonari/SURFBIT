@@ -20,7 +20,7 @@ Read this before touching `src/game`, `src/state` or `src/commerce`.
                                 │ server components / route handlers
 ┌───────────────────────────────▼──────────────────────────────────┐
 │  Next.js server: src/commerce (CommerceProvider)                 │
-│  Active provider: mock. Shopify Storefront adapter available.    │
+│  Provider: mock (demo catalog + checkout, see D16).              │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -61,7 +61,6 @@ src/
 │   ├── mock/catalog.ts       ✅ 15 demo products across the three shops
 │   ├── mock/provider.ts      ✅ validates combined stock + reprices lines, demo checkout
 │   ├── mock/provider.test.ts ✅ checkout repricing and combined stock tests
-│   └── shopify/              ✅ Storefront API client, queries, provider and tests
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
 │   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
@@ -160,29 +159,9 @@ configuration passes the loaded Phaser runtime to the scene factories.
    `useCart.getState().add(product, variant, qty)` (persisted).
 6. Checkout: `<CheckoutPage>` POSTs `{ lines: [{variantId, quantity}] }` to
    `/api/checkout` → `commerce.createCheckout(lines)` → redirect URL
-   (mock: `/checkout/success`, Shopify: hosted `checkoutUrl`). The demo
+   (`/checkout/success`). The demo
    confirmation shows the order number and catalog-priced total. It clears the
    hydrated cart once when the return URL and submitted items match.
-
-## Shopify product data
-
-The Shopify provider factory takes a `.myshopify.com` domain and a Storefront
-public access token kept on the server. The token needs product listings,
-product inventory, and cart read/write access. The app switches providers in
-step 5.2. [Shopify API access scopes](https://shopify.dev/docs/api/usage/access-scopes)
-
-Publish SURFBIT products to the storefront used by that token. Keep their
-handles aligned with the in-world displays. Define these product metafields
-with Storefront `PUBLIC_READ` access. [Shopify Storefront metafields](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/products-collections/metafields)
-
-| Metafield | Shopify type | Value |
-|---|---|---|
-| `surfbit.store` | `single_line_text_field` | Required. Use `boards`, `wear`, or `gear`. |
-| `surfbit.specs` | `json` | Optional ordered array of `{"label":"Length","value":"5′ 8″"}` entries. |
-
-Product category comes from Shopify's product type. Prices must be representable
-in integer cents under SURFBIT's `Money` contract. Shopify validates current
-inventory and pricing when it creates a cart and returns the hosted checkout URL.
 
 ## Map format (`src/game/maps`)
 
@@ -380,14 +359,14 @@ if you change your mind.
 
 | # | Decision | Why |
 |---|---|---|
-| D1 | **Mock commerce provider first**, Shopify behind `CommerceProvider` | The world and UI can be built and tested without a store; Shopify is a drop-in (roadmap phase 5). |
+| D1 | **Mock commerce provider** behind `CommerceProvider` | The world and UI can be built and tested without a store; any real backend stays a drop-in behind the same interface. |
 | D2 | **Procedural art** in `src/game/art` defines the original grid, palette and layout | The generators started as placeholders and became the production art source during Phase A (see D14). |
 | D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the MVP | Type-checked, diff-able, easy for AI agents to edit. A Tiled importer that outputs the same `MapDef` can be added later (phase 6) without touching systems. |
 | D4 | **One `MapScene` class** restarted with a map key, instead of one Phaser class per shop | Each restart builds the destination's own map, objects and camera state. Map data is lazy-loaded. |
 | D5 | **Free (8-way) movement with 4-directional animation** | Feels smoother than grid-locked 4-way (Stardew-like). To get strict 4-way, zero the minor axis in `Player`. |
 | D6 | **Custom tile-grid collision** instead of Arcade physics | Simpler, deterministic, enough for walking. |
-| D7 | **Server re-prices at checkout**; client cart holds display snapshots only | Prevents tampering; same flow for mock and Shopify. |
-| D8 | **Currency USD** (placeholder) | Set by the real store once Shopify is connected. |
+| D7 | **Server re-prices at checkout**; client cart holds display snapshots only | Prevents tampering; any future provider keeps the same flow. |
+| D8 | **Currency USD** | Fixed by the mock catalog. |
 | D9 | **WebAudio-generated ambience/music** until real audio files exist | No asset dependency; replace with files in `public/audio` later. |
 | D10 | **Vanilla CSS + CSS Modules** with tokens in `globals.css` (no Tailwind) | Small, explicit, easy to keep pixel-perfect. |
 | D11 | **`docs/art-references/` is the visual target**; layouts in `docs/SCENES.md` | One shared picture of "done" for every agent and artist. Concept art guides composition, palette and density; it isn't traced or used as game assets. |
@@ -395,5 +374,6 @@ if you change your mind.
 | D13 | **Town and interiors follow the reference layouts** (cobblestone town, stone wall + stairs, diagonal shoreline, ~20 × 14 interiors) instead of the earlier grass town and boardwalk | Matches the approved look; see roadmap 1.3b and 2.3. |
 | D14 | **Production art = the procedural generators in `src/game/art`, upgraded to final quality** (roadmap A.1, revised at A.3). Rounded cobbles, layered water and foam, full palm fronds, coursed thatch, lit shop interiors and shaded characters, all from the palette in code. Hand-drawn PNGs can still replace any texture key later (ART_DIRECTION.md → Replacing placeholder art). Aim for a **bolder pixel look than the references**: fewer colors, cleaner shapes, less tiny detail. | No budget for a commission. The free pack chosen at A.1 (Coastal Village Lite) turned out flatter than the existing generators (3–4 colors per tile, no cobblestone, Mediterranean houses) and is itself made by scripts, so it was kept only as a reference and nothing from it ships. Generators already sit on the grid and palette, keep texture keys stable, and can be iterated by agents. Any third-party art added later must be CC0 or commercial-use and listed in `assets/LICENSES.md`. |
 | D15 | **The town coast is a generated overlay, not foam tiles** | A tile grid can only step the shore one tile at a time, which read as a staircase with mismatched wet-sand bands. A per-pixel distance from a line through the step corners gives the reference's smooth diagonal and parallel surf lines. Collision and the map format stay tile-based; maps whose water doesn't form one east-reaching run fall back to the foam tiles. |
+| D16 | **No Shopify: the mock provider is the store** (2026-11-27) | SURFBIT is a portfolio site. A free Shopify development store is always password-protected and takes test orders only, and no public mock commerce API has surf products. The mock catalog keeps every product browsable and the demo checkout open to every visitor. The Phase 5 Shopify provider was removed; it's in git history (step 5.1) if a real store is ever needed. |
 | D16 | **The town ocean has no ambient surfer sprites** | The owner asked to remove the bobbing riders from the water. |
 | D17 | **Export static production art from the generators as a tileset and a packed PNG/JSON atlas** | BootScene registers each sheet under its existing texture key and frame numbers. The tilemap uses a standalone tileset PNG to preserve tile indices. The shoreline stays generated from the map per D15. |

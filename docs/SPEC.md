@@ -222,7 +222,7 @@ The project should be structured as a web application containing an interactive 
 | Tiled | Creating outdoor and indoor tilemaps |
 | Pixelorama / LibreSprite / Aseprite | Pixel-art assets and spritesheets (free editors; see ARCHITECTURE.md → D14) |
 | Zustand | Shared application and shopping cart state |
-| Shopify Storefront API | Products, inventory and commerce |
+| Mock commerce provider | Products, inventory and a demo checkout (see ARCHITECTURE.md → D16) |
 | Supabase | Optional accounts and saved preferences |
 | Vercel | Web hosting |
 
@@ -230,7 +230,7 @@ The interactive world and the e-commerce application should remain separate but 
 
 Phaser should manage the world, character movement, animations, collisions and interactions. React should manage product information, shopping carts, menus, account interfaces and other website functionality.
 
-Shopify or another commerce provider should manage real product information, inventory, payments and orders.
+A commerce provider manages product information, inventory and checkout. This portfolio build uses the built-in mock provider; a real backend can be plugged in behind the same interface.
 
 ## 11. World architecture
 

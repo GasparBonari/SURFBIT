@@ -1,6 +1,6 @@
 /**
  * Commerce domain types. These are provider-agnostic: the world, the cart and
- * the UI only ever see these shapes, never Shopify (or mock) specifics.
+ * the UI only ever see these shapes, never a provider's own specifics.
  */
 
 export type StoreId = "boards" | "wear" | "gear";
@@ -70,7 +70,7 @@ export type CheckoutResult =
 
 /**
  * The single seam between SURFBIT and a commerce backend.
- * Swap the mock implementation for a Shopify Storefront one without touching
+ * A real backend can replace the mock implementation without touching
  * the world, the cart or the UI.
  */
 export interface CommerceProvider {

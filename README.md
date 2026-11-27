@@ -9,7 +9,7 @@ world and check out with a normal, secure cart.
 ## Stack
 
 Next.js 16 (App Router) · React 19 · TypeScript · Phaser 3 · Zustand ·
-mock commerce provider (Shopify Storefront planned) · Vercel.
+mock commerce provider (demo catalog and checkout) · Vercel.
 
 ## Getting started
 
@@ -17,7 +17,7 @@ Local checks require Node.js `^20.19.0`, `^22.12.0`, or `>=24.0.0`.
 
 ```bash
 npm install
-cp .env.example .env.local   # optional until Shopify is connected
+cp .env.example .env.local   # optional
 npm run dev                  # http://localhost:3005
 npm test                     # Vitest unit tests
 npm run check                # lint + typecheck + tests + build

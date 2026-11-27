@@ -197,11 +197,13 @@ group up to the A.3 standard and A.9 packs their output and compares the scenes.
 
 ---
 
-## Phase 5 — Real commerce (Shopify)
+## Phase 5 — Real commerce (dropped)
 
-- [x] **5.1 Shopify provider** — `src/commerce/shopify/{client,queries,provider}.ts` implementing `CommerceProvider` via Storefront GraphQL (`products`, `product(handle:)`, `cartCreate` → `checkoutUrl`). Map to SURFBIT types; images → `ProductImage.src`. Product `metafields` carry `store` (boards/wear/gear) and specs.
-- [ ] **5.2 Provider selection** — `src/commerce/index.ts` picks Shopify when `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_TOKEN` are set (see `.env.example`), else mock. Cache product reads with `'use cache'` + `cacheTag('products')`.
-- [ ] **5.3 Webhook revalidation** — `src/app/api/revalidate/route.ts` verifies the Shopify HMAC and calls `revalidateTag('products')` on product/inventory updates.
+Dropped on 2026-11-27 (ARCHITECTURE.md → D16): the site is a portfolio, and
+the mock provider is the store. Step 5.1 (Shopify Storefront provider) was
+built and then removed; recover it from git history if a real store is ever
+needed. Steps 5.2 (provider selection) and 5.3 (webhook revalidation) won't
+be built.
 
 ## Phase 6 — Production polish
 
@@ -209,7 +211,7 @@ group up to the A.3 standard and A.9 packs their output and compares the scenes.
 - [ ] **6.2 Tiled importer (optional)** — `scripts/tiled-to-mapdef.ts` converting Tiled JSON to `MapDef`.
 - [ ] **6.3 Performance** — texture atlases, preload only the town, measure LCP/INP, keep initial JS for `/` < 400 KB gz (Phaser chunk loaded after first paint).
 - [ ] **6.4 Analytics & error tracking** — page views, product inspects, add-to-cart, checkout starts.
-- [ ] **6.5 Deploy** — Vercel project, env vars, preview deployments per PR.
+- [ ] **6.5 Deploy** — Vercel project, `NEXT_PUBLIC_SITE_URL`, preview deployments per PR.
 
 ## Phase 7 — Post-MVP ideas (from spec §14)
 
@@ -260,3 +262,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step A.7 complete. Finished the town foliage, street and beach props, and Beach Club deck fixtures. Compared the town with its reference and verified prop collision, sign interactions, and reduced motion in Chromium.
 - 2026-11-27 — Step A.8 complete. Finished the generated Boards, Wear, and Gear props, including product displays, shop signs, woven rugs, and pendant lights. Compared Boards and Wear with their references, checked Gear against its scene brief, and verified shop travel, product inspection, and reduced motion in Chromium.
 - 2026-11-27 — Step A.9 complete. Packed the static generator art into a tileset and sprite atlas, preserved texture keys and frame numbers in BootScene, and verified all four scenes in Chromium against their previous renders and their references or scene briefs.
+- 2026-11-27 — Phase 5 dropped (D16). Removed the Shopify provider, its env vars and docs; the mock catalog and demo checkout are the store for this portfolio build.

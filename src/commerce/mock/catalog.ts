@@ -7,7 +7,7 @@ import type {
 } from "../types";
 
 /**
- * Demo catalog. Stand-in for Shopify until a store is connected.
+ * Demo catalog: the store's products for this portfolio build (ARCHITECTURE.md → D16).
  * Product handles here are what the world's displays reference.
  */
 

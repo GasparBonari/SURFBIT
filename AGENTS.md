@@ -77,8 +77,7 @@ npm run check       # lint + typecheck + tests + build
 6. **No gameplay gates on purchasing.** Every product must stay reachable via
    `/shop` and `/products/[handle]` without the game.
 7. **Secrets** live in `.env.local` (git-ignored). Only `NEXT_PUBLIC_*` vars may
-   reach the client, and no tokens may be `NEXT_PUBLIC_*` except Shopify's
-   public Storefront token.
+   reach the client, and no tokens may be `NEXT_PUBLIC_*`.
 
 ## Hard rules (art & UI)
 
