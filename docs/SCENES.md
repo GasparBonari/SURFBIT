@@ -366,9 +366,9 @@ onto the street.
  │ [cap shelf] [shades]          [bottle fridge] Lani    │ row 4
  │                                            [COUNTER] │
  │pack                                          towel    │
- │hooks       ┌wave rug─────────────┐           ladder   │ rows 6–8
- │            │  tee table (x-sell)  │                   │
- │ round rug  └─────────────────────┘                    │
+ │hooks          [tee table]                    ladder   │ rows 6–8
+ │                  ┌─────wave rug─────┐                 │
+ │ round rug        └─────────────────┘                 │ row 9
  │ pouf  palm                          sticker rack      │ row 10
  │                                              palm     │
  │▓▓▓▓▓ railing ▓ pot ▓  [wave mat]  ▓ pot ▓ railing ▓▓▓▓│ row 13
@@ -383,7 +383,7 @@ onto the street.
 | Backpack hooks (left wall) | `day-pack` | `packHooks` (new, like `leashHooks`) | (1, 7) |
 | Towel ladder (right wall) | `stripe-beach-towel` | `towelLadder` (new) | (18, 7) |
 | Spinner rack of sticker packs | `pixel-sticker-pack` | `stickerRack` (new) | (13, 10) |
-| Tee table on the wave rug (cross-sell, also in Wear) | `logo-tee` | `teeTable` | (7, 7) |
+| Tee table north of the wave rug (cross-sell, also in Wear) | `logo-tee` | `teeTable` | (7, 7) |
 
 | Handle | Title | Category | Art kind | Art color / accent | Options | Price (cents) |
 |---|---|---|---|---|---|---|
@@ -404,10 +404,12 @@ waterproof vinyl stickers of the pixel wave and town.
 (`goodsSign`, built like `gearSign`), window with blinds, wall mirror beside
 the shades, a framed wave print, vines, four pendants, round jute rug and
 pouf, potted palms, hibiscus pots either side of the mat, navy wave mat.
-Fixed positions: `counter` (15, 5), wave print (15, 1) above Lani, round rug
-and pouf (2, 9), palms (4, 10) and (17, 11), hibiscus pots (8, 13) and
-(11, 13), wave mat (9, 13), spawn `door` (9, 12) facing up. The left
-palm sits a tile inward to keep its fronds clear of the pouf.
+Fixed positions: `counter` (15, 5), wave print (15, 1) above Lani, wave rug
+(8, 9) centered on the doorway with a gap to the tee table, round rug and
+pouf (2, 9), palms (4, 10) and
+(17, 11), hibiscus pots (8, 13) and (11, 13), and wave mat (9, 13). Spawn
+`door` is at (9, 12) facing up. The left palm sits a tile inward to keep
+its fronds clear of the pouf.
 
 **Shopkeeper:** Lani (`idle`, behind the counter at (16, 4)): bun, navy SURFBIT tee with a
 cream wave mark, cream shorts, cream bucket hat. Lani points shoppers to the

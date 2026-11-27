@@ -46,7 +46,7 @@ const def: MapDef = {
     },
     { type: "display", prop: "packHooks", x: 1, y: 7, productId: "day-pack", tint: { color: P.deepBlue, accent: P.sun } },
     { type: "display", prop: "towelLadder", x: 18, y: 7, productId: "stripe-beach-towel", tint: { color: P.coral, accent: P.cream } },
-    { type: "prop", prop: "waveRug", x: 6, y: 8, tint: { color: P.sandLight, accent: P.navy } },
+    { type: "prop", prop: "waveRug", x: 8, y: 9, tint: { color: P.sandLight, accent: P.navy } },
     { type: "display", prop: "teeTable", x: 7, y: 7, productId: "logo-tee", tint: { color: P.cream, accent: P.coral } },
     { type: "prop", prop: "roundRug", x: 2, y: 9 },
     { type: "prop", prop: "pouf", x: 2, y: 9 },
