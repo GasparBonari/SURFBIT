@@ -59,18 +59,22 @@ try {
   const output = await Promise.race([result, chrome.then(() => {
     throw new Error("Chromium closed before exporting the world art");
   })]);
-  const { tiles, sprites, frames, error } = JSON.parse(output);
+  const { tiles, atlases, error } = JSON.parse(output);
   if (error) throw new Error(error);
 
   const destination = join(project, "public/assets/world");
   await mkdir(destination, { recursive: true });
-  const entries = Object.entries(frames).map(([key, value]) => `    ${JSON.stringify(key)}: ${JSON.stringify(value)}`);
   await Promise.all([
     writeFile(join(destination, "tiles.png"), Buffer.from(tiles, "base64")),
-    writeFile(join(destination, "sprites.png"), Buffer.from(sprites, "base64")),
-    writeFile(join(destination, "sprites.json"), `{\n  "frames": {\n${entries.join(",\n")}\n  }\n}\n`),
+    ...atlases.flatMap(({ map, sprites, frames }) => {
+      const entries = Object.entries(frames).map(([key, value]) => `    ${JSON.stringify(key)}: ${JSON.stringify(value)}`);
+      return [
+        writeFile(join(destination, `${map}.png`), Buffer.from(sprites, "base64")),
+        writeFile(join(destination, `${map}.json`), `{\n  "frames": {\n${entries.join(",\n")}\n  }\n}\n`),
+      ];
+    }),
   ]);
-  console.log(`Exported the tileset and ${entries.length} sprite textures to public/assets/world`);
+  console.log(`Exported the tileset and ${atlases.length} map atlases to public/assets/world`);
 } finally {
   controller.abort();
   await chrome?.catch(() => {});

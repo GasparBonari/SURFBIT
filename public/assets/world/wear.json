@@ -1,0 +1,32 @@
+{
+  "frames": {
+    "npc:wear:shopkeeper": {"frame":{"x":0,"y":0,"w":48,"h":128},"sheet":{"width":16,"height":32}},
+    "fittingRoom": {"frame":{"x":48,"y":0,"w":32,"h":44},"sheet":{"width":32,"height":44}},
+    "pottedPalm": {"frame":{"x":80,"y":0,"w":34,"h":44},"sheet":{"width":34,"height":44}},
+    "sideWindow": {"frame":{"x":114,"y":0,"w":16,"h":43},"sheet":{"width":16,"height":43}},
+    "wallBoardRack:#3fa7a0:#fff3d6": {"frame":{"x":130,"y":0,"w":32,"h":42},"sheet":{"width":32,"height":42}},
+    "swimRack:#3fa7a0:#fff3d6": {"frame":{"x":162,"y":0,"w":32,"h":37},"sheet":{"width":32,"height":37}},
+    "shortsMannequin:#e8734a:#fff3d6": {"frame":{"x":194,"y":0,"w":16,"h":37},"sheet":{"width":16,"height":37}},
+    "hoodieRack:#2f6f8f:#f2b632": {"frame":{"x":210,"y":0,"w":48,"h":37},"sheet":{"width":48,"height":37}},
+    "mannequin:#2f6f8f:#f2b632": {"frame":{"x":258,"y":0,"w":16,"h":34},"sheet":{"width":16,"height":34}},
+    "capShelf": {"frame":{"x":274,"y":0,"w":37,"h":33},"sheet":{"width":37,"height":33}},
+    "rug:#e9bf6e:#fee9b0": {"frame":{"x":311,"y":0,"w":48,"h":32},"sheet":{"width":48,"height":32}},
+    "wallMirror": {"frame":{"x":359,"y":0,"w":16,"h":31},"sheet":{"width":16,"height":31}},
+    "standingMirror": {"frame":{"x":375,"y":0,"w":16,"h":31},"sheet":{"width":16,"height":31}},
+    "wearSign": {"frame":{"x":391,"y":0,"w":90,"h":30},"sheet":{"width":90,"height":30}},
+    "pendant": {"frame":{"x":481,"y":0,"w":84,"h":30},"sheet":{"width":28,"height":30}},
+    "waveRug:#fee9b0:#3d7a74": {"frame":{"x":565,"y":0,"w":60,"h":30},"sheet":{"width":60,"height":30}},
+    "clothesRack:#fff3d6:#e8734a": {"frame":{"x":625,"y":0,"w":32,"h":30},"sheet":{"width":32,"height":30}},
+    "plant": {"frame":{"x":657,"y":0,"w":16,"h":28},"sheet":{"width":16,"height":28}},
+    "counter": {"frame":{"x":673,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "sunsetPoster": {"frame":{"x":721,"y":0,"w":30,"h":25},"sheet":{"width":30,"height":25}},
+    "vines": {"frame":{"x":751,"y":0,"w":23,"h":25},"sheet":{"width":23,"height":25}},
+    "teeTable:#fff3d6:#e8734a": {"frame":{"x":774,"y":0,"w":46,"h":24},"sheet":{"width":46,"height":24}},
+    "capTable": {"frame":{"x":820,"y":0,"w":46,"h":24},"sheet":{"width":46,"height":24}},
+    "logPost": {"frame":{"x":866,"y":0,"w":12,"h":21},"sheet":{"width":12,"height":21}},
+    "poster": {"frame":{"x":878,"y":0,"w":16,"h":20},"sheet":{"width":16,"height":20}},
+    "roundRug": {"frame":{"x":894,"y":0,"w":29,"h":18},"sheet":{"width":29,"height":18}},
+    "waveMat": {"frame":{"x":923,"y":0,"w":32,"h":16},"sheet":{"width":32,"height":16}},
+    "fittingSign": {"frame":{"x":955,"y":0,"w":62,"h":13},"sheet":{"width":62,"height":13}}
+  }
+}

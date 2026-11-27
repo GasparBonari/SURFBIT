@@ -6,6 +6,7 @@ import { drawMarker, PROPS, type PropSpec, type Tint } from "../src/game/art/pro
 import { buildTileset, TILE } from "../src/game/art/tiles";
 import { drawFootprint, drawGull } from "../src/game/art/townProps";
 import { MAPS } from "../src/game/maps/index";
+import type { MapDef } from "../src/game/maps/types";
 import { buildingTextureKey, npcTextureKey, propTextureKey, type ArtFrame } from "../src/game/textures";
 
 type Sprite = { canvas: HTMLCanvasElement; sheet?: ArtFrame["sheet"] };
@@ -27,36 +28,36 @@ function drawProp(prop: PropSpec, tint: Tint) {
   });
 }
 
-async function drawSprites() {
-  const sprites = new Map<string, Sprite>([
+function drawTownEffects() {
+  return new Map<string, Sprite>([
     ["player", { canvas: buildCharacterSheet(PLAYER_LOOK), sheet: characterSheet }],
     ["shadow", { canvas: buildShadow() }],
     ["gull", drawStrip({ w: 13, h: 8, frames: 2 }, drawGull)],
     ["footprint", drawStrip({ w: 5, h: 4 }, drawFootprint)],
     ["marker", drawStrip({ w: 7, h: 7 }, drawMarker)],
   ]);
-  const defaultTint = { color: P.teal, accent: P.cream };
-  for (const [key, prop] of Object.entries(PROPS)) sprites.set(key, drawProp(prop, defaultTint));
+}
 
-  for (const { key: map, objects } of await Promise.all(Object.values(MAPS).map((load) => load()))) {
-    for (const object of objects) {
-      if (object.type === "building") {
-        const { id, x, w, h, style, label, door, interact } = object;
-        const canvas = buildBuilding(w * TILE, h * TILE, style, label, {
-          x: (door.x - x + 0.5) * TILE,
-          boarded: Boolean(label) && interact?.kind !== "enter",
-        });
-        sprites.set(buildingTextureKey(map, id), { canvas });
-      } else if (object.type === "npc") {
-        const canvas = buildCharacterSheet(object.look);
-        sprites.set(npcTextureKey(map, object.id), { canvas, sheet: characterSheet });
-      } else if (object.tint) {
-        const key = propTextureKey(object.prop, object.tint);
-        if (!sprites.has(key)) sprites.set(key, drawProp(PROPS[object.prop], object.tint));
+function drawMapSprites({ key: map, objects }: MapDef, sprites: Map<string, Sprite>, shared?: Map<string, Sprite>) {
+  const defaultTint = { color: P.teal, accent: P.cream };
+  for (const object of objects) {
+    if (object.type === "building") {
+      const { id, x, w, h, style, label, door, interact } = object;
+      const canvas = buildBuilding(w * TILE, h * TILE, style, label, {
+        x: (door.x - x + 0.5) * TILE,
+        boarded: Boolean(label) && interact?.kind !== "enter",
+      });
+      sprites.set(buildingTextureKey(map, id), { canvas });
+    } else if (object.type === "npc") {
+      const canvas = buildCharacterSheet(object.look);
+      sprites.set(npcTextureKey(map, object.id), { canvas, sheet: characterSheet });
+    } else {
+      const key = propTextureKey(object.prop, object.tint);
+      if (!sprites.has(key) && !shared?.has(key)) {
+        sprites.set(key, drawProp(PROPS[object.prop], object.tint ?? defaultTint));
       }
     }
   }
-  return sprites;
 }
 
 function packSprites(sprites: Map<string, Sprite>) {
@@ -81,7 +82,7 @@ function packSprites(sprites: Map<string, Sprite>) {
     rowHeight = Math.max(rowHeight, h);
   }
 
-  const [atlas, ctx] = makeCanvas(width, y + rowHeight);
+  const [atlas, ctx] = makeCanvas(width, Math.max(1, y + rowHeight));
   for (const [key, { canvas }] of entries) {
     const { x, y } = frames[key].frame;
     ctx.drawImage(canvas, x, y);
@@ -90,10 +91,20 @@ function packSprites(sprites: Map<string, Sprite>) {
 }
 
 const png = (canvas: HTMLCanvasElement) => canvas.toDataURL().split(",")[1];
-const result = await drawSprites().then((sprites) => {
-  const { atlas, frames } = packSprites(sprites);
-  return { tiles: png(buildTileset()), sprites: png(atlas), frames };
-}).catch((error: unknown) => ({ error: String(error) }));
+async function exportArt() {
+  const town = drawTownEffects();
+  drawMapSprites(await MAPS.town(), town);
+  const maps = await Promise.all(Object.values(MAPS).map((load) => load()));
+  const atlases = maps.map((def) => {
+    const sprites = def.key === "town" ? town : new Map<string, Sprite>();
+    if (def.key !== "town") drawMapSprites(def, sprites, town);
+    const { atlas, frames } = packSprites(sprites);
+    return { map: def.key, sprites: png(atlas), frames };
+  });
+  return { tiles: png(buildTileset()), atlases };
+}
+
+const result = await exportArt().catch((error: unknown) => ({ error: String(error) }));
 await fetch("/result", {
   method: "POST",
   headers: { "Content-Type": "application/json" },

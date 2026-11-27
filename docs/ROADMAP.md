@@ -211,9 +211,8 @@ be built.
 - [x] **6.2 Tiled importer (optional)** — `scripts/tiled-to-mapdef.ts` converting Tiled JSON to `MapDef`.
   - Accept: the documented command converts a finite Tiled map with 16 × 16 px
     tiles into a validated TypeScript `MapDef` module with terrain, objects and spawns.
-- [ ] **6.3 Performance** — texture atlases, preload only the town, measure LCP/INP, keep initial JS for `/` < 400 KB gz (Phaser chunk loaded after first paint).
+- [x] **6.3 Performance** — texture atlases, preload only the town, measure LCP/INP, keep initial JS for `/` < 400 KB gz (Phaser chunk loaded after first paint).
 - [ ] **6.4 Analytics & error tracking** — page views, product inspects, add-to-cart, checkout starts.
-- [ ] **6.5 Deploy** — Vercel project, `NEXT_PUBLIC_SITE_URL`, preview deployments per PR.
 
 ## Phase 7 — Post-MVP ideas (from spec §14)
 
@@ -267,3 +266,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Phase 5 dropped (D16). Removed the Shopify provider, its env vars and docs; the mock catalog and demo checkout are the store for this portfolio build.
 - 2026-11-27 — Step 6.1 complete. Removed five unused town props and five placeholder interior tiles, regenerated the world assets, and verified that the retained art is pixel-identical and all four scenes render in Chromium.
 - 2026-11-27 — Step 6.2 complete. Added a Tiled JSON importer that validates terrain, objects and spawns and emits TypeScript `MapDef` modules. Verified round-trips for all four maps.
+- 2026-11-27 — Step 6.3 complete. Split art into per-map atlases and deferred Phaser until after first paint. Initial home JS was 156 KB gzipped. Local Chromium medians for LCP and INP were 72 ms and 72 ms on desktop, and 1,080 ms and 136 ms on throttled mobile.

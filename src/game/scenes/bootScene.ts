@@ -1,5 +1,5 @@
 import type Phaser from "phaser";
-import { preloadTextures, registerTextures } from "../textures";
+import { queueMapAtlas, registerMapAtlas, requireTexture, TILESET_KEY } from "../textures";
 import { MAP_SCENE_KEY, type MapSceneData } from "./mapScene";
 
 export function createBootScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
@@ -9,12 +9,14 @@ export function createBootScene(phaser: typeof Phaser, reportError: (error: unkn
     }
 
     preload() {
-      preloadTextures(this);
+      this.load.image(TILESET_KEY, "/assets/world/tiles.png");
+      queueMapAtlas(this, "town");
     }
 
     create() {
       try {
-        registerTextures(this);
+        requireTexture(this, TILESET_KEY);
+        registerMapAtlas(this, "town");
         const data: MapSceneData = { map: "town", spawn: "default" };
         this.scene.start(MAP_SCENE_KEY, data);
       } catch (error) {

@@ -241,11 +241,13 @@ building design, NPC look or prop tint in the map definition. Run
 command uses Chrome by default. Set `SURFBIT_CHROMIUM` to the path to a
 Chromium executable if needed.
 
-The exporter packs complete sprite sheets in `sprites.png` with a
-`sprites.json` entry for each texture key. BootScene restores those keys and
-the numbered animation frames from the atlas. It loads `tiles.png` separately
-in the order defined by `TILE_NAMES`. The shoreline overlay is drawn from the
-current map's coastline at runtime.
+The exporter packs complete sprite sheets in one PNG/JSON atlas per map.
+BootScene loads `town.png` and `town.json`, which also hold the player,
+shadow and interaction marker. The shops load their own atlases on entry
+and reuse any sheets already registered by the town. Registration restores
+the texture keys and numbered animation frames. The shared `tiles.png` uses
+the order defined by `TILE_NAMES`. The current map's coastline determines the
+shoreline overlay at runtime.
 
 For hand-drawn additions, work at 1× in Pixelorama, LibreSprite or Aseprite
 using `assets/palette/surfbit.gpl`. Keep the existing texture key, frame size

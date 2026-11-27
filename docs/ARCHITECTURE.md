@@ -83,10 +83,10 @@ src/
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
 │   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage
-│   ├── textures.ts           ✅ packed PNG loading and registration under stable texture keys
+│   ├── textures.ts           ✅ per-map atlas loading and registration under stable texture keys
 │   ├── textures.test.ts      ✅ shipped atlas coverage and sheet sizes for the configured maps
 │   ├── config.ts             ✅ Phaser game config
-│   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
+│   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy interiors
 │   │                         ✅ Boards, Wear and Gear interiors + catalog reachability tests
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
@@ -114,7 +114,7 @@ src/
 
 ✅ `public/brand/` contains the vector wave mark (also the favicon) and wordmark.
 
-✅ `public/assets/world/` contains the tileset and packed sprite atlas. The
+✅ `public/assets/world/` contains the tileset and one packed atlas per map. The
 exporter in `scripts/` reads the generators and map definitions. Run
 `npm run art:export` after changing art, building designs, NPC looks or prop
 tints.
@@ -145,8 +145,11 @@ Vitest coverage in `scripts/`.
    editing map definitions, not by changing systems.
 
 The home page uses `app/World.tsx` as its client entry. Its `WorldClient`
-component imports Phaser and the game configuration inside an effect. The
-configuration passes the loaded Phaser runtime to the scene factories.
+component leaves a frame for the page shell to paint before importing Phaser
+and the game configuration inside an effect. The configuration passes the
+loaded Phaser runtime to the scene factories. BootScene loads the shared
+tileset and town atlas. Each shop's map and atlas load on its first visit,
+and the game keeps the registered sheets for return visits.
 
 ## Data flow: buying a board
 
@@ -221,12 +224,14 @@ export type MapObject =
       behavior: "idle" | "wander"; name: string; lines: string[] };
 ```
 
-The registry maps each `MapKey` to a lazy loader so the town and each shop
-ship in separate chunks.
+The registry includes the town with the deferred game code. Each shop
+ships in a separate chunk that loads on entry.
 
 ```ts
+import town from "./town";
+
 export const MAPS: Record<MapKey, () => Promise<MapDef>> = {
-  town: () => import("./town").then((module) => module.default),
+  town: () => Promise.resolve(town),
   boards: () => import("./boards").then((module) => module.default),
   wear: () => import("./wear").then((module) => module.default),
   gear: () => import("./gear").then((module) => module.default),
@@ -376,7 +381,7 @@ Tab order opens the catalog directly.
 Walking onto a doorway threshold emits `WORLD_INTERACTION` once per crossing.
 Player movement stops at the first threshold crossed in a frame. Door actions
 and `gameEvents` travel resolve through the same lazy map
-registry. The camera fades out, the target map loads, and `MapScene` restarts
+registry. The camera fades out, the target map and atlas load, and `MapScene` restarts
 at the named spawn and publishes the map name and key to `useUI`. The camera
 then fades in. Reduced motion skips both fades. Travel to an unregistered map
 leaves the current map active. Movement and prompts pause during travel.
@@ -419,4 +424,4 @@ if you change your mind.
 | D15 | **The town coast is a generated overlay, not foam tiles** | A tile grid can only step the shore one tile at a time, which read as a staircase with mismatched wet-sand bands. A per-pixel distance from a line through the step corners gives the reference's smooth diagonal and parallel surf lines. Collision and the map format stay tile-based; maps whose water doesn't form one east-reaching run fall back to the foam tiles. |
 | D16 | **No Shopify: the mock provider is the store** (2026-11-27) | SURFBIT is a portfolio site. A free Shopify development store is always password-protected and takes test orders only, and no public mock commerce API has surf products. The mock catalog keeps every product browsable and the demo checkout open to every visitor. The Phase 5 Shopify provider was removed; it's in git history (step 5.1) if a real store is ever needed. |
 | D16 | **The town ocean has no ambient surfer sprites** | The owner asked to remove the bobbing riders from the water. |
-| D17 | **Export static production art from the generators as a tileset and a packed PNG/JSON atlas** | BootScene registers each sheet under its existing texture key and frame numbers. The standalone tileset PNG follows `TILE_NAMES`. Regenerate it when that list changes so the exported tiles and map indices stay in sync. The shoreline stays generated from the map per D15. |
+| D17 | **Export static production art as a tileset and per-map PNG/JSON atlases** | BootScene registers the town sheets and the shared player and effects under their existing texture keys and frame numbers. Shop travel registers the destination atlas on demand. The tileset PNG follows `TILE_NAMES`. Regenerate it when that list changes so the exported tiles and map indices stay in sync. The shoreline stays generated from the map per D15. |

@@ -1,0 +1,26 @@
+{
+  "frames": {
+    "npc:gear:shopkeeper": {"frame":{"x":0,"y":0,"w":48,"h":128},"sheet":{"width":16,"height":32}},
+    "bagRack:#c8ccd4:#2f6f8f": {"frame":{"x":48,"y":0,"w":32,"h":44},"sheet":{"width":32,"height":44}},
+    "fittingRoom": {"frame":{"x":80,"y":0,"w":32,"h":44},"sheet":{"width":32,"height":44}},
+    "pottedPalm": {"frame":{"x":112,"y":0,"w":34,"h":44},"sheet":{"width":34,"height":44}},
+    "wetsuitHanger:#114f6d:#f2b632": {"frame":{"x":146,"y":0,"w":16,"h":36},"sheet":{"width":16,"height":36}},
+    "wetsuitHanger:#2b2b3a:#e8734a": {"frame":{"x":162,"y":0,"w":16,"h":36},"sheet":{"width":16,"height":36}},
+    "wetsuitHanger:#3d3346:#3c8c84": {"frame":{"x":178,"y":0,"w":16,"h":36},"sheet":{"width":16,"height":36}},
+    "shelf:#fff3d6:#3fa7a0": {"frame":{"x":194,"y":0,"w":32,"h":32},"sheet":{"width":32,"height":32}},
+    "rug:#e9bf6e:#f2b632": {"frame":{"x":226,"y":0,"w":48,"h":32},"sheet":{"width":48,"height":32}},
+    "gearSign": {"frame":{"x":274,"y":0,"w":90,"h":30},"sheet":{"width":90,"height":30}},
+    "pendant": {"frame":{"x":364,"y":0,"w":84,"h":30},"sheet":{"width":28,"height":30}},
+    "hibiscusPot": {"frame":{"x":448,"y":0,"w":23,"h":29},"sheet":{"width":23,"height":29}},
+    "pegboard:#f2b632:#7a4b2a": {"frame":{"x":471,"y":0,"w":30,"h":28},"sheet":{"width":30,"height":28}},
+    "counter": {"frame":{"x":501,"y":0,"w":48,"h":28},"sheet":{"width":48,"height":28}},
+    "plant": {"frame":{"x":549,"y":0,"w":16,"h":28},"sheet":{"width":16,"height":28}},
+    "leashHooks:#e8734a:#2b2b3a": {"frame":{"x":565,"y":0,"w":30,"h":27},"sheet":{"width":30,"height":27}},
+    "surfPoster": {"frame":{"x":595,"y":0,"w":30,"h":25},"sheet":{"width":30,"height":25}},
+    "vines": {"frame":{"x":625,"y":0,"w":23,"h":25},"sheet":{"width":23,"height":25}},
+    "padTable:#2b2b3a:#3fa7a0": {"frame":{"x":648,"y":0,"w":46,"h":24},"sheet":{"width":46,"height":24}},
+    "window": {"frame":{"x":694,"y":0,"w":28,"h":18},"sheet":{"width":28,"height":18}},
+    "waveMat:#d18f1d:#fff3d6": {"frame":{"x":722,"y":0,"w":32,"h":16},"sheet":{"width":32,"height":16}},
+    "crate": {"frame":{"x":754,"y":0,"w":14,"h":14},"sheet":{"width":14,"height":14}}
+  }
+}

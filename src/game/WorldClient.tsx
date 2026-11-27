@@ -37,10 +37,14 @@ export function WorldClient({ className }: { className: string }) {
       }
     }
 
-    void mount(parent);
+    // Animation callbacks run before paint. Leave a frame for the page shell before loading Phaser.
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => void mount(parent));
+    });
 
     return () => {
       cancelled = true;
+      cancelAnimationFrame(frame);
       gameEvents.emit("ambience", null);
       // A fullscreen change can arrive after the host is detached and before Phaser's next frame.
       game?.scale.stopListeners();

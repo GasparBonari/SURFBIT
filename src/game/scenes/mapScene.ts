@@ -13,7 +13,7 @@ import { Interactions, WORLD_INTERACTION } from "../systems/interaction";
 import { Npc } from "../systems/Npc";
 import { Player } from "../systems/Player";
 import { spawnObjects } from "../systems/objects";
-import { TILESET_KEY } from "../textures";
+import { loadMapAtlas, TILESET_KEY } from "../textures";
 
 export const MAP_SCENE_KEY = "MapScene";
 const FADE_MS = 180;
@@ -50,6 +50,7 @@ export function createMapScene(
     private ambient?: Ambient;
     private interactions?: Interactions;
     private transitioning = false;
+    private readonly loadedAtlases = new Set<MapKey>(["town"]);
 
     constructor() {
       super(MAP_SCENE_KEY);
@@ -59,12 +60,13 @@ export function createMapScene(
       const { events, scale } = this;
       const { DESTROY, SHUTDOWN } = phaser.Scenes.Events;
       const { RESIZE } = phaser.Scale.Events;
-      let active = true;
+      const lifecycle = new AbortController();
+      const { signal } = lifecycle;
       let updateZoom: (() => void) | undefined;
       let stopTravel: (() => void) | undefined;
 
       const cleanup = () => {
-        active = false;
+        lifecycle.abort();
         stopTravel?.();
         this.transitioning = false;
         this.ambient?.destroy();
@@ -91,7 +93,7 @@ export function createMapScene(
 
         // The destination is already loaded on restart so the camera can fade in on its first frame.
         const def = destination?.def ?? await loadMap();
-        if (!active) return;
+        if (signal.aborted) return;
         const start = getSpawn(def, spawn);
 
         const tilemap = this.make.tilemap({
@@ -157,12 +159,17 @@ export function createMapScene(
           const loadDestination = async () => {
             try {
               const def = await loadMap();
-              if (!active) return;
+              if (signal.aborted) return;
               getSpawn(def, spawn);
+              if (!this.loadedAtlases.has(def.key)) {
+                await loadMapAtlas(this, def.key, signal);
+                if (signal.aborted) return;
+                this.loadedAtlases.add(def.key);
+              }
               const data: MapSceneData = { map: def.key, spawn, destination: { def, fadeIn: fade } };
               this.scene.restart(data);
             } catch (error) {
-              if (!active) return;
+              if (signal.aborted) return;
               console.error(`Could not travel to "${map}"`, error);
               if (fade) reveal();
               else finishTransition();
@@ -209,7 +216,7 @@ export function createMapScene(
         if (destination?.fadeIn) reveal();
         else finishTransition();
       } catch (error) {
-        if (!active) return;
+        if (signal.aborted) return;
         cleanup();
         reportError(error);
       }
