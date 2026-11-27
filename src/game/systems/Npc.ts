@@ -1,7 +1,7 @@
 import type Phaser from "phaser";
 import { TILE } from "../art/tiles";
 import type { MapKey, MapObject } from "../maps/types";
-import { ensureCharacter } from "../textures";
+import { npcTextureKey, requireTexture } from "../textures";
 import { Character } from "./character";
 import { moveWithCollision, type BlockedGrid, type Point } from "./collision";
 
@@ -17,9 +17,9 @@ export class Npc extends Character {
   private pauseMs = 0;
 
   constructor(scene: Phaser.Scene, map: MapKey, readonly definition: NpcDefinition) {
-    const { id, x, y, look } = definition;
+    const { id, x, y } = definition;
     const home = { x: (x + 0.5) * TILE, y: (y + 0.5) * TILE };
-    super(scene, home.x, home.y, ensureCharacter(scene, `npc:${map}:${id}`, look), "down");
+    super(scene, home.x, home.y, requireTexture(scene, npcTextureKey(map, id)), "down");
     this.home = home;
     this.pause();
   }

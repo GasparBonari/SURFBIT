@@ -183,7 +183,7 @@ detail of `docs/art-references/` needs real pixel art. This track can run in
 parallel with phases 2–5 and doesn't block them. Spec: ART_DIRECTION.md →
 Production art; asset list: SCENES.md §7. Since A.3 the art is made by
 upgrading the generators in `src/game/art` (D14), so A.4–A.8 bring each
-group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
+group up to the A.3 standard and A.9 packs their output and compares the scenes.
 
 - [x] **A.1 Choose the art source** *(owner decision)* — edited free asset pack, recolored to the palette, with hand-drawn brand pieces. See ARCHITECTURE.md → Decisions D14.
 - [x] **A.2 Brand mark** — wave mark + wordmark as SVG (`public/brand/`), pixel versions (8 × 8, 16 × 16, sign boards, plaza inlay) per SCENES.md §6. Use it in the HUD, favicon and placeholder sign boards.
@@ -193,7 +193,7 @@ group up to the A.3 standard and A.9 becomes the scene-by-scene comparison.
 - [x] **A.6 Buildings** — all town buildings and cottages.
 - [x] **A.7 Town props** — everything in the SCENES.md town props table.
 - [x] **A.8 Interior props** — Boards, Wear, Gear sets.
-- [ ] **A.9 Integration** — load the PNG/JSON assets in `BootScene` under the same texture keys (ART_DIRECTION.md → Replacing placeholder art), pack atlases, compare every scene with its reference.
+- [x] **A.9 Integration** — export the static generator art as a tileset and packed PNG/JSON atlas, load the assets in `BootScene` under the same texture keys (ART_DIRECTION.md → Replacing placeholder art), and compare town, Boards and Wear with their references and Gear with its scene brief.
 
 ---
 
@@ -259,3 +259,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step A.6 complete. Finished the six shop façades and two cottages with distinct roof silhouettes, shop displays, and shuttered windows. Compared the town with its reference and verified shop travel in Chromium.
 - 2026-11-27 — Step A.7 complete. Finished the town foliage, street and beach props, and Beach Club deck fixtures. Compared the town with its reference and verified prop collision, sign interactions, and reduced motion in Chromium.
 - 2026-11-27 — Step A.8 complete. Finished the generated Boards, Wear, and Gear props, including product displays, shop signs, woven rugs, and pendant lights. Compared Boards and Wear with their references, checked Gear against its scene brief, and verified shop travel, product inspection, and reduced motion in Chromium.
+- 2026-11-27 — Step A.9 complete. Packed the static generator art into a tileset and sprite atlas, preserved texture keys and frame numbers in BootScene, and verified all four scenes in Chromium against their previous renders and their references or scene briefs.

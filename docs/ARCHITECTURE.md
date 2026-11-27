@@ -84,7 +84,8 @@ src/
 │   │   ├── motifs.ts         ✅ shared surfboard, shirt and wave-mark drawing
 │   │   ├── buildingRoofs.ts  ✅ roof silhouettes, thatch and tile patterns
 │   │   └── buildings.ts      ✅ shop façades, cottage fronts and signage
-│   ├── textures.ts           ✅ generated textures, lazy NPC sheets and prop tints
+│   ├── textures.ts           ✅ packed PNG loading and registration under stable texture keys
+│   ├── textures.test.ts      ✅ shipped atlas coverage and sheet sizes for the configured maps
 │   ├── config.ts             ✅ Phaser game config
 │   ├── maps/                 ✅ MapDef types, builders, tests, reference town and lazy loader
 │   │                         ✅ Boards, Wear and Gear interiors + catalog reachability tests
@@ -113,6 +114,11 @@ src/
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
 
 ✅ `public/brand/` contains the vector wave mark (also the favicon) and wordmark.
+
+✅ `public/assets/world/` contains the tileset and packed sprite atlas. The
+exporter in `scripts/` reads the generators and map definitions. Run
+`npm run art:export` after changing art, building designs, NPC looks or prop
+tints.
 
 ✅ `docs/art-references/` contains the town, Boards, and Wear concept images.
 [Visual references](ART_DIRECTION.md#visual-references)
@@ -375,7 +381,7 @@ if you change your mind.
 | # | Decision | Why |
 |---|---|---|
 | D1 | **Mock commerce provider first**, Shopify behind `CommerceProvider` | The world and UI can be built and tested without a store; Shopify is a drop-in (roadmap phase 5). |
-| D2 | **Procedural art** in `src/game/art`; started as placeholders and is being upgraded to production quality in Phase A (see D14) | Lets the game be built and tested now with the right grid, palette and layout. It can't reach the detail of the references; real assets replace generators **with the same texture keys and frame sizes**. |
+| D2 | **Procedural art** in `src/game/art` defines the original grid, palette and layout | The generators started as placeholders and became the production art source during Phase A (see D14). |
 | D3 | **Maps as TypeScript `MapDef`s** (ASCII ground + typed objects) instead of Tiled JSON for the MVP | Type-checked, diff-able, easy for AI agents to edit. A Tiled importer that outputs the same `MapDef` can be added later (phase 6) without touching systems. |
 | D4 | **One `MapScene` class** restarted with a map key, instead of one Phaser class per shop | Each restart builds the destination's own map, objects and camera state. Map data is lazy-loaded. |
 | D5 | **Free (8-way) movement with 4-directional animation** | Feels smoother than grid-locked 4-way (Stardew-like). To get strict 4-way, zero the minor axis in `Player`. |
@@ -390,3 +396,4 @@ if you change your mind.
 | D14 | **Production art = the procedural generators in `src/game/art`, upgraded to final quality** (roadmap A.1, revised at A.3). Rounded cobbles, layered water and foam, full palm fronds, coursed thatch, lit shop interiors and shaded characters, all from the palette in code. Hand-drawn PNGs can still replace any texture key later (ART_DIRECTION.md → Replacing placeholder art). Aim for a **bolder pixel look than the references**: fewer colors, cleaner shapes, less tiny detail. | No budget for a commission. The free pack chosen at A.1 (Coastal Village Lite) turned out flatter than the existing generators (3–4 colors per tile, no cobblestone, Mediterranean houses) and is itself made by scripts, so it was kept only as a reference and nothing from it ships. Generators already sit on the grid and palette, keep texture keys stable, and can be iterated by agents. Any third-party art added later must be CC0 or commercial-use and listed in `assets/LICENSES.md`. |
 | D15 | **The town coast is a generated overlay, not foam tiles** | A tile grid can only step the shore one tile at a time, which read as a staircase with mismatched wet-sand bands. A per-pixel distance from a line through the step corners gives the reference's smooth diagonal and parallel surf lines. Collision and the map format stay tile-based; maps whose water doesn't form one east-reaching run fall back to the foam tiles. |
 | D16 | **The town ocean has no ambient surfer sprites** | The owner asked to remove the bobbing riders from the water. |
+| D17 | **Export static production art from the generators as a tileset and a packed PNG/JSON atlas** | BootScene registers each sheet under its existing texture key and frame numbers. The tilemap uses a standalone tileset PNG to preserve tile indices. The shoreline stays generated from the map per D15. |

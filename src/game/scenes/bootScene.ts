@@ -1,11 +1,15 @@
 import type Phaser from "phaser";
-import { registerTextures } from "../textures";
+import { preloadTextures, registerTextures } from "../textures";
 import { MAP_SCENE_KEY, type MapSceneData } from "./mapScene";
 
 export function createBootScene(phaser: typeof Phaser, reportError: (error: unknown) => void) {
   return class BootScene extends phaser.Scene {
     constructor() {
       super("BootScene");
+    }
+
+    preload() {
+      preloadTextures(this);
     }
 
     create() {

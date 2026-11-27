@@ -235,18 +235,21 @@ grid, it can't be split into layers, and it blurs when zoomed.
 
 ### Replacing placeholder art with real assets
 
-1. Draw or edit at 1× in a pixel editor (Pixelorama, LibreSprite, or Aseprite
-   built from source) using the palette above (import
-   `assets/palette/surfbit.gpl`). Recolor pack sprites to this palette; don't
-   keep the pack's own colors.
-2. Export spritesheets as PNG + JSON (array) into
-   `public/assets/{tiles,characters,props,buildings}/`.
-3. Keep **the same texture keys, frame sizes and frame order** used by the
-   generators in `src/game/art/*`.
-4. In `BootScene`, load the PNG instead of calling the generator for that key.
-   Nothing else changes.
-5. Pack into atlases (Free Texture Packer / Aseprite `--sheet-pack`) before
-   launch to cut requests.
+Edit static art in `src/game/art/`. For map-specific variants, edit the
+building design, NPC look or prop tint in the map definition. Run
+`npm run art:export` to regenerate the files in `public/assets/world/`. The
+command uses Chrome by default. Set `SURFBIT_CHROMIUM` to the path to a
+Chromium executable if needed.
+
+The exporter packs complete sprite sheets in `sprites.png` with a
+`sprites.json` entry for each texture key. BootScene restores those keys and
+the numbered animation frames from the atlas. It loads `tiles.png` separately
+in the order defined by `TILE_NAMES`. The shoreline overlay is drawn from the
+current map's coastline at runtime.
+
+For hand-drawn additions, work at 1× in Pixelorama, LibreSprite or Aseprite
+using `assets/palette/surfbit.gpl`. Keep the existing texture key, frame size
+and order when replacing a sheet in the export.
 
 ## UI language
 

@@ -1,68 +1,65 @@
 import type Phaser from "phaser";
-import { makeCanvas, type Ctx } from "./art/canvas";
-import { autoOutline, buildCharacterSheet, buildShadow, CHAR_H, CHAR_W, PLAYER_LOOK, type Look } from "./art/characters";
-import { P } from "./art/palette";
-import { drawMarker, PROPS, type PropSpec, type Tint } from "./art/props";
-import { buildTileset } from "./art/tiles";
-import { drawFootprint, drawGull } from "./art/townProps";
+import { makeCanvas } from "./art/canvas";
+import type { PROPS, Tint } from "./art/props";
+import type { MapKey } from "./maps/types";
 
 export const TILESET_KEY = "tiles";
+const ATLAS_KEY = "world-art";
 
-type TextureManager = Phaser.Textures.TextureManager;
-type FrameSize = Pick<PropSpec, "w" | "h" | "frames">;
+export interface ArtFrame {
+  frame: { x: number; y: number; w: number; h: number };
+  sheet?: { width: number; height: number };
+}
 
-function addSheet(textures: TextureManager, key: string, canvas: HTMLCanvasElement, w: number, h: number) {
-  const texture = textures.addCanvas(key, canvas);
-  if (!texture) throw new Error(`Could not register texture "${key}"`);
+export function buildingTextureKey(map: MapKey, id: string) {
+  return `building:${map}:${id}`;
+}
 
-  const columns = canvas.width / w;
-  const rows = canvas.height / h;
-  for (let row = 0; row < rows; row++) {
-    for (let column = 0; column < columns; column++) {
-      texture.add(row * columns + column, 0, column * w, row * h, w, h);
+export function npcTextureKey(map: MapKey, id: string) {
+  return `npc:${map}:${id}`;
+}
+
+export function propTextureKey(prop: keyof typeof PROPS, tint?: Tint) {
+  return tint ? `${prop}:${tint.color}:${tint.accent}` : prop;
+}
+
+export function preloadTextures({ load }: Phaser.Scene) {
+  load.image(TILESET_KEY, "/assets/world/tiles.png");
+  load.atlas(ATLAS_KEY, "/assets/world/sprites.png", "/assets/world/sprites.json");
+}
+
+export function registerTextures({ textures }: Phaser.Scene) {
+  if (!textures.exists(TILESET_KEY) || !textures.exists(ATLAS_KEY)) {
+    throw new Error("Could not load the world art");
+  }
+
+  const atlas = textures.get(ATLAS_KEY);
+  const source = atlas.getSourceImage();
+  if (!(source instanceof HTMLImageElement)) throw new Error("Missing sprite atlas image");
+
+  // Each packed rectangle is a complete sheet. Give it back its original key and numeric frames.
+  for (const key of atlas.getFrameNames()) {
+    const { cutX, cutY, cutWidth, cutHeight, customData } = atlas.get(key);
+    const { sheet } = customData as ArtFrame;
+    const [canvas, ctx] = makeCanvas(cutWidth, cutHeight);
+    ctx.drawImage(source, cutX, cutY, cutWidth, cutHeight, 0, 0, cutWidth, cutHeight);
+    const texture = textures.addCanvas(key, canvas);
+    if (!texture) throw new Error(`Could not register texture "${key}"`);
+
+    if (!sheet) continue;
+    const { width, height } = sheet;
+    const columns = cutWidth / width;
+    const rows = cutHeight / height;
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        texture.add(row * columns + column, 0, column * width, row * height, width, height);
+      }
     }
   }
+  textures.remove(ATLAS_KEY);
 }
 
-function addStrip(
-  textures: TextureManager,
-  key: string,
-  { w, h, frames = 1 }: FrameSize,
-  draw: (ctx: Ctx, x: number, frame: number) => void,
-) {
-  const [canvas, ctx] = makeCanvas(w * frames, h);
-  for (let frame = 0; frame < frames; frame++) draw(ctx, frame * w, frame);
-  addSheet(textures, key, canvas, w, h);
-}
-
-function addProp(textures: TextureManager, key: string, prop: PropSpec, tint: Tint) {
-  addStrip(textures, key, prop, (ctx, x, frame) => {
-    prop.draw(ctx, x, frame, tint);
-    if (prop.outline ?? !prop.flat) autoOutline(ctx, x, 0, prop.w, prop.h, P.outline);
-  });
-}
-
-export function ensureCharacter({ textures }: Phaser.Scene, key: string, look: Look): string {
-  if (!textures.exists(key)) addSheet(textures, key, buildCharacterSheet(look), CHAR_W, CHAR_H);
-  return key;
-}
-
-export function registerTextures(scene: Phaser.Scene) {
-  const { textures } = scene;
-  textures.addCanvas(TILESET_KEY, buildTileset());
-  ensureCharacter(scene, "player", PLAYER_LOOK);
-  textures.addCanvas("shadow", buildShadow());
-
-  const tint = { color: P.teal, accent: P.cream };
-  for (const [key, prop] of Object.entries(PROPS)) addProp(textures, key, prop, tint);
-
-  addStrip(textures, "gull", { w: 13, h: 8, frames: 2 }, drawGull);
-  addStrip(textures, "footprint", { w: 5, h: 4 }, drawFootprint);
-  addStrip(textures, "marker", { w: 7, h: 7 }, drawMarker);
-}
-
-export function ensureTinted({ textures }: Phaser.Scene, propKey: keyof typeof PROPS, tint: Tint): string {
-  const key = `${propKey}:${tint.color}:${tint.accent}`;
-  if (!textures.exists(key)) addProp(textures, key, PROPS[propKey], tint);
+export function requireTexture({ textures }: Phaser.Scene, key: string) {
+  if (!textures.exists(key)) throw new Error(`Missing world texture "${key}"`);
   return key;
 }
