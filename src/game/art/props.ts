@@ -18,6 +18,8 @@ export interface PropSpec {
   h: number;
   frames?: number;
   animation?: { frameMs: number; pingPong?: boolean };
+  /** Bulb center in sprite pixels for an outdoor night glow. */
+  lightSource?: { x: number; y: number };
   /** Footprint in tiles (placement + collision). Defaults to ceil(w/16) × 1. */
   foot?: { w: number; h: number };
   solid?: boolean;

@@ -22,7 +22,11 @@ it("restores existing audio and motion settings with the original player appeara
   storage.set("surfbit-settings", JSON.stringify({ version: 1, state: audioAndMotion }));
   await useSettings.persist.rehydrate();
 
-  expect(useSettings.getState()).toMatchObject({ ...audioAndMotion, appearance: defaultPlayerAppearance });
+  expect(useSettings.getState()).toMatchObject({
+    ...audioAndMotion,
+    appearance: defaultPlayerAppearance,
+    townLighting: "cycle",
+  });
 });
 
 it("keeps valid saved appearance choices and defaults invalid ones", async () => {
@@ -31,4 +35,11 @@ it("keeps valid saved appearance choices and defaults invalid ones", async () =>
   await useSettings.persist.rehydrate();
 
   expect(useSettings.getState().appearance).toEqual({ ...defaultPlayerAppearance, skin: "deep" });
+});
+
+it.each([["night", "night"], ["invalid", "cycle"]])("restores saved lighting %s as %s", async (saved, expected) => {
+  storage.set("surfbit-settings", JSON.stringify({ version: 1, state: { townLighting: saved } }));
+  await useSettings.persist.rehydrate();
+
+  expect(useSettings.getState().townLighting).toBe(expected);
 });

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { appearanceOptions, defaultPlayerAppearance, readPlayerAppearance, type PlayerAppearance } from "@/state/playerAppearance";
-import { useSettings } from "@/state/settings";
+import { readTownLighting, useSettings } from "@/state/settings";
 import { useUI } from "@/state/ui";
 import styles from "./SettingsPanel.module.css";
 
@@ -217,39 +217,56 @@ function AccessibilitySettings() {
 }
 
 function AppearanceSettings() {
-  const { appearance, set } = useSettings();
+  const { appearance, townLighting, set } = useSettings();
 
   return (
-    <div className={styles.appearanceBody}>
-      <div className={styles.preview}>
-        <AppearancePreview appearance={appearance} />
+    <>
+      <div className={styles.appearanceBody}>
+        <div className={styles.preview}>
+          <AppearancePreview appearance={appearance} />
+        </div>
+        <div className={styles.appearanceFields}>
+          {appearanceControls.map(([field, label]) => (
+            <label key={field}>
+              {label}
+              <select
+                value={appearance[field]}
+                onChange={(event) => set({
+                  appearance: readPlayerAppearance({ ...appearance, [field]: event.currentTarget.value }),
+                })}
+              >
+                {Object.entries(appearanceOptions[field]).map(([value, name]) => (
+                  <option key={value} value={value}>{name}</option>
+                ))}
+              </select>
+            </label>
+          ))}
+          <button
+            type="button"
+            className="sb-btn sb-btn--secondary"
+            onClick={() => set({ appearance: defaultPlayerAppearance })}
+          >
+            Reset appearance
+          </button>
+        </div>
       </div>
-      <div className={styles.appearanceFields}>
-        {appearanceControls.map(([field, label]) => (
-          <label key={field}>
-            {label}
-            <select
-              value={appearance[field]}
-              onChange={(event) => set({
-                appearance: readPlayerAppearance({ ...appearance, [field]: event.currentTarget.value }),
-              })}
-            >
-              {Object.entries(appearanceOptions[field]).map(([value, name]) => (
-                <option key={value} value={value}>{name}</option>
-              ))}
-            </select>
-          </label>
-        ))}
-        <button
-          type="button"
-          className="sb-btn sb-btn--secondary"
+      <label className={styles.row}>
+        Town lighting
+        <select
+          aria-describedby="settings-lighting-help"
           data-last-control
-          onClick={() => set({ appearance: defaultPlayerAppearance })}
+          value={townLighting}
+          onChange={(event) => set({ townLighting: readTownLighting(event.currentTarget.value) })}
         >
-          Reset appearance
-        </button>
-      </div>
-    </div>
+          <option value="cycle">Cycle</option>
+          <option value="day">Day</option>
+          <option value="night">Night</option>
+        </select>
+      </label>
+      <p id="settings-lighting-help" className={styles.help}>
+        Cycle shows steady daylight when reduced motion is on.
+      </p>
+    </>
   );
 }
 

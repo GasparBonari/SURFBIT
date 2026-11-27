@@ -273,7 +273,19 @@ traditional shop", so record this as a decision.
     and leave the original outfit as the default for existing visitors.
     Compare the customized player screenshot with `beach-town.webp`.
 
-Other ideas: day/night cycle · seasonal decorations & limited drops · NPC conversations · Easter eggs ·
+- [x] **7.2 Town day/night cycle**
+  - Do: cycle the outdoor lighting from daylight through sunset, night and
+    dawn over eight minutes of active world time, with warm streetlamp halos
+    after sunset. Keep the cycle running during shop visits. Add a saved
+    Town lighting control under Appearance with Cycle, Day and Night.
+  - Accept: the town starts in the reference's daylight and changes gradually
+    through a full loop. Shop interiors keep their normal lighting, and the
+    town resumes at the current point in the cycle on return. Keyboard and
+    touch can set a fixed look that survives reload. Reduced motion shows
+    static daylight in Cycle mode and still honors explicit Day or Night.
+    Compare daylight and nighttime screenshots with `beach-town.webp`.
+
+Other ideas: seasonal decorations & limited drops · NPC conversations · Easter eggs ·
 surf mini-game · loyalty points · surfboard configurator (Workshop) ·
 multiplayer · Supabase accounts & saved preferences.
 
@@ -333,3 +345,4 @@ multiplayer · Supabase accounts & saved preferences.
 - 2026-11-27 — Step B.5 complete. Updated town and shop signs and townsfolk dialogue. Verified all six doors and directory links, indoor audio and location live regions in the three new rooms, and six keyboard and touch demo orders with analytics in Chromium.
 - 2026-11-27 — Step 7.1 complete. Added local player appearance settings with a pixel preview and reset. Verified keyboard and touch controls, all four walk directions, shop travel, reload, and the original outfit for existing settings.
 - 2026-11-27 — Step 7.1 follow-up. Separated Settings into Audio, Appearance and Accessibility tabs. Verified keyboard and touch navigation, focus return, and scrolling on short screens.
+- 2026-11-27 — Step 7.2 complete. Added an outdoor day/night cycle, glowing streetlamps and saved lighting controls. Compared day and night with the town reference and verified shop travel, keyboard and touch controls, and reduced motion in Chromium.

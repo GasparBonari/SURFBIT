@@ -68,8 +68,8 @@ src/
 ├── state/                       Zustand stores (client)
 │   ├── cart.ts               ✅ global cart, persisted (localStorage, skipHydration)
 │   ├── cart.test.ts          ✅ cart line merging, stock limits and removal tests
-│   ├── settings.ts           ✅ audio, reduced motion and player appearance, persisted
-│   ├── settings.test.ts      ✅ hydration of legacy settings and saved appearances
+│   ├── settings.ts           ✅ audio, reduced motion, player appearance and town lighting, persisted
+│   ├── settings.test.ts      ✅ hydration of legacy settings, saved appearances and town lighting
 │   ├── playerAppearance.ts   ✅ appearance options and persisted choice validation
 │   ├── ui.ts                 ✅ prompt, product modal, dialog, panels, location, and travel readiness
 │   └── catalog.ts            ✅ client copy of products, keyed by handle
@@ -102,6 +102,7 @@ src/
 │   ├── scenes/               ✅ BootScene, MapScene ground, objects and player camera
 │   ├── systems/              ✅ Player, collision and its unit tests, object placement, ambient animation, interaction
 │   │                         ✅ NPC movement and shared character sprites
+│   │                         ✅ daylight.ts and tests for the town lighting cycle
 │   ├── audio.ts              ✅ Web Audio ambience, shop music and UI cues
 │   └── WorldClient.tsx       ✅ React component that mounts Phaser
 └── components/                  React UI
@@ -118,7 +119,7 @@ src/
     ├── Hud.tsx                ✅ world location, cart count, directory, settings, mute, and fullscreen (with CSS module)
     ├── StoreDirectory.tsx     ✅ town shops, travel shortcuts, and storefront links (with CSS module)
     ├── SiteHeader.tsx         ✅ storefront navigation (with CSS module)
-    └── SettingsPanel.tsx      ✅ audio, reduced-motion and player appearance controls (with CSS module)
+    └── SettingsPanel.tsx      ✅ audio, reduced-motion, player appearance and town lighting controls (with CSS module)
 ```
 
 ✅ `vitest.config.mts` at the repo root configures the Node test environment.
@@ -341,7 +342,7 @@ looks and prop tints, then run `npm run check`.
 - **Depth (y-sorting):** buildings, dynamic things and standing props use
   `depth = bottom pixel y`. `flat` props (rugs, towels, flowers) use
   `depth = 1`. `wall` props use `depth = 2`. Shore overlay `0.5`, footprints `3`,
-  gulls and in-world markers `100000`.
+  gulls `100000`, outdoor lighting `100001`–`100003`, in-world markers `100004`.
 - **Interaction point:** center of the first tile row below the footprint,
   aligned with its horizontal center. Building signs use their configured
   door tile center. NPC interaction points follow their sprite, half a tile
@@ -375,6 +376,16 @@ looks and prop tints, then run `npm run check`.
 - NPCs start at their home tile centers. Wanderers take short walks within
   three tiles of home and pause between legs. Reduced motion or an open
   overlay pauses wandering. NPCs turn toward the player when spoken to.
+
+## Outdoor lighting
+
+MapScene tracks eight minutes of active world time per cycle, starting at
+daylight when the world mounts and advancing across scene restarts. Only
+outdoor maps render the lighting system. The system layers two palette tints
+over the camera and adds a cached pixel glow at each prop's `lightSource`
+sprite coordinate. The interaction marker renders above the lighting layers.
+The settings store saves Cycle, Day or Night. Cycle uses steady daylight
+when reduced motion is active, and fixed Day and Night apply immediately.
 
 ## World interactions
 

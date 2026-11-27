@@ -10,6 +10,7 @@ import { buildBlocked, buildGround } from "../maps/build";
 import type { Interaction, MapDef, MapKey } from "../maps/types";
 import { Ambient } from "../systems/ambient";
 import type { BlockedGrid } from "../systems/collision";
+import { Daylight } from "../systems/daylight";
 import { Interactions, WORLD_INTERACTION } from "../systems/interaction";
 import { Npc } from "../systems/Npc";
 import { Player } from "../systems/Player";
@@ -49,6 +50,8 @@ export function createMapScene(
     private npcs: Npc[] = [];
     private blocked: BlockedGrid = [];
     private ambient?: Ambient;
+    private daylight?: Daylight;
+    private worldElapsed = 0;
     private interactions?: Interactions;
     private transitioning = false;
     private readonly loadedAtlases = new Set<MapKey>(["town"]);
@@ -74,6 +77,7 @@ export function createMapScene(
         this.transitioning = false;
         this.ambient?.destroy();
         this.ambient = undefined;
+        this.daylight = undefined;
         this.interactions?.destroy();
         this.interactions = undefined;
         const ui = useUI.getState();
@@ -109,7 +113,7 @@ export function createMapScene(
         const ground = tilemap.createLayer(0, tileset);
         if (!ground) throw new Error(`Could not create the ground layer for "${map}"`);
 
-        const animatedProps = spawnObjects(this, def);
+        const { animated, lights } = spawnObjects(this, def);
         this.blocked = buildBlocked(def);
         const player = new Player(this, start, this.blocked);
         player.setAppearance(useSettings.getState().appearance);
@@ -118,10 +122,14 @@ export function createMapScene(
         });
         this.npcs = def.objects.flatMap((object) => object.type === "npc" ? [new Npc(this, def.key, object)] : []);
         this.interactions = new Interactions(this, def.objects, this.npcs);
-        this.ambient = new Ambient(this, def, ground, animatedProps, player.sprite);
+        this.ambient = new Ambient(this, def, ground, animated, player.sprite);
         const camera = this.cameras.main;
         const interior = def.kind === "interior";
         const { widthInPixels, heightInPixels } = tilemap;
+        if (!interior) {
+          this.daylight = new Daylight(this, lights);
+          this.daylight.update(this.worldElapsed, useSettings.getState().townLighting, prefersReducedMotion());
+        }
         camera.setBackgroundColor(interior ? P.outline : P.water);
         updateZoom = () => {
           const { width, height } = scale;
@@ -129,6 +137,7 @@ export function createMapScene(
             ? Math.ceil(Math.max(width / widthInPixels, height / heightInPixels))
             : Math.floor(height / 240);
           camera.setZoom(Math.max(2, zoom));
+          this.daylight?.resize(width, height);
         };
         updateZoom();
         camera.setBounds(0, 0, widthInPixels, heightInPixels);
@@ -232,10 +241,12 @@ export function createMapScene(
 
     update(time: number, delta: number) {
       if (!this.player) return;
+      this.worldElapsed += delta;
+      const reduced = prefersReducedMotion();
       if (!this.transitioning) {
         const npcSprites = this.npcs.map((npc) => npc.sprite);
         this.player.update(delta, npcSprites, this.interactions?.reachesDoorway);
-        const pauseNpcs = isOverlayOpen(useUI.getState()) || prefersReducedMotion();
+        const pauseNpcs = isOverlayOpen(useUI.getState()) || reduced;
         for (const npc of this.npcs) {
           const obstacles = [this.player.sprite, ...npcSprites.filter((sprite) => sprite !== npc.sprite)];
           npc.update(delta, this.blocked, obstacles, pauseNpcs);
@@ -243,6 +254,7 @@ export function createMapScene(
         this.interactions?.update(time, this.player.sprite, this.player.direction);
       }
       this.ambient?.update(delta, this.player.sprite);
+      this.daylight?.update(this.worldElapsed, useSettings.getState().townLighting, reduced);
     }
   };
 }

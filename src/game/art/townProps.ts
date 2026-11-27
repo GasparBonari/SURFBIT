@@ -270,6 +270,7 @@ export const TOWN_PROPS = {
   },
   lamp: {
     w: 10, h: 36, foot: { w: 1, h: 1 }, solid: true, outline: false,
+    lightSource: { x: 5, y: 7 },
     draw: (c, x) => {
       ellipse(c, x + 5, 34, 4, 1, P.shadow);
       rect(c, x + 4, 9, 2, 24, P.ironDark);

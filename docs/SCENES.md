@@ -88,7 +88,7 @@ is available for future storefronts. No buildings currently set it.
 | Tropical shrubs, hibiscus bushes | Every planter and gap | Solid |
 | Raised stone planters | Plaza corners, along street | Solid; plants drawn on top |
 | Plaza wave-logo inlay | Plaza center | Flat multi-tile prop (navy/teal cobbles) |
-| Street lamps (black iron) | Flanking plaza and street | Solid base; warm glow at night later |
+| Street lamps (black iron) | Flanking plaza and street | Solid base; warm glow after sunset |
 | Benches | Top of stone wall, plaza | Solid |
 | Signpost `Surf/Shop/Beach` | Central stairs | `read` interaction |
 | Notice board | Next to Wear | `read` interaction announcing all six shops and highlighting Goods, Workshop and Beach Club |

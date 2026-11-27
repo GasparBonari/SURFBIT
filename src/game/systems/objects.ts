@@ -14,6 +14,7 @@ export interface AnimatedProp {
 
 export function spawnObjects(scene: Phaser.Scene, { key: map, objects }: MapDef) {
   const animated: AnimatedProp[] = [];
+  const lights: { x: number; y: number }[] = [];
   for (const object of objects) {
     if (object.type === "npc") continue;
 
@@ -30,10 +31,13 @@ export function spawnObjects(scene: Phaser.Scene, { key: map, objects }: MapDef)
       const depth = prop.flat ? 1 : prop.wall ? 2 : bottom;
       const key = requireTexture(scene, propTextureKey(object.prop, object.tint));
       const sprite = scene.add.sprite(x, bottom, key, 0).setOrigin(0.5, 1).setDepth(depth);
+      if (prop.lightSource) {
+        lights.push({ x: x - prop.w / 2 + prop.lightSource.x, y: bottom - prop.h + prop.lightSource.y });
+      }
       if (prop.animation && prop.frames && prop.frames > 1) {
         animated.push({ sprite, frames: prop.frames, ...prop.animation });
       }
     }
   }
-  return animated;
+  return { animated, lights };
 }

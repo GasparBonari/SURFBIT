@@ -4,6 +4,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { defaultPlayerAppearance, readPlayerAppearance, type PlayerAppearance } from "./playerAppearance";
 
+export type TownLighting = "cycle" | "day" | "night";
+
+export function readTownLighting(value: unknown): TownLighting {
+  return value === "day" || value === "night" ? value : "cycle";
+}
+
 interface SettingsState {
   muted: boolean;
   musicVolume: number;
@@ -11,6 +17,7 @@ interface SettingsState {
   /** null = follow the OS `prefers-reduced-motion` setting. */
   reducedMotion: boolean | null;
   appearance: PlayerAppearance;
+  townLighting: TownLighting;
   set(patch: Partial<Omit<SettingsState, "set">>): void;
 }
 
@@ -22,6 +29,7 @@ export const useSettings = create<SettingsState>()(
       ambienceVolume: 0.7,
       reducedMotion: null,
       appearance: defaultPlayerAppearance,
+      townLighting: "cycle",
       set: (patch) => set(patch),
     }),
     {
@@ -35,6 +43,7 @@ export const useSettings = create<SettingsState>()(
           ...saved,
           set: current.set,
           appearance: readPlayerAppearance(saved?.appearance),
+          townLighting: readTownLighting(saved?.townLighting),
         };
       },
     },

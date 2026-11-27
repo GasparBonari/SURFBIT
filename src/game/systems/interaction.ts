@@ -93,7 +93,7 @@ export class Interactions {
       const { name, lines } = npc.definition;
       this.targets.push({ action: { kind: "talk", name, lines }, prompt: { verb: "Talk", label: name }, npc });
     }
-    this.marker = scene.add.sprite(0, 0, "marker", 0).setOrigin(0.5, 1).setDepth(100000).setVisible(false);
+    this.marker = scene.add.sprite(0, 0, "marker", 0).setOrigin(0.5, 1).setDepth(100_004).setVisible(false);
     this.keyboard = scene.input.keyboard;
     this.keyboard?.on("keydown", this.onKeyDown);
     this.unsubscribeInteract = gameEvents.on("interact", this.activate);

@@ -213,12 +213,16 @@ Full scene layouts: [SCENES.md](SCENES.md).
 | Flags | 3 | 160 ms per frame |
 | Gulls | 2 | 200 ms per frame |
 | Lamp flicker | alpha tween | 0.75–1.0, irregular |
+| Town lighting | daylight, sunset, night, dawn | 8 minutes per loop, smooth transitions |
 | Footprints | — | fade over 2.5 s |
 
 **Reduced motion** (OS setting or in-game toggle): no gulls, sway,
-flicker or camera fades. Water tiles and the shore overlay still animate at
-¼ speed. Walking
-animation stays (it is feedback, not decoration).
+flicker, lighting transitions or camera fades. Water tiles and the shore overlay
+still animate at ¼ speed. Walking animation stays (it is feedback, not decoration).
+
+Outdoor light uses the daylight reference as its baseline. Warm Terracotta
+Dark tint colors sunset and dawn, deep Indigo shades the town at night, and
+low-alpha pixel halos in Glow and Glow Warm pick out the streetlamps.
 
 ## Production art
 
